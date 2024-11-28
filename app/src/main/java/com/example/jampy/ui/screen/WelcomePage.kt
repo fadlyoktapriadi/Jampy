@@ -28,25 +28,25 @@ import com.example.jampy.ui.theme.Outfit
 import com.example.jampy.ui.theme.primaryGreen
 
 @Composable
-fun WelcomePage(modifier: Modifier) {
+fun WelcomePage() {
     Box(
-        modifier
+        Modifier
             .fillMaxSize()
             .background(primaryGreen),
         contentAlignment = Alignment.Center
     ) {
         Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.jampy),
                 contentDescription = "Logo application the name is Jampy",
-                modifier = modifier.size(150.dp)
+                modifier = Modifier.size(150.dp)
             )
             Column(
                 horizontalAlignment = Alignment.Start,
-                modifier = modifier.padding(top = 24.dp)
+                modifier = Modifier.padding(top = 24.dp)
             ) {
                 Text(
                     text = "Nature's medicine,\n" +
@@ -64,7 +64,7 @@ fun WelcomePage(modifier: Modifier) {
                     fontWeight = FontWeight.Medium,
                     lineHeight = 20.sp,
                     color = Color.White,
-                    modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
             }
             Button(
@@ -73,20 +73,20 @@ fun WelcomePage(modifier: Modifier) {
                     containerColor = Color.White,
                     contentColor = Color.Black
                 ),
-                modifier = modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp)
                                     .fillMaxWidth()
             )
             {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = modifier.padding(vertical = 2.dp)
+                    modifier = Modifier.padding(vertical = 2.dp)
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_google),
                         contentDescription = "Google logo",
-                        modifier = modifier.size(24.dp)
+                        modifier = Modifier.size(24.dp)
                     )
-                    Spacer(modifier = modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Sign in with Google",
                         fontFamily = Outfit,
@@ -94,10 +94,6 @@ fun WelcomePage(modifier: Modifier) {
                     )
                 }
             }
-
-
-
-
         }
     }
 }
@@ -105,5 +101,5 @@ fun WelcomePage(modifier: Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewWelcomePage() {
-    WelcomePage(Modifier)
+    WelcomePage()
 }
