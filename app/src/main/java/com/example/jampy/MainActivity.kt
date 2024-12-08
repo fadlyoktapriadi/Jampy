@@ -34,7 +34,7 @@ import kotlinx.coroutines.delay
                     var showSplashScreen: Boolean by remember { mutableStateOf(true) }
 
                     LaunchedEffect(Unit) {
-                        delay(3000)
+                        delay(1000)
                         showSplashScreen = false
                     }
 
