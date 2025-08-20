@@ -32,7 +32,7 @@ import com.fyyadi.jampy.ui.theme.bgGreen
 import com.fyyadi.jampy.ui.theme.primaryGreen
 
 @Composable
-fun WelcomePage() {
+fun LoginScreen() {
     Box(
         Modifier
             .fillMaxSize()
@@ -117,5 +117,5 @@ fun WelcomePage() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewWelcomePage() {
-    WelcomePage()
+    LoginScreen()
 }

@@ -48,10 +48,11 @@ val popularPlants = listOf(
 )
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    modifier: Modifier = Modifier
+) {
     // Scaffold menyediakan struktur dasar Material Design
     Scaffold(
-        bottomBar = { BottomNavigationBar() }
     ) { paddingValues ->
         // Box digunakan untuk menumpuk elemen
         Box(
@@ -257,67 +258,8 @@ fun PlantCard(plant: Plant) {
     }
 }
 
-@Composable
-fun BottomNavigationBar() {
-    var selectedIndex by remember { mutableStateOf(0) }
-    val items = listOf(
-        BottomNavItem("Home", R.drawable.home_filled, R.drawable.home_gray),
-        BottomNavItem("Search", R.drawable.search_filled, R.drawable.search_grey),
-        BottomNavItem("Scan", R.drawable.scan_orange, R.drawable.scan_grey),
-        BottomNavItem("Bookmark", R.drawable.bookmark_filled, R.drawable.bookmark_grey),
-        BottomNavItem("Profile", R.drawable.profile_filled, R.drawable.profile_grey)
-    )
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp),
-        shape = RoundedCornerShape(28.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-        colors = CardDefaults.cardColors(containerColor = cardWhite)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            items.forEachIndexed { index, item ->
-                val isSelected = selectedIndex == index
-                val isScanButton = index == 2
 
-                IconButton(onClick = { selectedIndex = index }) {
-                    Box(
-                        modifier = if (isScanButton) Modifier
-                            .size(48.dp)
-                            .clip(CircleShape)
-                            .background(OrangePrimary)
-                        else Modifier.size(28.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = if (isSelected) item.selectedIcon else item.unselectedIcon),
-                            contentDescription = item.title,
-                            modifier = Modifier.size(if (isScanButton) 28.dp else 24.dp),
-                            tint = when {
-                                isScanButton -> Color.White
-                                isSelected -> primaryGreen
-                                else -> OrangePrimary
-                            }
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-data class BottomNavItem(
-    val title: String,
-    val selectedIcon: Int,
-    val unselectedIcon: Int
-)
 
 @Preview(showBackground = true, device = "id:pixel_5")
 @Composable
