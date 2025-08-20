@@ -15,7 +15,7 @@ val primaryGreen = Color(0xFF3E5F44)
 
 val cardWhite = Color(0xFFFAFAFA)
 
-val OrangePrimary = Color(0xFFE28843)
+val orangePrimary = Color(0xFFE28843)
 
 val bgGreen = Color(0xFFF1F8E8)
 val secondaryGreen = Color(0xFFD0E8C5)
