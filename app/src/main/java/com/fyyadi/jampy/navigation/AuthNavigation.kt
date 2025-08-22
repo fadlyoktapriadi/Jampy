@@ -36,7 +36,16 @@ object AuthNavigation {
             )
         }
         composable<AuthRoutes.LoginScreen> {
-            LoginScreen()
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(HomeRoutes.HomeScreen) {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+
         }
     }
 }

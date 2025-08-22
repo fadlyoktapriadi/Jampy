@@ -11,8 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -76,7 +74,7 @@ fun TopSection() {
         modifier = Modifier
             .fillMaxWidth()
             .height(380.dp)
-            .background(bgGreen)
+            .background(BackgroundGreen)
     ) {
         // Header dengan logo
         Image(
@@ -111,7 +109,7 @@ fun WeatherCard() {
             .fillMaxWidth()
             .padding(horizontal = 24.dp),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = cardWhite),
+        colors = CardDefaults.cardColors(containerColor = backgroundCardWhite),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Row(
@@ -148,7 +146,7 @@ fun WeatherCard() {
                     text = "Fadly Oktapriadi",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = primaryGreen
+                    color = PrimaryGreen
                 )
             }
         }
@@ -199,7 +197,7 @@ fun PopularPlantsSection() {
                 text = "Plant Populer",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = primaryGreen
+                color = PrimaryGreen
             )
             Text(
                 text = "See All",
@@ -250,7 +248,7 @@ fun PlantCard(plant: Plant) {
             Text(
                 text = plant.description,
                 fontSize = 12.sp,
-                color = primaryGreen,
+                color = PrimaryGreen,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )

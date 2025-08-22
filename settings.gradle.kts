@@ -22,4 +22,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Jampy"
 include(":app")
- 
+include(":core")

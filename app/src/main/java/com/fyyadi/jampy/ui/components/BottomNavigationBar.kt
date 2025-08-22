@@ -26,10 +26,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.fyyadi.jampy.R
 import com.fyyadi.jampy.ui.theme.OrangePrimary
-import com.fyyadi.jampy.ui.theme.cardWhite
-import com.fyyadi.jampy.ui.theme.primaryGreen
+import com.fyyadi.jampy.ui.theme.backgroundCardWhite
+import com.fyyadi.jampy.ui.theme.PrimaryGreen
 import com.fyyadi.jampy.utils.BottomNavItem
 
 @Composable
@@ -53,7 +52,7 @@ fun BottomNavigationBar(
                     .padding(horizontal = 24.dp, vertical = 8.dp),
                 shape = RoundedCornerShape(28.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-                colors = CardDefaults.cardColors(containerColor = cardWhite)
+                colors = CardDefaults.cardColors(containerColor = backgroundCardWhite)
             ) {
                 Row(
                     modifier = Modifier
@@ -86,7 +85,7 @@ fun BottomNavigationBar(
                                     modifier = Modifier.size(if (isScanButton) 28.dp else 24.dp),
                                     tint = when {
                                         isScanButton -> Color.White
-                                        isSelected -> primaryGreen
+                                        isSelected -> PrimaryGreen
                                         else -> OrangePrimary
                                     }
                                 )

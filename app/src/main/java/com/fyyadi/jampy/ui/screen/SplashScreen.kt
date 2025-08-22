@@ -15,12 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fyyadi.jampy.R
-import com.fyyadi.jampy.ui.theme.BgGrey
-import com.fyyadi.jampy.ui.theme.bgGreen
-import com.fyyadi.jampy.ui.theme.tersiaryGreen
+import com.fyyadi.jampy.ui.theme.BackgroundGreen
+import com.fyyadi.jampy.ui.theme.TersiaryGreen
+import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
@@ -31,7 +30,7 @@ fun SplashScreen(
     var splashscreen by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(2000L) // 2 seconds delay
+        delay(2000L)
         splashscreen = false
     }
 
@@ -42,8 +41,8 @@ fun SplashScreen(
                 .background(
                     Brush.linearGradient(
                         colors = listOf(
-                            bgGreen,
-                            tersiaryGreen,
+                            BackgroundGreen,
+                            TersiaryGreen,
                         )
                     )
                 ),
@@ -59,9 +58,3 @@ fun SplashScreen(
         onLoginNavigate()
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewJampyyApp() {
-//    SplashScreen(Modi)
-//}
