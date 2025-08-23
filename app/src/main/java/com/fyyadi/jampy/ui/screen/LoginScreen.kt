@@ -22,8 +22,9 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fyyadi.core.BuildConfig
+import com.fyyadi.core.domain.model.UserProfile
+import com.fyyadi.core.utils.ResultState
 import com.fyyadi.jampy.R
-import com.fyyadi.jampy.ui.auth.LoginViewModel // Add this import
 import com.fyyadi.jampy.ui.theme.Amarant
 import com.fyyadi.jampy.ui.theme.BackgroundGreen
 import com.fyyadi.jampy.ui.theme.PrimaryGreen
@@ -39,21 +40,33 @@ fun LoginScreen(
     val viewModel: LoginViewModel = hiltViewModel()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(uiState.isLoginSuccess) {
-        if (uiState.isLoginSuccess) {
-            Toast.makeText(context, "Login Successful!", Toast.LENGTH_SHORT).show()
-            onLoginSuccess()
+    val loginAuthState by viewModel.loginAuthState.collectAsState()
+    val addUserState by viewModel.addUserState.collectAsState()
+
+    LaunchedEffect(loginAuthState) {
+        when (loginAuthState) {
+            is ResultState.Success -> {
+                viewModel.addUser()
+            }
+            is ResultState.Error -> {
+                Toast.makeText(context, (loginAuthState as ResultState.Error).message ?: "Login failed", Toast.LENGTH_LONG).show()
+            }
+            else -> Unit
         }
     }
-
-    LaunchedEffect(uiState.error) {
-        uiState.error?.let {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+    LaunchedEffect(addUserState) {
+        when (addUserState) {
+            is ResultState.Success -> {
+                Toast.makeText(context, "Login Successful!", Toast.LENGTH_SHORT).show()
+                onLoginSuccess()
+            }
+            is ResultState.Error -> {
+                Toast.makeText(context, (addUserState as ResultState.Error).message ?: "Failed to save user", Toast.LENGTH_LONG).show()
+            }
+            else -> Unit
         }
     }
-
     val credentialManager = remember { CredentialManager.create(context) }
 
     val googleIdOption: GetGoogleIdOption = remember {
@@ -115,7 +128,7 @@ fun LoginScreen(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
             }
-            if (uiState.isLoading) {
+            if (loginAuthState is ResultState.Loading) {
                 CircularProgressIndicator(modifier = Modifier.padding(12.dp, vertical = 4.dp))
             } else {
                 Button(
@@ -126,14 +139,28 @@ fun LoginScreen(
                                     request = request,
                                     context = context,
                                 )
-                                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
-                                val googleIdToken = googleIdTokenCredential.idToken
-                                Log.e("CEK ISI DATA AUTH", "$googleIdTokenCredential")
-//                                viewModel.signInWithGoogle(googleIdToken)
+                                val googleIdCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
+                                val googleIdToken = googleIdCredential.idToken
+
+                                Log.e("CEK LOGIN EMAIL", googleIdCredential.id)
+                                Log.e("CEK LOGIN FULL NAME", googleIdCredential.displayName.toString())
+                                Log.e("CEK LOGIN AVATAR", googleIdCredential.profilePictureUri.toString())
+
+                                val userProfile = UserProfile(
+                                    id = "",
+                                    email = googleIdCredential.id,
+                                    fullName = googleIdCredential.displayName,
+                                    avatarUrl = googleIdCredential.profilePictureUri.toString(),
+                                    role = "User"
+                                )
+
+                                viewModel.loginWithGoogle(googleIdToken)
+                                viewModel.updateUserProfile(userProfile)
+
                             } catch (e: GetCredentialException) {
                                 Toast.makeText(context, "Sign-in failed: ${e.message}", Toast.LENGTH_LONG).show()
                             } catch (e: Exception) {
-                                Toast.makeText(context, "An unknown error occurred.", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "An unknown error occurred. ${e.message}", Toast.LENGTH_LONG).show()
                             }
                         }
                     },
