@@ -40,4 +40,20 @@ class CoreRepositoryImpl @Inject constructor(
         }
         emit(result)
     }
+
+    override fun checkUserLogin(user: UserProfile): Flow<Result<Boolean>> = flow {
+        val result = runCatching {
+            val response = postgrest.from("users")
+                .select {
+                    filter {
+                        eq("email", user.email ?: "")
+                    }
+                }
+                .decodeList<UserProfileDto>()
+            Log.e("CoreRepositoryImpl", "checkUserLogin: $response")
+            response.isNotEmpty()
+        }
+        emit(result)
+    }
+
 }

@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface CoreRepository {
     fun signInWithGoogle(idToken: String) : Flow<Result<Unit>>
     fun addUser(user: UserProfile) : Flow<Result<Unit>>
+    fun checkUserLogin(user: UserProfile): Flow<Result<Boolean>>
 }

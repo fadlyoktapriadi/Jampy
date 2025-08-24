@@ -17,52 +17,31 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fyyadi.core.domain.model.Plant
 import com.fyyadi.jampy.ui.theme.*
 import com.fyyadi.jampy.R
-
-// Data class untuk tanaman populer
-data class Plant(
-    val name: String,
-    val species: String,
-    val description: String,
-    val imageRes: Int
-)
-
-// Data dummy
-val popularPlants = listOf(
-    Plant("Lidah Buaya", "Aloe Vera", "Soothing, Healing, Hydrating", R.drawable.lidahbuaya),
-    Plant("Daun Sirih", "Piper betle", "Antiseptic, Analgesic, Astringent", R.drawable.sirih),
-    Plant(
-        "Jahe",
-        "Zingiber",
-        "Warming, Anti-inflammatory",
-        R.drawable.lidahbuaya
-    ) // Ganti dengan gambar jahe
-)
+import com.fyyadi.jampy.ui.components.PlantCard
+import com.fyyadi.jampy.ui.components.WeatherCard
+import com.fyyadi.jampy.utils.plantHomeDummy
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
-    // Scaffold menyediakan struktur dasar Material Design
-    Scaffold(
-    ) { paddingValues ->
-        // Box digunakan untuk menumpuk elemen
+    Scaffold { paddingValues ->
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(BackgroundGreen)
                 .padding(paddingValues)
         ) {
-            // Bagian atas dengan latar belakang hijau
             TopSection()
-
-            // Bagian bawah (sheet putih) yang menumpuk di atas
             BottomContentSheet(modifier = Modifier.align(Alignment.BottomCenter))
         }
     }
@@ -76,7 +55,6 @@ fun TopSection() {
             .height(380.dp)
             .background(BackgroundGreen)
     ) {
-        // Header dengan logo
         Image(
             painter = painterResource(id = R.drawable.jampy),
             contentDescription = "Jampy Logo",
@@ -86,11 +64,9 @@ fun TopSection() {
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Kartu cuaca dan sapaan
         WeatherCard()
         Spacer(modifier = Modifier.weight(1f))
 
-        // Ilustrasi tanaman
         Image(
             painter = painterResource(id = R.drawable.illuplant_home),
             contentDescription = "Plant Illustration",
@@ -102,63 +78,13 @@ fun TopSection() {
     }
 }
 
-@Composable
-fun WeatherCard() {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = backgroundCardWhite),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            // Kolom cuaca
-            Column {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Outlined.LocationOn,
-                        contentDescription = "Location",
-                        tint = OrangePrimary,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = "Pandeglang", fontSize = 12.sp, color = Color.Black)
-                }
-                Text(
-                    text = "28°C",
-                    fontSize = 48.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = OrangePrimary,
-                    lineHeight = 50.sp
-                )
-            }
-            // Kolom sapaan
-            Column(horizontalAlignment = Alignment.End) {
-                Text(text = "Hai,", fontSize = 16.sp, color = Color.Black)
-                Text(
-                    text = "Fadly Oktapriadi",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = PrimaryGreen
-                )
-            }
-        }
-    }
-}
 
 @Composable
 fun BottomContentSheet(modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.65f), // Mengisi 65% bagian bawah layar
+            .fillMaxHeight(0.49f),
         color = Color.White,
         shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
     ) {
@@ -167,7 +93,6 @@ fun BottomContentSheet(modifier: Modifier = Modifier) {
                 .fillMaxSize()
                 .padding(top = 16.dp)
         ) {
-            // Handle (garis abu-abu di atas)
             Box(
                 modifier = Modifier
                     .width(40.dp)
@@ -185,7 +110,6 @@ fun BottomContentSheet(modifier: Modifier = Modifier) {
 @Composable
 fun PopularPlantsSection() {
     Column {
-        // Header "Plant Populer"
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -194,13 +118,13 @@ fun PopularPlantsSection() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Plant Populer",
+                text = stringResource(R.string.plant_populer),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryGreen
             )
             Text(
-                text = "See All",
+                text = stringResource(R.string.see_all),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = OrangePrimary
@@ -208,55 +132,16 @@ fun PopularPlantsSection() {
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Daftar tanaman horizontal
         LazyRow(
             contentPadding = PaddingValues(horizontal = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(popularPlants) { plant ->
+            items(plantHomeDummy) { plant ->
                 PlantCard(plant)
             }
         }
     }
 }
-
-@Composable
-fun PlantCard(plant: Plant) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .width(160.dp)
-                .padding(12.dp)
-        ) {
-            Image(
-                painter = painterResource(id = plant.imageRes),
-                contentDescription = plant.name,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Crop
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(text = plant.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
-            Text(text = plant.species, fontSize = 12.sp, color = Color.Black)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = plant.description,
-                fontSize = 12.sp,
-                color = PrimaryGreen,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
-
-
 
 
 @Preview(showBackground = true, device = "id:pixel_5")

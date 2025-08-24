@@ -5,6 +5,7 @@ import com.fyyadi.core.data.repository.CoreRepositoryImpl
 import com.fyyadi.core.domain.repository.CoreRepository
 import com.fyyadi.core.domain.usecase.AddUserUseCase
 import com.fyyadi.core.domain.usecase.AuthUseCase
+import com.fyyadi.core.domain.usecase.CheckUserLoginUseCase
 import com.fyyadi.core.domain.usecase.CoreUseCase
 import dagger.Module
 import dagger.Provides
@@ -16,6 +17,7 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.serializer.KotlinXSerializer
 import javax.inject.Singleton
 
 @Module
@@ -29,6 +31,7 @@ object CoreModule {
             supabaseUrl = BuildConfig.SUPABASE_URL,
             supabaseKey = BuildConfig.SUPABASE_ANON_KEY,
         ) {
+            defaultSerializer = KotlinXSerializer()
             install(Auth)
             install(Postgrest)
         }
@@ -50,9 +53,10 @@ object CoreModule {
 
     @Provides
     fun providesCoreUseCases(
-        authRepository: CoreRepository
+        coreRepository: CoreRepository
     ) = CoreUseCase(
-        authUseCase = AuthUseCase(authRepository),
-        addUserUseCase = AddUserUseCase(authRepository)
+        authUseCase = AuthUseCase(coreRepository),
+        addUserUseCase = AddUserUseCase(coreRepository),
+        checkUserLoginUseCase = CheckUserLoginUseCase(coreRepository)
     )
 }

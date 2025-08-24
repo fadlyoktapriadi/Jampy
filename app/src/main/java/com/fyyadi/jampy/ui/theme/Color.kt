@@ -15,6 +15,9 @@ val backgroundCardWhite = Color(0xFFFAFAFA)
 // Orange
 val OrangePrimary = Color(0xFFE28843)
 
+// Slate
+val SlatePrimary = Color(0xFFD4D4D4)
+
 // Green
 val PrimaryGreen = Color(0xFF3E5F44)
 val SecondaryGreen = Color(0xFFD0E8C5)

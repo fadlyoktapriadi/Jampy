@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,12 +43,30 @@ fun LoginScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val loginAuthState by viewModel.loginAuthState.collectAsState()
+    val checkUserLoginState by viewModel.checkUserLoginState.collectAsState()
     val addUserState by viewModel.addUserState.collectAsState()
+
+    LaunchedEffect(checkUserLoginState) {
+        when (checkUserLoginState) {
+            is ResultState.Success -> {
+                val isLoggedIn = (checkUserLoginState as ResultState.Success).data
+                if (isLoggedIn) {
+                    onLoginSuccess()
+                } else {
+                    viewModel.addUser()
+                }
+            }
+            is ResultState.Error -> {
+                Toast.makeText(context, (checkUserLoginState as ResultState.Error).message ?: "Failed to check user login", Toast.LENGTH_LONG).show()
+            }
+            else -> Unit
+        }
+    }
 
     LaunchedEffect(loginAuthState) {
         when (loginAuthState) {
             is ResultState.Success -> {
-                viewModel.addUser()
+                viewModel.checkUserLogin()
             }
             is ResultState.Error -> {
                 Toast.makeText(context, (loginAuthState as ResultState.Error).message ?: "Login failed", Toast.LENGTH_LONG).show()
@@ -58,7 +77,6 @@ fun LoginScreen(
     LaunchedEffect(addUserState) {
         when (addUserState) {
             is ResultState.Success -> {
-                Toast.makeText(context, "Login Successful!", Toast.LENGTH_SHORT).show()
                 onLoginSuccess()
             }
             is ResultState.Error -> {
@@ -102,7 +120,7 @@ fun LoginScreen(
                 modifier = Modifier.padding(top = 14.dp)
             ) {
                 Text(
-                    text = "Nature's medicine,",
+                    text = stringResource(R.string.welcome_text_nature),
                     fontFamily = Amarant,
                     fontSize = 28.sp,
                     fontWeight = FontWeight.ExtraBold,
@@ -111,7 +129,7 @@ fun LoginScreen(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
                 Text(
-                    text = "Explore the herbal world.",
+                    text = stringResource(R.string.welcome_text_explore),
                     fontFamily = Amarant,
                     fontSize = 28.sp,
                     fontWeight = FontWeight.ExtraBold,
@@ -120,7 +138,7 @@ fun LoginScreen(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
                 Text(
-                    text = "Identifikasi tanaman dengan mudah dan temukan khasiatnya hanya dalam sekali klik.",
+                    text = stringResource(R.string.welcome_text_discover),
                     fontFamily = RethinkSans,
                     fontWeight = FontWeight.Normal,
                     lineHeight = 18.sp,
@@ -142,12 +160,12 @@ fun LoginScreen(
                                 val googleIdCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
                                 val googleIdToken = googleIdCredential.idToken
 
-                                Log.e("CEK LOGIN EMAIL", googleIdCredential.id)
-                                Log.e("CEK LOGIN FULL NAME", googleIdCredential.displayName.toString())
-                                Log.e("CEK LOGIN AVATAR", googleIdCredential.profilePictureUri.toString())
+//                                Log.e("CEK LOGIN EMAIL", googleIdCredential.id)
+//                                Log.e("CEK LOGIN FULL NAME", googleIdCredential.displayName.toString())
+//                                Log.e("CEK LOGIN AVATAR", googleIdCredential.profilePictureUri.toString())
 
                                 val userProfile = UserProfile(
-                                    id = "",
+                                    id = null,
                                     email = googleIdCredential.id,
                                     fullName = googleIdCredential.displayName,
                                     avatarUrl = googleIdCredential.profilePictureUri.toString(),
@@ -184,7 +202,7 @@ fun LoginScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "Sign in with Google",
+                            text = stringResource(R.string.button_login),
                             fontSize = 14.sp,
                             fontFamily = RethinkSans,
                             fontWeight = FontWeight.Normal

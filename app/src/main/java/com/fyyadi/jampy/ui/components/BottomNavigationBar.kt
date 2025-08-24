@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.fyyadi.jampy.ui.theme.OrangePrimary
 import com.fyyadi.jampy.ui.theme.backgroundCardWhite
 import com.fyyadi.jampy.ui.theme.PrimaryGreen
+import com.fyyadi.jampy.ui.theme.SlatePrimary
 import com.fyyadi.jampy.utils.BottomNavItem
 
 @Composable
@@ -45,7 +46,13 @@ fun BottomNavigationBar(
         exit = fadeOut() + slideOutVertically(targetOffsetY = { it })
     ) {
 
-        NavigationBar {
+        NavigationBar(
+            containerColor = Color.White,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(bottom = 12.dp, top = 4.dp)
+        ) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -86,7 +93,7 @@ fun BottomNavigationBar(
                                     tint = when {
                                         isScanButton -> Color.White
                                         isSelected -> PrimaryGreen
-                                        else -> OrangePrimary
+                                        else -> SlatePrimary
                                     }
                                 )
                             }
