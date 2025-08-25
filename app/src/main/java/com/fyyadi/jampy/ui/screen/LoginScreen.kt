@@ -1,6 +1,5 @@
 package com.fyyadi.jampy.ui.screen
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,9 +21,9 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.fyyadi.core.BuildConfig
-import com.fyyadi.core.domain.model.UserProfile
-import com.fyyadi.core.utils.ResultState
+import com.fyyadi.domain.model.UserProfile
+import com.fyyadi.jampy.BuildConfig
+import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.ui.theme.Amarant
 import com.fyyadi.jampy.ui.theme.BackgroundGreen
@@ -187,8 +186,8 @@ fun LoginScreen(
                         contentColor = Color.Black
                     ),
                     modifier = Modifier
-                        .padding(12.dp, vertical = 4.dp)
                         .fillMaxWidth()
+                        .padding(12.dp, vertical = 4.dp)
                         .border(1.dp, PrimaryGreen, shape = ButtonDefaults.shape)
                 ) {
                     Row(

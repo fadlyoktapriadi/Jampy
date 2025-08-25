@@ -22,4 +22,6 @@ val SlatePrimary = Color(0xFFD4D4D4)
 val PrimaryGreen = Color(0xFF3E5F44)
 val SecondaryGreen = Color(0xFFD0E8C5)
 val TersiaryGreen = Color(0xFF80AF81)
+
+val Green600 = Color(0xFFFCFFF8)
 val BackgroundGreen = Color(0xFFF1F8E8)

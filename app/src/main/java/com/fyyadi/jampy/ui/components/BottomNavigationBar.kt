@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -22,15 +21,15 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.fyyadi.jampy.ui.theme.Green600
 import com.fyyadi.jampy.ui.theme.OrangePrimary
 import com.fyyadi.jampy.ui.theme.backgroundCardWhite
 import com.fyyadi.jampy.ui.theme.PrimaryGreen
 import com.fyyadi.jampy.ui.theme.SlatePrimary
 import com.fyyadi.jampy.utils.BottomNavItem
+// file: `app/src/main/java/com/fyyadi/jampy/ui/components/BottomNavigationBar.kt`
 
 @Composable
 fun BottomNavigationBar(
@@ -39,18 +38,16 @@ fun BottomNavigationBar(
     selectedIndex: Int,
     onSelectedIndexChange: (Int) -> Unit
 ) {
-
     AnimatedVisibility(
         visible = isBottomBarVisible,
         enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
         exit = fadeOut() + slideOutVertically(targetOffsetY = { it })
     ) {
-
         NavigationBar(
-            containerColor = Color.White,
+            containerColor = Green600,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(Green600)
                 .padding(bottom = 12.dp, top = 4.dp)
         ) {
             Card(
@@ -69,38 +66,50 @@ fun BottomNavigationBar(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     itemNavScreens.forEachIndexed { index, item ->
-                        val isSelected = selectedIndex == index
-                        val isScanButton = index == 2
-
-                        IconButton(onClick = { onSelectedIndexChange(index) }) {
-                            Box(
-                                modifier = if (isScanButton) {
-                                    Modifier
-                                        .size(48.dp)
-                                        .clip(CircleShape)
-                                        .background(OrangePrimary)
-                                } else {
-                                    Modifier.size(28.dp)
-                                },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    painter = painterResource(
-                                        id = if (isSelected) item.selectedIcon else item.unselectedIcon
-                                    ),
-                                    contentDescription = item.title,
-                                    modifier = Modifier.size(if (isScanButton) 28.dp else 24.dp),
-                                    tint = when {
-                                        isScanButton -> Color.White
-                                        isSelected -> PrimaryGreen
-                                        else -> SlatePrimary
-                                    }
-                                )
-                            }
-                        }
+                        BottomNavItemButton(
+                            item = item,
+                            isSelected = selectedIndex == index,
+                            isScanButton = index == 2,
+                            onClick = { onSelectedIndexChange(index) }
+                        )
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun BottomNavItemButton(
+    item: BottomNavItem,
+    isSelected: Boolean,
+    isScanButton: Boolean,
+    onClick: () -> Unit
+) {
+    IconButton(onClick = onClick) {
+        Box(
+            modifier = Modifier.size(IconBoxSize),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(
+                    id = if (isSelected) item.selectedIcon else item.unselectedIcon
+                ),
+                contentDescription = item.title,
+                modifier = Modifier.size(iconSize(isScanButton)),
+                tint = iconTint(isScanButton, isSelected)
+            )
+        }
+    }
+}
+
+private val IconBoxSize = 28.dp
+
+private fun iconSize(isScanButton: Boolean) =
+    if (isScanButton) 28.dp else 24.dp
+
+private fun iconTint(isScanButton: Boolean, isSelected: Boolean) = when {
+    isScanButton -> OrangePrimary
+    isSelected   -> PrimaryGreen
+    else         -> SlatePrimary
 }

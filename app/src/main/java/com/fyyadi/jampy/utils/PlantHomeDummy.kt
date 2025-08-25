@@ -1,6 +1,6 @@
 package com.fyyadi.jampy.utils
 
-import com.fyyadi.core.domain.model.Plant
+import com.fyyadi.domain.model.Plant
 import com.fyyadi.jampy.R
 
 val plantHomeDummy = listOf(

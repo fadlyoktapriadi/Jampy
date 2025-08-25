@@ -5,7 +5,7 @@ import com.fyyadi.jampy.route.BaseRoute
 
 data class BottomNavItem(
     val title: String,
-    @DrawableRes val selectedIcon: Int,
-    @DrawableRes val unselectedIcon: Int,
+    @param:DrawableRes val selectedIcon: Int,
+    @param:DrawableRes val unselectedIcon: Int,
     val route: BaseRoute
 )

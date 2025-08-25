@@ -2,9 +2,9 @@ package com.fyyadi.jampy.ui.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fyyadi.core.domain.model.UserProfile
-import com.fyyadi.core.domain.usecase.CoreUseCase
-import com.fyyadi.core.utils.ResultState
+import com.fyyadi.domain.model.UserProfile
+import com.fyyadi.domain.usecase.CoreUseCase
+import com.fyyadi.jampy.common.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

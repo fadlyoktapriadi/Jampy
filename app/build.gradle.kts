@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -19,6 +21,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val localProps = Properties()
+        localProps.load(project.rootProject.file("local.properties").inputStream())
+
+        buildConfigField("String", "SUPABASE_URL", "\"${localProps.getProperty("SUPABASE_URL")}\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"${localProps.getProperty("SUPABASE_ANON_KEY")}\"")
+        buildConfigField("String", "GOOGLE_CLIENT_ID", "\"${localProps.getProperty("GOOGLE_CLIENT_ID")}\"")
     }
 
     buildTypes {
@@ -46,7 +55,8 @@ android {
 
 dependencies {
 
-    implementation(project(":core"))
+    implementation(project(":data"))
+    implementation(project(":domain"))
 
     // Core
     implementation(libs.androidx.core.ktx)
@@ -78,6 +88,7 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     ksp(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
     // Compose
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -90,7 +101,13 @@ dependencies {
     implementation(libs.googleid)
     implementation(libs.androidx.credentials.play.services.auth)
 
-
+    // Supabase
+    implementation(platform(libs.supabase.core))
+    implementation(libs.postgrest.kt)
+    implementation(libs.supabase.compose.auth)
+    implementation(libs.supabase.compose.auth.ui)
+    implementation(libs.auth.kt)
+    implementation(libs.realtime.kt)
 
 
 }
