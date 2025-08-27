@@ -31,6 +31,10 @@ class PreferenceManager @Inject constructor(
         get() = prefs.getString(KEY_USER_AVATAR, null)
         set(value) = prefs.edit { putString(KEY_USER_AVATAR, value)}
 
+    var userRole: String?
+        get() = prefs.getString("user_role", null)
+        set(value) = prefs.edit { putString("user_role", value) }
+
     fun clearUserData() {
         prefs.edit { clear() }
     }

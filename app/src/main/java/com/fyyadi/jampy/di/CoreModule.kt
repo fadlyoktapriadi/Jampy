@@ -1,11 +1,16 @@
 package com.fyyadi.jampy.di
 
 import com.fyyadi.data.repository.CoreRepositoryImpl
+import com.fyyadi.data.source.local.sharedpreference.PreferenceManager
 import com.fyyadi.domain.repository.CoreRepository
 import com.fyyadi.domain.usecase.AddUserUseCase
 import com.fyyadi.domain.usecase.AuthUseCase
 import com.fyyadi.domain.usecase.CheckUserLoginUseCase
+import com.fyyadi.domain.usecase.ClearUserLoginUseCase
 import com.fyyadi.domain.usecase.CoreUseCase
+import com.fyyadi.domain.usecase.GetLoginStatusUseCase
+import com.fyyadi.domain.usecase.GetUserProfileUseCase
+import com.fyyadi.domain.usecase.SaveUserLoginUseCase
 import com.fyyadi.jampy.BuildConfig
 import dagger.Module
 import dagger.Provides
@@ -48,8 +53,9 @@ object CoreModule {
     @Singleton
     fun provideCoreRepositoryImpl(
         auth: Auth,
-        postgrest: Postgrest
-    ): CoreRepository = CoreRepositoryImpl(auth, postgrest)
+        postgrest: Postgrest,
+        preferenceManager: PreferenceManager
+    ): CoreRepository = CoreRepositoryImpl(auth, postgrest, preferenceManager)
 
     @Provides
     fun providesCoreUseCases(
@@ -57,6 +63,10 @@ object CoreModule {
     ) = CoreUseCase(
         authUseCase = AuthUseCase(coreRepository),
         addUserUseCase = AddUserUseCase(coreRepository),
-        checkUserLoginUseCase = CheckUserLoginUseCase(coreRepository)
+        checkUserLoginUseCase = CheckUserLoginUseCase(coreRepository),
+        clearUserLoginUseCase = ClearUserLoginUseCase(coreRepository),
+        getUserProfileUseCase = GetUserProfileUseCase(coreRepository),
+        getLoginStatusUseCase = GetLoginStatusUseCase(coreRepository),
+        saveUserLoginUseCase = SaveUserLoginUseCase(coreRepository)
     )
 }

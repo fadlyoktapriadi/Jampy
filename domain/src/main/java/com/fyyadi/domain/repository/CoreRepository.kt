@@ -10,8 +10,8 @@ interface CoreRepository {
     fun checkUserLogin(user: UserProfile): Flow<Result<Boolean>>
 
     // Preferences
-//    fun saveUserLogin(user: UserProfile)
-//    fun getUserLogin(): UserProfile?
-//    fun isUserLoggedIn(): Boolean
-//    fun clearUserLogin()
+    fun saveUserLogin(user: UserProfile): Flow<Result<Unit>>
+    fun clearUserLogin(): Flow<Result<Unit>>
+    fun isUserLoggedIn(): Flow<Result<Boolean>>
+    fun getUserProfile(): Flow<Result<UserProfile?>>
 }

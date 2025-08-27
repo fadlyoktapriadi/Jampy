@@ -81,4 +81,20 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    fun saveUserLogin() {
+        val profile = _userProfile.value ?: return
+        viewModelScope.launch {
+            coreUseCase.saveUserLoginUseCase(profile)
+                .collect { result ->
+                    result
+                        .onSuccess {
+                            // User login saved successfully
+                        }
+                        .onFailure { exception ->
+                            // Handle error if needed
+                        }
+                }
+        }
+    }
 }

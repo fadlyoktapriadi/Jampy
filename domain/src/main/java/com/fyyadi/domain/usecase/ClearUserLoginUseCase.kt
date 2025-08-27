@@ -1,13 +1,12 @@
 package com.fyyadi.domain.usecase
 
-import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.domain.repository.CoreRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SaveUserLoginUseCase @Inject constructor(
+class ClearUserLoginUseCase @Inject constructor(
     private val coreRepository: CoreRepository
 ) {
-    operator fun invoke(user: UserProfile): Flow<Result<Unit>> =
-        coreRepository.saveUserLogin(user)
+    operator fun invoke(): Flow<Result<Unit>> =
+        coreRepository.clearUserLogin()
 }

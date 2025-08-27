@@ -50,6 +50,7 @@ fun LoginScreen(
             is ResultState.Success -> {
                 val isLoggedIn = (checkUserLoginState as ResultState.Success).data
                 if (isLoggedIn) {
+                    viewModel.saveUserLogin()
                     onLoginSuccess()
                 } else {
                     viewModel.addUser()
@@ -76,6 +77,7 @@ fun LoginScreen(
     LaunchedEffect(addUserState) {
         when (addUserState) {
             is ResultState.Success -> {
+                viewModel.saveUserLogin()
                 onLoginSuccess()
             }
             is ResultState.Error -> {
