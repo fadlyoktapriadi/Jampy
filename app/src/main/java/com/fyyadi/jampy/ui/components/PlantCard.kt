@@ -22,8 +22,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fyyadi.domain.model.Plant
+import com.fyyadi.jampy.R
 import com.fyyadi.jampy.ui.theme.PrimaryGreen
-
+import com.fyyadi.jampy.ui.theme.RethinkSans
 
 @Composable
 fun PlantCard(plant: Plant) {
@@ -34,27 +35,44 @@ fun PlantCard(plant: Plant) {
     ) {
         Column(
             modifier = Modifier
-                .width(160.dp)
+                .width(180.dp)
                 .padding(12.dp)
         ) {
+//            Image(
+//                painter = painterResource(id = plant.imagePlant),
+//                contentDescription = plant.plantName,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(120.dp)
+//                    .clip(RoundedCornerShape(12.dp)),
+//                contentScale = ContentScale.Crop
+//            )
             Image(
-                painter = painterResource(id = plant.imageRes),
-                contentDescription = plant.name,
+                painter = painterResource(R.drawable.sirih),
+                contentDescription = plant.plantName,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
+                    .height(130.dp)
                     .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(12.dp))
-            Text(text = plant.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
-            Text(text = plant.species, fontSize = 12.sp, color = Color.Black)
-            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = plant.description,
-                fontSize = 12.sp,
+                text = plant.plantName,
+                fontFamily = RethinkSans,
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                color = Color.Black
+            )
+            Text(text = plant.plantSpecies, fontSize = 12.sp, color = Color.Black, lineHeight = 14.sp)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = plant.plantDescription,
+                fontSize = 10.sp,
+                fontFamily = RethinkSans,
                 color = PrimaryGreen,
                 maxLines = 2,
+                lineHeight = 14.sp,
                 overflow = TextOverflow.Ellipsis
             )
         }

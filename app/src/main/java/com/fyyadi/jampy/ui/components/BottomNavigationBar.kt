@@ -29,7 +29,6 @@ import com.fyyadi.jampy.ui.theme.backgroundCardWhite
 import com.fyyadi.jampy.ui.theme.PrimaryGreen
 import com.fyyadi.jampy.ui.theme.SlatePrimary
 import com.fyyadi.jampy.utils.BottomNavItem
-// file: `app/src/main/java/com/fyyadi/jampy/ui/components/BottomNavigationBar.kt`
 
 @Composable
 fun BottomNavigationBar(
@@ -61,7 +60,7 @@ fun BottomNavigationBar(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ) {

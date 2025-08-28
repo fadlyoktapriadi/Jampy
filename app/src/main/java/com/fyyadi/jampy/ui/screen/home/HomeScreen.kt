@@ -1,4 +1,4 @@
-package com.fyyadi.jampy.ui.screen
+package com.fyyadi.jampy.ui.screen.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,16 +20,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.fyyadi.domain.model.Plant
+import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.jampy.ui.theme.*
 import com.fyyadi.jampy.R
+import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.components.PlantCard
 import com.fyyadi.jampy.ui.components.WeatherCard
-import com.fyyadi.jampy.utils.plantHomeDummy
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
+    val viewModel: HomeViewModel = hiltViewModel()
+
+    val profileUserState by viewModel.profileUserState.collectAsState()
+    val plantHomeState by viewModel.plantHomeState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getUserProfile()
+        viewModel.getPlantHome()
+    }
+
     Scaffold { paddingValues ->
         Box(
             modifier = modifier
@@ -37,14 +50,16 @@ fun HomeScreen(
                 .background(BackgroundGreen)
                 .padding(paddingValues)
         ) {
-            TopSection()
-            BottomContentSheet(modifier = Modifier.align(Alignment.BottomCenter))
+            TopSection(profileUserState)
+            BottomContentSheet(modifier = Modifier.align(Alignment.BottomCenter), plantHomeState)
         }
     }
 }
 
 @Composable
-fun TopSection() {
+fun TopSection(
+    profileUserState: ResultState<UserProfile?>
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -60,7 +75,7 @@ fun TopSection() {
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        WeatherCard()
+        WeatherCard(profileUserState)
         Spacer(modifier = Modifier.weight(1f))
 
         Image(
@@ -76,11 +91,14 @@ fun TopSection() {
 
 
 @Composable
-fun BottomContentSheet(modifier: Modifier = Modifier) {
+fun BottomContentSheet(
+    modifier: Modifier = Modifier,
+    plantHomeState: ResultState<List<Plant>>
+) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.49f),
+            .fillMaxHeight(0.45f),
         color = Color.White,
         shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
     ) {
@@ -98,13 +116,15 @@ fun BottomContentSheet(modifier: Modifier = Modifier) {
                     .align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(24.dp))
-            PopularPlantsSection()
+            PopularPlantsSection(plantHomeState)
         }
     }
 }
 
 @Composable
-fun PopularPlantsSection() {
+fun PopularPlantsSection(
+    plantHomeState: ResultState<List<Plant>>
+) {
     Column {
         Row(
             modifier = Modifier
@@ -116,24 +136,56 @@ fun PopularPlantsSection() {
             Text(
                 text = stringResource(R.string.plant_populer),
                 fontSize = 18.sp,
+                fontFamily = RethinkSans,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryGreen
             )
             Text(
                 text = stringResource(R.string.see_all),
                 fontSize = 14.sp,
+                fontFamily = RethinkSans,
                 fontWeight = FontWeight.SemiBold,
                 color = OrangePrimary
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(plantHomeDummy) { plant ->
-                PlantCard(plant)
+        when (plantHomeState) {
+            is ResultState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = PrimaryGreen)
+                }
+            }
+            is ResultState.Success -> {
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(plantHomeState.data) { plant ->
+                        PlantCard(plant)
+                    }
+                }
+            }
+            is ResultState.Error -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Failed to load plants",
+                        fontFamily = RethinkSans,
+                        color = Color.Red
+                    )
+                }
+            } else -> {
+
             }
         }
     }

@@ -1,5 +1,6 @@
-package com.fyyadi.jampy.ui.screen
+package com.fyyadi.jampy.ui.screen.login
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -166,10 +167,10 @@ fun LoginScreen(
 //                                Log.e("CEK LOGIN AVATAR", googleIdCredential.profilePictureUri.toString())
 
                                 val userProfile = UserProfile(
-                                    id = null,
+                                    idUser = null,
                                     email = googleIdCredential.id,
                                     fullName = googleIdCredential.displayName,
-                                    avatarUrl = googleIdCredential.profilePictureUri.toString(),
+                                    photoProfile = googleIdCredential.profilePictureUri.toString(),
                                     role = "User"
                                 )
 
@@ -189,7 +190,6 @@ fun LoginScreen(
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(12.dp, vertical = 4.dp)
                         .border(1.dp, PrimaryGreen, shape = ButtonDefaults.shape)
                 ) {
                     Row(

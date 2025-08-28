@@ -1,8 +1,11 @@
 package com.fyyadi.data.repository
 
 import android.util.Log
+import com.fyyadi.data.mapper.toPlant
 import com.fyyadi.data.source.local.sharedpreference.PreferenceManager
+import com.fyyadi.data.source.network.dto.PlantDto
 import com.fyyadi.data.source.network.dto.UserProfileDto
+import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.domain.repository.CoreRepository
 import io.github.jan.supabase.auth.Auth
@@ -12,6 +15,7 @@ import io.github.jan.supabase.postgrest.Postgrest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+import kotlin.collections.map
 
 class CoreRepositoryImpl @Inject constructor(
     private val auth: Auth,
@@ -32,9 +36,9 @@ class CoreRepositoryImpl @Inject constructor(
     override fun addUser(user: UserProfile): Flow<Result<Unit>> = flow {
         val result = runCatching {
             val userDto = mapOf(
-                "fullName" to user.fullName,
+                "full_name" to user.fullName,
                 "email" to user.email,
-                "avatar_url" to user.avatarUrl,
+                "photo_profile" to user.photoProfile,
                 "role" to user.role
             )
             postgrest.from("users").upsert(userDto)
@@ -52,7 +56,6 @@ class CoreRepositoryImpl @Inject constructor(
                     }
                 }
                 .decodeList<UserProfileDto>()
-            Log.e("CoreRepositoryImpl", "checkUserLogin: $response")
             response.isNotEmpty()
         }
         emit(result)
@@ -64,7 +67,7 @@ class CoreRepositoryImpl @Inject constructor(
             preferenceManager.isLoggedIn = true
             preferenceManager.userEmail = user.email
             preferenceManager.userFullName = user.fullName
-            preferenceManager.userAvatarUrl = user.avatarUrl
+            preferenceManager.userPhotoProfileUrl = user.photoProfile
             preferenceManager.userRole = user.role
         }
         emit(result)
@@ -88,15 +91,30 @@ class CoreRepositoryImpl @Inject constructor(
         val result = runCatching {
             if (preferenceManager.isLoggedIn) {
                 UserProfile(
-                    id = null,
+                    idUser = null,
                     fullName = preferenceManager.userFullName,
                     email = preferenceManager.userEmail,
-                    avatarUrl = preferenceManager.userAvatarUrl,
+                    photoProfile = preferenceManager.userPhotoProfileUrl,
                     role = preferenceManager.userRole
                 )
             } else null
         }
         emit(result)
     }
+
+    // DATA SOURCE
+    override fun getPlantHome(): Flow<Result<List<Plant>>> = flow {
+        val result = runCatching {
+            val response = postgrest.from("herb_plants")
+                .select{
+                    limit(4)
+                }
+                .decodeList<PlantDto>()
+            response.map { it.toPlant() }
+        }
+
+        emit(result)
+    }
+
 
 }

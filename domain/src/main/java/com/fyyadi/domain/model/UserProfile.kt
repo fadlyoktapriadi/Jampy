@@ -1,9 +1,9 @@
 package com.fyyadi.domain.model
 
 data class UserProfile(
-    val id: Int?,
+    val idUser: Int?,
     val email: String?,
     val fullName: String?,
-    val avatarUrl: String?,
+    val photoProfile: String?,
     val role: String?
 )

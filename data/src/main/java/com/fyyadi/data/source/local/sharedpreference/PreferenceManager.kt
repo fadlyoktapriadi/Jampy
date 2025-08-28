@@ -27,9 +27,9 @@ class PreferenceManager @Inject constructor(
         get() = prefs.getString(KEY_USER_FULL_NAME, null)
         set(value) = prefs.edit { putString(KEY_USER_FULL_NAME, value)}
 
-    var userAvatarUrl: String?
-        get() = prefs.getString(KEY_USER_AVATAR, null)
-        set(value) = prefs.edit { putString(KEY_USER_AVATAR, value)}
+    var userPhotoProfileUrl: String?
+        get() = prefs.getString(KEY_USER_PHOTO_PROFILE, null)
+        set(value) = prefs.edit { putString(KEY_USER_PHOTO_PROFILE, value)}
 
     var userRole: String?
         get() = prefs.getString("user_role", null)
@@ -44,6 +44,6 @@ class PreferenceManager @Inject constructor(
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
         private const val KEY_USER_EMAIL = "user_email"
         private const val KEY_USER_FULL_NAME = "user_name"
-        private const val KEY_USER_AVATAR = "user_avatar"
+        private const val KEY_USER_PHOTO_PROFILE = "user_avatar"
     }
 }

@@ -1,4 +1,4 @@
-package com.fyyadi.jampy.ui.screen
+package com.fyyadi.jampy.ui.screen.splashscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

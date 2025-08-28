@@ -1,4 +1,4 @@
-package com.fyyadi.jampy.ui.screen
+package com.fyyadi.jampy.ui.screen.splashscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,5 +1,6 @@
-package com.fyyadi.jampy.ui.screen
+package com.fyyadi.jampy.ui.screen.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fyyadi.domain.model.UserProfile
@@ -89,10 +90,9 @@ class LoginViewModel @Inject constructor(
                 .collect { result ->
                     result
                         .onSuccess {
-                            // User login saved successfully
                         }
                         .onFailure { exception ->
-                            // Handle error if needed
+                            Log.e("LoginViewModel", "saveUserLogin: ${exception.message}" )
                         }
                 }
         }

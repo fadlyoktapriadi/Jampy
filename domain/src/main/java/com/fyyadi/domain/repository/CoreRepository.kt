@@ -1,5 +1,6 @@
 package com.fyyadi.domain.repository
 
+import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.UserProfile
 import kotlinx.coroutines.flow.Flow
 
@@ -14,4 +15,7 @@ interface CoreRepository {
     fun clearUserLogin(): Flow<Result<Unit>>
     fun isUserLoggedIn(): Flow<Result<Boolean>>
     fun getUserProfile(): Flow<Result<UserProfile?>>
+
+    // Plant
+    fun getPlantHome(): Flow<Result<List<Plant>>>
 }

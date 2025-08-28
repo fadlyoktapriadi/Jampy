@@ -22,13 +22,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fyyadi.domain.model.UserProfile
+import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.theme.OrangePrimary
 import com.fyyadi.jampy.ui.theme.PrimaryGreen
 import com.fyyadi.jampy.ui.theme.backgroundCardWhite
 
 
 @Composable
-fun WeatherCard() {
+fun WeatherCard(
+    profileUserState: ResultState<UserProfile?>
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -65,12 +69,25 @@ fun WeatherCard() {
             }
             Column(horizontalAlignment = Alignment.End) {
                 Text(text = "Hai,", fontSize = 16.sp, color = Color.Black)
-                Text(
-                    text = "Fadly Oktapriadi",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = PrimaryGreen
-                )
+                when(profileUserState)
+                {
+                    is ResultState.Success -> {
+                        Text(
+                            text = profileUserState.data?.fullName ?: "",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = PrimaryGreen
+                        )
+                    }
+                    else -> {
+                        Text(
+                            text = "User",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = PrimaryGreen
+                        )
+                    }
+                }
             }
         }
     }

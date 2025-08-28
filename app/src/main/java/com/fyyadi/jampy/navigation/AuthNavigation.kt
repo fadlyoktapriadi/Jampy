@@ -6,8 +6,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.fyyadi.jampy.route.AuthRoutes
 import com.fyyadi.jampy.route.HomeRoutes
-import com.fyyadi.jampy.ui.screen.LoginScreen
-import com.fyyadi.jampy.ui.screen.SplashScreen
+import com.fyyadi.jampy.ui.screen.login.LoginScreen
+import com.fyyadi.jampy.ui.screen.splashscreen.SplashScreen
 
 object AuthNavigation {
     fun NavGraphBuilder.authNavigation(

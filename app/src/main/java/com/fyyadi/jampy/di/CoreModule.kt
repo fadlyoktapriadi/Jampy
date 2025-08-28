@@ -9,6 +9,7 @@ import com.fyyadi.domain.usecase.CheckUserLoginUseCase
 import com.fyyadi.domain.usecase.ClearUserLoginUseCase
 import com.fyyadi.domain.usecase.CoreUseCase
 import com.fyyadi.domain.usecase.GetLoginStatusUseCase
+import com.fyyadi.domain.usecase.GetPlantHomeUseCase
 import com.fyyadi.domain.usecase.GetUserProfileUseCase
 import com.fyyadi.domain.usecase.SaveUserLoginUseCase
 import com.fyyadi.jampy.BuildConfig
@@ -23,6 +24,7 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.serializer.KotlinXSerializer
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
@@ -36,7 +38,13 @@ object CoreModule {
             supabaseUrl = BuildConfig.SUPABASE_URL,
             supabaseKey = BuildConfig.SUPABASE_ANON_KEY,
         ) {
-            defaultSerializer = KotlinXSerializer()
+            defaultSerializer = KotlinXSerializer(
+                Json {
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                    encodeDefaults = true
+                }
+            )
             install(Auth)
             install(Postgrest)
         }
@@ -67,6 +75,7 @@ object CoreModule {
         clearUserLoginUseCase = ClearUserLoginUseCase(coreRepository),
         getUserProfileUseCase = GetUserProfileUseCase(coreRepository),
         getLoginStatusUseCase = GetLoginStatusUseCase(coreRepository),
-        saveUserLoginUseCase = SaveUserLoginUseCase(coreRepository)
+        saveUserLoginUseCase = SaveUserLoginUseCase(coreRepository),
+        getPlantHomeUseCase = GetPlantHomeUseCase(coreRepository)
     )
 }
