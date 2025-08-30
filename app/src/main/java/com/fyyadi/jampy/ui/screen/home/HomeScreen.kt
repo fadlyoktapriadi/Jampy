@@ -27,11 +27,12 @@ import com.fyyadi.jampy.ui.theme.*
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.components.PlantCard
-import com.fyyadi.jampy.ui.components.WeatherCard
+import com.fyyadi.jampy.ui.screen.home.components.WeatherCard
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onPlantClick: (Int) -> Unit = {}
 ) {
     val viewModel: HomeViewModel = hiltViewModel()
 
@@ -51,7 +52,7 @@ fun HomeScreen(
                 .padding(paddingValues)
         ) {
             TopSection(profileUserState)
-            BottomContentSheet(modifier = Modifier.align(Alignment.BottomCenter), plantHomeState)
+            BottomContentSheet(modifier = Modifier.align(Alignment.BottomCenter), plantHomeState, onPlantClick = onPlantClick, )
         }
     }
 }
@@ -93,7 +94,8 @@ fun TopSection(
 @Composable
 fun BottomContentSheet(
     modifier: Modifier = Modifier,
-    plantHomeState: ResultState<List<Plant>>
+    plantHomeState: ResultState<List<Plant>>,
+    onPlantClick: (Int) -> Unit = {}
 ) {
     Surface(
         modifier = modifier
@@ -116,14 +118,15 @@ fun BottomContentSheet(
                     .align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(24.dp))
-            PopularPlantsSection(plantHomeState)
+            PopularPlantsSection(plantHomeState, onPlantClick)
         }
     }
 }
 
 @Composable
 fun PopularPlantsSection(
-    plantHomeState: ResultState<List<Plant>>
+    plantHomeState: ResultState<List<Plant>>,
+    onPlantClick: (Int) -> Unit = {}
 ) {
     Column {
         Row(
@@ -167,7 +170,9 @@ fun PopularPlantsSection(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(plantHomeState.data) { plant ->
-                        PlantCard(plant)
+                        PlantCard(
+                            plant = plant,
+                            onClick = { onPlantClick(plant.idPlant) })
                     }
                 }
             }

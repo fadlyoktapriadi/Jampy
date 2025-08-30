@@ -9,6 +9,9 @@ sealed class HomeRoutes : BaseRoute() {
     data object HomeScreen : HomeRoutes()
 
     @Serializable
+    data class DetailPlantScreen(val plantId: Int) : HomeRoutes()
+
+    @Serializable
     data object SearchScreen : HomeRoutes()
 
     @Serializable

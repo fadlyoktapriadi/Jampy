@@ -4,7 +4,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.fyyadi.jampy.route.HomeRoutes
+import com.fyyadi.jampy.ui.screen.detail.DetailPlantScreen
 import com.fyyadi.jampy.ui.screen.home.HomeScreen
 
 object HomeNavigation {
@@ -15,6 +17,21 @@ object HomeNavigation {
     ) {
         composable<HomeRoutes.HomeScreen> {
             HomeScreen(
+                modifier = modifier,
+                onPlantClick = { idPlant ->
+                    navController.navigate(HomeRoutes.DetailPlantScreen(idPlant))
+                }
+            )
+        }
+
+        composable<HomeRoutes.DetailPlantScreen> { backStackEntry ->
+            val plant = backStackEntry.toRoute<HomeRoutes.DetailPlantScreen>()
+
+            DetailPlantScreen(
+                idPlant = plant.plantId,
+                onBackClick = {
+                    navController.popBackStack()
+                },
                 modifier = modifier
             )
         }

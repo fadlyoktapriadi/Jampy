@@ -18,7 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.theme.BackgroundGreen
-import com.fyyadi.jampy.ui.theme.TersiaryGreen
+import com.fyyadi.jampy.ui.theme.SecondaryGreen
 import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(
@@ -62,7 +62,7 @@ fun SplashScreen(
                 Brush.linearGradient(
                     colors = listOf(
                         BackgroundGreen,
-                        TersiaryGreen,
+                        SecondaryGreen,
                     )
                 )
             ),

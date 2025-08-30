@@ -1,4 +1,4 @@
-package com.fyyadi.jampy.ui.components
+package com.fyyadi.jampy.ui.screen.home.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +26,7 @@ import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.theme.OrangePrimary
 import com.fyyadi.jampy.ui.theme.PrimaryGreen
+import com.fyyadi.jampy.ui.theme.RethinkSans
 import com.fyyadi.jampy.ui.theme.backgroundCardWhite
 
 
@@ -75,6 +76,7 @@ fun WeatherCard(
                         Text(
                             text = profileUserState.data?.fullName ?: "",
                             fontSize = 18.sp,
+                            fontFamily = RethinkSans,
                             fontWeight = FontWeight.Bold,
                             color = PrimaryGreen
                         )
@@ -83,6 +85,7 @@ fun WeatherCard(
                         Text(
                             text = "User",
                             fontSize = 18.sp,
+                            fontFamily = RethinkSans,
                             fontWeight = FontWeight.Bold,
                             color = PrimaryGreen
                         )

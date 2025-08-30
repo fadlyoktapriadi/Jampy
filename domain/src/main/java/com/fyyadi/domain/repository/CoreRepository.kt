@@ -18,4 +18,5 @@ interface CoreRepository {
 
     // Plant
     fun getPlantHome(): Flow<Result<List<Plant>>>
+    fun getDetailPlant(plantId: Int): Flow<Result<Plant?>>
 }

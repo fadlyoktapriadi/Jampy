@@ -1,6 +1,7 @@
 package com.fyyadi.jampy.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,11 +28,16 @@ import com.fyyadi.jampy.ui.theme.PrimaryGreen
 import com.fyyadi.jampy.ui.theme.RethinkSans
 
 @Composable
-fun PlantCard(plant: Plant) {
+fun PlantCard(
+    plant: Plant,
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        modifier = modifier.clickable { onClick() },
     ) {
         Column(
             modifier = Modifier
@@ -64,7 +70,12 @@ fun PlantCard(plant: Plant) {
                 fontSize = 14.sp,
                 color = Color.Black
             )
-            Text(text = plant.plantSpecies, fontSize = 12.sp, color = Color.Black, lineHeight = 14.sp)
+            Text(
+                text = plant.plantSpecies,
+                fontSize = 12.sp,
+                color = Color.Black,
+                lineHeight = 14.sp
+            )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = plant.plantDescription,

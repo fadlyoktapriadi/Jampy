@@ -113,7 +113,26 @@ class CoreRepositoryImpl @Inject constructor(
             response.map { it.toPlant() }
         }
 
+        Log.e("CEK REPO TANAMAN", result.toString())
+
         emit(result)
+    }
+
+    override fun getDetailPlant(plantId: Int): Flow<Result<Plant?>> {
+        return flow {
+            val result = runCatching {
+                val response = postgrest.from("herb_plants")
+                    .select {
+                        filter {
+                            eq("id_plant", plantId)
+                        }
+                    }
+                    .decodeList<PlantDto>()
+                response.firstOrNull()?.toPlant()
+            }
+            Log.e("CEK DETAIL TANAMAN", result.toString())
+            emit(result)
+        }
     }
 
 

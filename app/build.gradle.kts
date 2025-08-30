@@ -109,5 +109,10 @@ dependencies {
     implementation(libs.auth.kt)
     implementation(libs.realtime.kt)
 
+    // Markdown
+    implementation("io.noties.markwon:core:4.6.2")
+    implementation("io.noties.markwon:html:4.6.2")
+
+
 
 }
