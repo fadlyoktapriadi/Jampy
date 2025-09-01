@@ -21,6 +21,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.fyyadi.jampy.ui.theme.Green600
@@ -43,10 +44,10 @@ fun BottomNavigationBar(
         exit = fadeOut() + slideOutVertically(targetOffsetY = { it })
     ) {
         NavigationBar(
-            containerColor = Green600,
+            containerColor = Color.White,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Green600)
+                .background(Color.White)
                 .padding(bottom = 12.dp, top = 4.dp)
         ) {
             Card(

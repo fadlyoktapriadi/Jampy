@@ -21,7 +21,6 @@ class DetailPlantViewModel @Inject constructor(
     val plantDetailState = _plantDetailState.asStateFlow()
 
     fun getDetailPlant(id: Int) {
-        Log.e("CEK ID DETAIL", "getDetailPlant: $id")
         viewModelScope.launch {
             _plantDetailState.value = ResultState.Loading
             coreUseCase.getDetailPlantUseCase(id)

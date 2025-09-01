@@ -40,8 +40,6 @@ import com.fyyadi.jampy.ui.theme.Green500
 import com.fyyadi.jampy.ui.theme.PrimaryGreen
 import com.fyyadi.jampy.ui.theme.RethinkSans
 import com.fyyadi.jampy.ui.theme.SecondaryGreen
-import com.fyyadi.jampy.ui.theme.SlatePrimary
-
 @Composable
 fun DetailPlantScreen(
     modifier: Modifier = Modifier,
@@ -248,13 +246,34 @@ fun BodyContent(plant: Plant?, modifier: Modifier = Modifier, headerHeight: Dp) 
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp
                 )
-                Text(
-                    text = plant?.healthBenefits ?: "",
-                    fontFamily = RethinkSans,
-                    color = Black600,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
+                FlowRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    plant?.healthBenefits?.split(";")?.forEach { benefit ->
+                        if (benefit.isNotBlank()) {
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        color = PrimaryGreen,
+                                        shape = RoundedCornerShape(16.dp)
+                                    )
+                                    .padding(horizontal = 12.dp, vertical = 6.dp)
+                            ) {
+                                Text(
+                                    text = benefit.trim().replaceFirstChar { if (it.isLowerCase()) it.titlecase()
+                                    else it.toString() },
+                                    color = Color.White,
+                                    fontSize = 12.sp,
+                                    fontFamily = RethinkSans
+                                )
+                            }
+                        }
+                    }
+                }
                 Text(
                     text = "Cara Pengolahan:",
                     fontFamily = RethinkSans,
