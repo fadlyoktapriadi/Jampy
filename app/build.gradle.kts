@@ -109,9 +109,14 @@ dependencies {
     implementation(libs.auth.kt)
     implementation(libs.realtime.kt)
 
+    // Room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
     // Markdown
-    implementation("io.noties.markwon:core:4.6.2")
-    implementation("io.noties.markwon:html:4.6.2")
+    implementation(libs.markwon.core)
+    implementation(libs.markwon.html)
 
 
 

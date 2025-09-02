@@ -1,5 +1,6 @@
 [versions]
 agp = "8.12.1"
+markwonCore = "4.6.2"
 credentials = "1.5.0"
 googleid = "1.1.1"
 ktorUtils = "3.2.3"
@@ -47,7 +48,9 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 auth-kt = { module = "io.github.jan-tennert.supabase:auth-kt" }
+markwon-core = { module = "io.noties.markwon:core", version.ref = "markwonCore" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
+markwon-html = { module = "io.noties.markwon:html", version.ref = "markwonCore" }
 supabase-compose-auth-ui = { module = "io.github.jan-tennert.supabase:compose-auth-ui", version.ref = "composeAuthUi" }
 supabase-compose-auth = { module = "io.github.jan-tennert.supabase:compose-auth", version.ref = "composeAuth" }
 ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktorUtils" }

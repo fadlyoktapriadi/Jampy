@@ -1,6 +1,7 @@
 package com.fyyadi.jampy.ui.screen.detail
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -47,15 +48,15 @@ import com.fyyadi.jampy.ui.theme.SecondaryGreen
 fun DetailPlantScreen(
     modifier: Modifier = Modifier,
     idPlant: Int,
-    isBookmarked: Boolean = false,
     onBackClick: () -> Unit = {},
-    onBookmarkClick: () -> Unit = {}
 ) {
     val viewModel: DetailPlantViewModel = hiltViewModel()
     val plantDetailState by viewModel.plantDetailState.collectAsState()
+    val isBookmarked by viewModel.isBookmarked.collectAsState()
 
     LaunchedEffect(idPlant) {
         viewModel.getDetailPlant(idPlant)
+        viewModel.getBookmarkStatus(idPlant)
     }
 
     when (val state = plantDetailState) {
@@ -94,7 +95,7 @@ fun DetailPlantScreen(
                 plant = state.data,
                 isBookmarked = isBookmarked,
                 onBackClick = onBackClick,
-                onBookmarkClick = onBookmarkClick,
+                onBookmarkClick = { viewModel.toggleBookmark(state.data) },
                 modifier = modifier
             )
         }
@@ -306,6 +307,8 @@ fun StaticTopBar(
     onBookmarkClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    Log.e("CEKK BOOKMARK DI STATIC", isBookmarked.toString())
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -343,14 +346,14 @@ fun StaticTopBar(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
-                .background(Green500.copy(alpha = 0.8f))
+                .background(Green500.copy(alpha = 0.7f))
                 .clickable(onClick = onBookmarkClick),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(if (isBookmarked) R.drawable.bookmark_filled
-                else R.drawable.bookmark_grey),
+                painter = painterResource(R.drawable.bookmark_filled),
                 contentDescription = "Bookmark",
+                tint = if (isBookmarked) OrangePrimary else Color.White,
                 modifier = Modifier.size(24.dp)
             )
         }

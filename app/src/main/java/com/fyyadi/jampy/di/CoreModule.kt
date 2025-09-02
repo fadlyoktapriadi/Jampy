@@ -1,23 +1,34 @@
 package com.fyyadi.jampy.di
 
+import android.content.Context
+import androidx.room.Room
+import com.fyyadi.data.repository.BookmarkRepositoryImpl
 import com.fyyadi.data.repository.CoreRepositoryImpl
+import com.fyyadi.data.source.local.room.AppDatabase
+import com.fyyadi.data.source.local.room.dao.PlantBookmarkDao
 import com.fyyadi.data.source.local.sharedpreference.PreferenceManager
+import com.fyyadi.domain.repository.BookmarkRepository
 import com.fyyadi.domain.repository.CoreRepository
 import com.fyyadi.domain.usecase.AddUserUseCase
 import com.fyyadi.domain.usecase.AuthUseCase
 import com.fyyadi.domain.usecase.CheckUserLoginUseCase
 import com.fyyadi.domain.usecase.ClearUserLoginUseCase
 import com.fyyadi.domain.usecase.CoreUseCase
+import com.fyyadi.domain.usecase.GetAllBookmarkedPlantsUseCase
 import com.fyyadi.domain.usecase.GetAllPlantsUseCase
 import com.fyyadi.domain.usecase.GetLoginStatusUseCase
 import com.fyyadi.domain.usecase.GetDetailPlantUseCase
 import com.fyyadi.domain.usecase.GetPlantHomeUseCase
 import com.fyyadi.domain.usecase.GetUserProfileUseCase
+import com.fyyadi.domain.usecase.IsPlantBookmarkedUseCase
+import com.fyyadi.domain.usecase.RemoveBookmarkPlantUseCase
+import com.fyyadi.domain.usecase.SaveBookmarkPlantUseCase
 import com.fyyadi.domain.usecase.SaveUserLoginUseCase
 import com.fyyadi.jampy.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
@@ -68,8 +79,22 @@ object CoreModule {
     ): CoreRepository = CoreRepositoryImpl(auth, postgrest, preferenceManager)
 
     @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext ctx: Context): AppDatabase =
+        Room.databaseBuilder(ctx, AppDatabase::class.java, "jampy.db").build()
+
+    @Provides
+    fun providePlantBookmarkDao(db: AppDatabase): PlantBookmarkDao = db.plantBookmarkDao()
+
+    @Provides
+    @Singleton
+    fun provideBookmarkRepository(dao: PlantBookmarkDao): BookmarkRepository =
+        BookmarkRepositoryImpl(dao)
+
+    @Provides
     fun providesCoreUseCases(
-        coreRepository: CoreRepository
+        coreRepository: CoreRepository,
+        bookmarkRepository: BookmarkRepository
     ) = CoreUseCase(
         authUseCase = AuthUseCase(coreRepository),
         addUserUseCase = AddUserUseCase(coreRepository),
@@ -80,6 +105,10 @@ object CoreModule {
         saveUserLoginUseCase = SaveUserLoginUseCase(coreRepository),
         getPlantHomeUseCase = GetPlantHomeUseCase(coreRepository),
         getAllPlantUseCase = GetAllPlantsUseCase(coreRepository),
-        getDetailPlantUseCase = GetDetailPlantUseCase(coreRepository)
+        getDetailPlantUseCase = GetDetailPlantUseCase(coreRepository),
+        getAllBookmarkedPlantsUseCase = GetAllBookmarkedPlantsUseCase(bookmarkRepository),
+        saveBookmarkPlantUseCase = SaveBookmarkPlantUseCase(bookmarkRepository),
+        removeBookmarkPlantUseCase = RemoveBookmarkPlantUseCase(bookmarkRepository),
+        isPlantBookmarkedUseCase = IsPlantBookmarkedUseCase(bookmarkRepository)
     )
 }
