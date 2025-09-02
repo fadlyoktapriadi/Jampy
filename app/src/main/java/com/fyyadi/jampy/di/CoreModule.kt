@@ -8,6 +8,7 @@ import com.fyyadi.domain.usecase.AuthUseCase
 import com.fyyadi.domain.usecase.CheckUserLoginUseCase
 import com.fyyadi.domain.usecase.ClearUserLoginUseCase
 import com.fyyadi.domain.usecase.CoreUseCase
+import com.fyyadi.domain.usecase.GetAllPlantsUseCase
 import com.fyyadi.domain.usecase.GetLoginStatusUseCase
 import com.fyyadi.domain.usecase.GetDetailPlantUseCase
 import com.fyyadi.domain.usecase.GetPlantHomeUseCase
@@ -78,6 +79,7 @@ object CoreModule {
         getLoginStatusUseCase = GetLoginStatusUseCase(coreRepository),
         saveUserLoginUseCase = SaveUserLoginUseCase(coreRepository),
         getPlantHomeUseCase = GetPlantHomeUseCase(coreRepository),
+        getAllPlantUseCase = GetAllPlantsUseCase(coreRepository),
         getDetailPlantUseCase = GetDetailPlantUseCase(coreRepository)
     )
 }

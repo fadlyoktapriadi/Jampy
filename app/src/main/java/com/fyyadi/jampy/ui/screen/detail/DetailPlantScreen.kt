@@ -1,8 +1,8 @@
 package com.fyyadi.jampy.ui.screen.detail
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,11 +24,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil3.compose.AsyncImage
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
@@ -37,6 +39,7 @@ import com.fyyadi.jampy.ui.theme.BackgroundGreen
 import com.fyyadi.jampy.ui.theme.Black600
 import com.fyyadi.jampy.ui.theme.Green400
 import com.fyyadi.jampy.ui.theme.Green500
+import com.fyyadi.jampy.ui.theme.OrangePrimary
 import com.fyyadi.jampy.ui.theme.PrimaryGreen
 import com.fyyadi.jampy.ui.theme.RethinkSans
 import com.fyyadi.jampy.ui.theme.SecondaryGreen
@@ -75,7 +78,7 @@ fun DetailPlantScreen(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = state.message ?: "Failed to load detail",
+                        text = state.message ?: stringResource(R.string.failed_to_load_data),
                         color = Color.Red,
                         fontFamily = RethinkSans
                     )
@@ -196,17 +199,20 @@ fun HeaderContent(plant: Plant?, modifier: Modifier = Modifier) {
                     .padding(horizontal = 16.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.sirih),
-                    contentDescription = "Plant Image",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxSize()
+                AsyncImage(
+                    model = plant?.imagePlant,
+                    placeholder = painterResource(id = R.drawable.ic_launcher_background),
+                    contentDescription = plant?.plantName,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    contentScale = ContentScale.Fit
                 )
             }
         }
     }
 }
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun BodyContent(plant: Plant?, modifier: Modifier = Modifier, headerHeight: Dp) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -226,7 +232,7 @@ fun BodyContent(plant: Plant?, modifier: Modifier = Modifier, headerHeight: Dp) 
                     .padding(horizontal = 24.dp, vertical = 24.dp)
             ) {
                 Text(
-                    text = "Deskripsi:",
+                    text = stringResource(R.string.description),
                     fontFamily = RethinkSans,
                     color = PrimaryGreen,
                     fontWeight = FontWeight.SemiBold,
@@ -240,7 +246,7 @@ fun BodyContent(plant: Plant?, modifier: Modifier = Modifier, headerHeight: Dp) 
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Text(
-                    text = "Khasiat:",
+                    text = stringResource(R.string.benefits),
                     fontFamily = RethinkSans,
                     color = PrimaryGreen,
                     fontWeight = FontWeight.SemiBold,
@@ -258,7 +264,7 @@ fun BodyContent(plant: Plant?, modifier: Modifier = Modifier, headerHeight: Dp) 
                             Box(
                                 modifier = Modifier
                                     .background(
-                                        color = PrimaryGreen,
+                                        color = OrangePrimary,
                                         shape = RoundedCornerShape(16.dp)
                                     )
                                     .padding(horizontal = 12.dp, vertical = 6.dp)
@@ -275,7 +281,7 @@ fun BodyContent(plant: Plant?, modifier: Modifier = Modifier, headerHeight: Dp) 
                     }
                 }
                 Text(
-                    text = "Cara Pengolahan:",
+                    text = stringResource(R.string.how_to_usage),
                     fontFamily = RethinkSans,
                     color = PrimaryGreen,
                     fontWeight = FontWeight.SemiBold,
@@ -326,7 +332,7 @@ fun StaticTopBar(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Detail Tanaman",
+                text = stringResource(R.string.detail_plant),
                 fontFamily = RethinkSans,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,

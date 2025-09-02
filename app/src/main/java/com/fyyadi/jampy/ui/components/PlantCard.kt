@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.ui.theme.PrimaryGreen
@@ -44,17 +45,8 @@ fun PlantCard(
                 .width(180.dp)
                 .padding(12.dp)
         ) {
-//            Image(
-//                painter = painterResource(id = plant.imagePlant),
-//                contentDescription = plant.plantName,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(120.dp)
-//                    .clip(RoundedCornerShape(12.dp)),
-//                contentScale = ContentScale.Crop
-//            )
-            Image(
-                painter = painterResource(R.drawable.sirih),
+            AsyncImage(
+                model = plant.imagePlant,
                 contentDescription = plant.plantName,
                 modifier = Modifier
                     .fillMaxWidth()

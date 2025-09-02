@@ -11,5 +11,5 @@ fun PlantDto.toPlant(): Plant =
         plantDescription = this.plantDescription.orEmpty(),
         healthBenefits = this.healthBenefits.orEmpty(),
         processingMethod = this.processingMethod.orEmpty(),
-        imagePlant = this.imagePlant?.toIntOrNull() ?: 0
+        imagePlant = this.imagePlant.orEmpty()
     )

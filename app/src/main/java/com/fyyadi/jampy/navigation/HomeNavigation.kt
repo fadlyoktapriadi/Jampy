@@ -8,6 +8,7 @@ import androidx.navigation.toRoute
 import com.fyyadi.jampy.route.HomeRoutes
 import com.fyyadi.jampy.ui.screen.detail.DetailPlantScreen
 import com.fyyadi.jampy.ui.screen.home.HomeScreen
+import com.fyyadi.jampy.ui.screen.search.SearchScreen
 
 object HomeNavigation {
 
@@ -33,6 +34,12 @@ object HomeNavigation {
                     navController.popBackStack()
                 },
                 modifier = modifier
+            )
+        }
+
+        composable<HomeRoutes.SearchScreen> {
+            SearchScreen(
+                modifier = modifier,
             )
         }
     }

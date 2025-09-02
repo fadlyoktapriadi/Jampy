@@ -9,5 +9,6 @@ data class CoreUseCase (
     val saveUserLoginUseCase: SaveUserLoginUseCase,
     val getLoginStatusUseCase: GetLoginStatusUseCase,
     val getPlantHomeUseCase: GetPlantHomeUseCase,
+    val getAllPlantUseCase: GetAllPlantsUseCase,
     val getDetailPlantUseCase: GetDetailPlantUseCase
 )

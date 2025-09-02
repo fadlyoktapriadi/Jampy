@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,7 +18,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,6 +27,7 @@ import com.fyyadi.jampy.ui.theme.*
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.components.PlantCard
+import com.fyyadi.jampy.ui.components.ShimmerPlantCard
 import com.fyyadi.jampy.ui.screen.home.components.WeatherCard
 
 @Composable
@@ -52,7 +53,11 @@ fun HomeScreen(
                 .padding(paddingValues)
         ) {
             TopSection(profileUserState)
-            BottomContentSheet(modifier = Modifier.align(Alignment.BottomCenter), plantHomeState, onPlantClick = onPlantClick, )
+            BottomContentSheet(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                plantHomeState,
+                onPlantClick = onPlantClick,
+            )
         }
     }
 }
@@ -69,7 +74,7 @@ fun TopSection(
     ) {
         Image(
             painter = painterResource(id = R.drawable.jampy),
-            contentDescription = "Jampy Logo",
+            contentDescription = stringResource(R.string.app_name),
             modifier = Modifier
                 .padding(start = 24.dp, top = 24.dp)
                 .size(48.dp)
@@ -128,42 +133,39 @@ fun PopularPlantsSection(
     plantHomeState: ResultState<List<Plant>>,
     onPlantClick: (Int) -> Unit = {}
 ) {
+
+    val viewModel: HomeViewModel = hiltViewModel()
+
     Column {
-        Row(
+        Text(
+            text = stringResource(R.string.plant_populer),
+            fontSize = 18.sp,
+            fontFamily = RethinkSans,
+            fontWeight = FontWeight.Bold,
+            color = PrimaryGreen,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = stringResource(R.string.plant_populer),
-                fontSize = 18.sp,
-                fontFamily = RethinkSans,
-                fontWeight = FontWeight.Bold,
-                color = PrimaryGreen
-            )
-            Text(
-                text = stringResource(R.string.see_all),
-                fontSize = 14.sp,
-                fontFamily = RethinkSans,
-                fontWeight = FontWeight.SemiBold,
-                color = OrangePrimary
-            )
-        }
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         when (plantHomeState) {
             is ResultState.Loading -> {
-                Box(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp),
-                    contentAlignment = Alignment.Center
+                        .padding(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        16.dp
+                    )
                 ) {
-                    CircularProgressIndicator(color = PrimaryGreen)
+                    repeat(4){
+                        ShimmerPlantCard()
+                    }
                 }
             }
+
             is ResultState.Success -> {
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 24.dp),
@@ -176,6 +178,7 @@ fun PopularPlantsSection(
                     }
                 }
             }
+
             is ResultState.Error -> {
                 Box(
                     modifier = Modifier
@@ -183,24 +186,21 @@ fun PopularPlantsSection(
                         .height(200.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "Failed to load plants",
-                        fontFamily = RethinkSans,
-                        color = Color.Red
-                    )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = stringResource(R.string.failed_to_load_data),
+                            fontFamily = RethinkSans,
+                            color = Color.Red
+                        )
+                        Spacer(Modifier.height(12.dp))
+                        Button(onClick = { viewModel.getPlantHome() }) {
+                            Text("Retry")
+                        }
+                    }
                 }
-            } else -> {
-
             }
+
+            ResultState.Idle -> return
         }
-    }
-}
-
-
-@Preview(showBackground = true, device = "id:pixel_5")
-@Composable
-fun HomeScreenPreview() {
-    JampyTheme {
-        HomeScreen()
     }
 }

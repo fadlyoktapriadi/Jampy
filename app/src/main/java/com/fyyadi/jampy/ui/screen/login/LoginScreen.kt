@@ -1,6 +1,6 @@
 package com.fyyadi.jampy.ui.screen.login
 
-import android.util.Log
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,7 +33,6 @@ import com.fyyadi.jampy.ui.theme.RethinkSans
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
-
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit = {}
@@ -47,60 +46,29 @@ fun LoginScreen(
     val addUserState by viewModel.addUserState.collectAsState()
 
     LaunchedEffect(checkUserLoginState) {
-        when (checkUserLoginState) {
-            is ResultState.Success -> {
-                val isLoggedIn = (checkUserLoginState as ResultState.Success).data
-                if (isLoggedIn) {
-                    viewModel.saveUserLogin()
-                    onLoginSuccess()
-                } else {
-                    viewModel.addUser()
-                }
-            }
-            is ResultState.Error -> {
-                Toast.makeText(context, (checkUserLoginState as ResultState.Error).message ?: "Failed to check user login", Toast.LENGTH_LONG).show()
-            }
-            else -> Unit
-        }
+        onCheckUserLoginState(checkUserLoginState, viewModel, context, onLoginSuccess)
     }
-
     LaunchedEffect(loginAuthState) {
-        when (loginAuthState) {
-            is ResultState.Success -> {
-                viewModel.checkUserLogin()
-            }
-            is ResultState.Error -> {
-                Toast.makeText(context, (loginAuthState as ResultState.Error).message ?: "Login failed", Toast.LENGTH_LONG).show()
-            }
-            else -> Unit
-        }
+        onLoginAuthState(loginAuthState, viewModel, context)
     }
     LaunchedEffect(addUserState) {
-        when (addUserState) {
-            is ResultState.Success -> {
-                viewModel.saveUserLogin()
-                onLoginSuccess()
-            }
-            is ResultState.Error -> {
-                Toast.makeText(context, (addUserState as ResultState.Error).message ?: "Failed to save user", Toast.LENGTH_LONG).show()
-            }
-            else -> Unit
-        }
+        onAddUserState(addUserState, viewModel, context, onLoginSuccess)
     }
-    val credentialManager = remember { CredentialManager.create(context) }
 
+    val credentialManager = remember { CredentialManager.create(context) }
     val googleIdOption: GetGoogleIdOption = remember {
         GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
             .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
             .build()
     }
-
     val request: GetCredentialRequest = remember {
         GetCredentialRequest.Builder()
             .addCredentialOption(googleIdOption)
             .build()
     }
+
+    val isLoading = loginAuthState is ResultState.Loading
 
     Box(
         Modifier
@@ -114,74 +82,22 @@ fun LoginScreen(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.jampy),
-                contentDescription = "Logo application the name is Jampy",
+                contentDescription = stringResource(R.string.app_name),
                 modifier = Modifier.size(100.dp)
             )
-            Column(
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier.padding(top = 14.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.welcome_text_nature),
-                    fontFamily = Amarant,
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    lineHeight = 30.sp,
-                    color = PrimaryGreen,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-                Text(
-                    text = stringResource(R.string.welcome_text_explore),
-                    fontFamily = Amarant,
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    lineHeight = 30.sp,
-                    color = Color.Black,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-                Text(
-                    text = stringResource(R.string.welcome_text_discover),
-                    fontFamily = RethinkSans,
-                    fontWeight = FontWeight.Normal,
-                    lineHeight = 18.sp,
-                    color = Color.Black,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
-            if (loginAuthState is ResultState.Loading) {
+            WelcomeHeader()
+            if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.padding(12.dp, vertical = 4.dp))
             } else {
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            try {
-                                val result = credentialManager.getCredential(
-                                    request = request,
-                                    context = context,
-                                )
-                                val googleIdCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
-                                val googleIdToken = googleIdCredential.idToken
-
-//                                Log.e("CEK LOGIN EMAIL", googleIdCredential.id)
-//                                Log.e("CEK LOGIN FULL NAME", googleIdCredential.displayName.toString())
-//                                Log.e("CEK LOGIN AVATAR", googleIdCredential.profilePictureUri.toString())
-
-                                val userProfile = UserProfile(
-                                    idUser = null,
-                                    email = googleIdCredential.id,
-                                    fullName = googleIdCredential.displayName,
-                                    photoProfile = googleIdCredential.profilePictureUri.toString(),
-                                    role = "User"
-                                )
-
-                                viewModel.loginWithGoogle(googleIdToken)
-                                viewModel.updateUserProfile(userProfile)
-
-                            } catch (e: GetCredentialException) {
-                                Toast.makeText(context, "Sign-in failed: ${e.message}", Toast.LENGTH_LONG).show()
-                            } catch (e: Exception) {
-                                Toast.makeText(context, "An unknown error occurred. ${e.message}", Toast.LENGTH_LONG).show()
-                            }
+                            performGoogleSignIn(
+                                credentialManager = credentialManager,
+                                request = request,
+                                context = context,
+                                viewModel = viewModel
+                            )
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -212,6 +128,136 @@ fun LoginScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun WelcomeHeader() {
+    Column(
+        horizontalAlignment = Alignment.Start,
+        modifier = Modifier.padding(top = 14.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.welcome_text_nature),
+            fontFamily = Amarant,
+            fontSize = 28.sp,
+            fontWeight = FontWeight.ExtraBold,
+            lineHeight = 30.sp,
+            color = PrimaryGreen,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+        Text(
+            text = stringResource(R.string.welcome_text_explore),
+            fontFamily = Amarant,
+            fontSize = 28.sp,
+            fontWeight = FontWeight.ExtraBold,
+            lineHeight = 30.sp,
+            color = Color.Black,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+        Text(
+            text = stringResource(R.string.welcome_text_discover),
+            fontFamily = RethinkSans,
+            fontWeight = FontWeight.Normal,
+            lineHeight = 18.sp,
+            color = Color.Black,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+    }
+}
+
+private fun onCheckUserLoginState(
+    state: ResultState<Boolean>,
+    viewModel: LoginViewModel,
+    context: Context,
+    onLoginSuccess: () -> Unit
+) {
+    when (state) {
+        is ResultState.Success -> {
+            if (state.data) {
+                viewModel.saveUserLogin()
+                onLoginSuccess()
+            } else {
+                viewModel.addUser()
+            }
+        }
+        is ResultState.Error -> {
+            Toast.makeText(
+                context,
+                state.message ?: "Failed to check user login",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        else -> Unit
+    }
+}
+
+private fun onLoginAuthState(
+    state: ResultState<*>,
+    viewModel: LoginViewModel,
+    context: android.content.Context
+) {
+    when (state) {
+        is ResultState.Success -> viewModel.checkUserLogin()
+        is ResultState.Error -> {
+            Toast.makeText(
+                context,
+                state.message ?: "Login failed",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        else -> Unit
+    }
+}
+
+private fun onAddUserState(
+    state: ResultState<*>,
+    viewModel: LoginViewModel,
+    context: Context,
+    onLoginSuccess: () -> Unit
+) {
+    when (state) {
+        is ResultState.Success -> {
+            viewModel.saveUserLogin()
+            onLoginSuccess()
+        }
+        is ResultState.Error -> {
+            Toast.makeText(
+                context,
+                state.message ?: "Failed to save user",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        else -> Unit
+    }
+}
+
+private suspend fun performGoogleSignIn(
+    credentialManager: CredentialManager,
+    request: GetCredentialRequest,
+    context: Context,
+    viewModel: LoginViewModel
+) {
+    try {
+        val result = credentialManager.getCredential(
+            request = request,
+            context = context,
+        )
+        val googleIdCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
+        val googleIdToken = googleIdCredential.idToken
+        val userProfile = UserProfile(
+            idUser = null,
+            email = googleIdCredential.id,
+            fullName = googleIdCredential.displayName,
+            photoProfile = googleIdCredential.profilePictureUri.toString(),
+            role = "User"
+        )
+        viewModel.loginWithGoogle(googleIdToken)
+        viewModel.updateUserProfile(userProfile)
+    } catch (e: GetCredentialException) {
+        Toast.makeText(context, "Sign-in failed: ${e.message}", Toast.LENGTH_LONG).show()
+    } catch (e: Exception) {
+        Toast.makeText(context, "An unknown error occurred. ${e.message}", Toast.LENGTH_LONG).show()
     }
 }
 

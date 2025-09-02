@@ -1,6 +1,5 @@
 package com.fyyadi.data.repository
 
-import android.util.Log
 import com.fyyadi.data.mapper.toPlant
 import com.fyyadi.data.source.local.sharedpreference.PreferenceManager
 import com.fyyadi.data.source.network.dto.PlantDto
@@ -112,9 +111,16 @@ class CoreRepositoryImpl @Inject constructor(
                 .decodeList<PlantDto>()
             response.map { it.toPlant() }
         }
+        emit(result)
+    }
 
-        Log.e("CEK REPO TANAMAN", result.toString())
-
+    override fun getAllPlants(): Flow<Result<List<Plant>>> = flow {
+        val result = runCatching {
+            val response = postgrest.from("herb_plants")
+                .select()
+                .decodeList<PlantDto>()
+            response.map { it.toPlant() }
+        }
         emit(result)
     }
 
@@ -130,10 +136,7 @@ class CoreRepositoryImpl @Inject constructor(
                     .decodeList<PlantDto>()
                 response.firstOrNull()?.toPlant()
             }
-            Log.e("CEK DETAIL TANAMAN", result.toString())
             emit(result)
         }
     }
-
-
 }

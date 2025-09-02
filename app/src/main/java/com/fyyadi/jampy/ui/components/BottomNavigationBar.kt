@@ -1,5 +1,6 @@
 package com.fyyadi.jampy.ui.components
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -17,22 +18,31 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.NavigationBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.fyyadi.jampy.ui.theme.Green600
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.rememberNavController
+import com.fyyadi.jampy.ui.theme.BackgroundGreen
 import com.fyyadi.jampy.ui.theme.OrangePrimary
 import com.fyyadi.jampy.ui.theme.backgroundCardWhite
 import com.fyyadi.jampy.ui.theme.PrimaryGreen
 import com.fyyadi.jampy.ui.theme.SlatePrimary
 import com.fyyadi.jampy.utils.BottomNavItem
-
 @Composable
 fun BottomNavigationBar(
+    navController: NavController,
     isBottomBarVisible: Boolean,
     itemNavScreens: List<BottomNavItem>,
     selectedIndex: Int,
@@ -43,36 +53,40 @@ fun BottomNavigationBar(
         enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
         exit = fadeOut() + slideOutVertically(targetOffsetY = { it })
     ) {
-        NavigationBar(
-            containerColor = Color.White,
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
-                .padding(bottom = 12.dp, top = 4.dp)
+                .background(if(selectedIndex == 0) Color.Transparent else BackgroundGreen)
+                .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
         ) {
-            Card(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
-                shape = RoundedCornerShape(28.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-                colors = CardDefaults.cardColors(containerColor = backgroundCardWhite)
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(50)) // Menambah bayangan
+                    .background(color = backgroundCardWhite, shape = RoundedCornerShape(50))
+                    .padding(horizontal = 16.dp, vertical = 6.dp),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    itemNavScreens.forEachIndexed { index, item ->
-                        BottomNavItemButton(
-                            item = item,
-                            isSelected = selectedIndex == index,
-                            isScanButton = index == 2,
-                            onClick = { onSelectedIndexChange(index) }
-                        )
-                    }
+                itemNavScreens.forEachIndexed { index, item ->
+                    BottomNavItemButton(
+                        isSelected = selectedIndex == index,
+                        isScanButton = index == 2,
+                        onClick = {
+                            if (selectedIndex != index) {
+                                navController.navigate(item.route) {
+                                    launchSingleTop = true
+                                    restoreState = true
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                }
+                                Log.d("BottomNav", "Navigating to ${item.route}, index $index")
+                                onSelectedIndexChange(index)
+                            }
+                        },
+                        item = item
+                    )
                 }
             }
         }
@@ -87,29 +101,24 @@ private fun BottomNavItemButton(
     onClick: () -> Unit
 ) {
     IconButton(onClick = onClick) {
-        Box(
-            modifier = Modifier.size(IconBoxSize),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = painterResource(
-                    id = if (isSelected) item.selectedIcon else item.unselectedIcon
-                ),
-                contentDescription = item.title,
-                modifier = Modifier.size(iconSize(isScanButton)),
-                tint = iconTint(isScanButton, isSelected)
-            )
-        }
+        Icon(
+            painter = painterResource(
+                id = if (isSelected) item.selectedIcon else item.unselectedIcon
+            ),
+            contentDescription = item.title,
+            modifier = Modifier.size(iconSize(isScanButton)),
+            tint = iconTint(isScanButton, isSelected)
+        )
     }
 }
 
-private val IconBoxSize = 28.dp
-
+// PERUBAHAN: Ukuran ikon scan dibuat lebih besar agar menonjol
 private fun iconSize(isScanButton: Boolean) =
-    if (isScanButton) 28.dp else 24.dp
+    if (isScanButton) 32.dp else 24.dp
 
+// Logika pewarnaan ikon sudah sesuai dengan desain baru
 private fun iconTint(isScanButton: Boolean, isSelected: Boolean) = when {
-    isScanButton -> OrangePrimary
-    isSelected   -> PrimaryGreen
-    else         -> SlatePrimary
+    isScanButton -> OrangePrimary // Tombol scan selalu oranye
+    isSelected -> PrimaryGreen    // Item terpilih berwarna hijau
+    else -> SlatePrimary          // Item tidak terpilih berwarna abu-abu
 }

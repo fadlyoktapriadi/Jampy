@@ -10,5 +10,5 @@ data class Plant(
     val plantDescription: String,
     val healthBenefits: String,
     val processingMethod: String,
-    val imagePlant: Int
+    val imagePlant: String
 )
