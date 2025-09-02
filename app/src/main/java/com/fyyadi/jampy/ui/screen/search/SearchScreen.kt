@@ -29,7 +29,8 @@ import com.fyyadi.jampy.ui.theme.PrimaryGreen
 
 @Composable
 fun SearchScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onPlantClick: (Int) -> Unit = {}
 ) {
     val viewModel: SearchViewModel = hiltViewModel()
     val searchPlantState by viewModel.searchPlantState.collectAsState()
@@ -124,7 +125,7 @@ fun SearchScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         items(plants) { plant ->
-                            PlantItemSearchCard(plant = plant)
+                            PlantItemSearchCard(plant = plant, onPlantClick)
                         }
                     }
                 }

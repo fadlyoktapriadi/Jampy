@@ -40,6 +40,9 @@ object HomeNavigation {
         composable<HomeRoutes.SearchScreen> {
             SearchScreen(
                 modifier = modifier,
+                onPlantClick = { idPlant ->
+                    navController.navigate(HomeRoutes.DetailPlantScreen(idPlant))
+                }
             )
         }
     }

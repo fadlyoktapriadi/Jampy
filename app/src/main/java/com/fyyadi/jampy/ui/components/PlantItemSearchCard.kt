@@ -1,5 +1,6 @@
 package com.fyyadi.jampy.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,22 +24,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.fyyadi.domain.model.Plant
-import com.fyyadi.jampy.R
 import com.fyyadi.jampy.ui.theme.OrangePrimary
-import com.fyyadi.jampy.ui.theme.PrimaryGreen
 
 
 @Composable
-fun PlantItemSearchCard(plant: Plant) {
+fun PlantItemSearchCard(
+    plant: Plant,
+    onPlantClick: (Int) -> Unit = {}
+) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
+            .clickable(
+                onClick = { onPlantClick(plant.idPlant) }
+            ),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -99,7 +103,6 @@ fun PlantItemSearchCard(plant: Plant) {
         }
     }
 }
-
 
 
 @Composable
