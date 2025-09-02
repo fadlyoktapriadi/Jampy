@@ -8,6 +8,6 @@ import javax.inject.Inject
 class GetAllBookmarkedPlantsUseCase @Inject constructor(
     private val repository: BookmarkRepository
 ) {
-    operator fun invoke() : Flow<List<Plant>> =
+    operator fun invoke() : Flow<Result<List<Plant>>> =
         repository.getAllPlant()
 }

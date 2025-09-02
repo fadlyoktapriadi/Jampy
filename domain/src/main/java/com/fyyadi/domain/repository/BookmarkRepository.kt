@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 interface BookmarkRepository {
     suspend fun savePlant(plant: Plant)
     suspend fun removePlant(id: Int)
-    fun getAllPlant(): Flow<List<Plant>>
+    fun getAllPlant(): Flow<Result<List<Plant>>>
     fun isBookmarked(id: Int): Flow<Boolean>
 }

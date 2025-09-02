@@ -105,14 +105,14 @@ fun BottomContentSheet(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.45f),
+            .fillMaxHeight(0.46f),
         color = Color.White,
         shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 16.dp)
+                .padding(top = 12.dp)
         ) {
             Box(
                 modifier = Modifier

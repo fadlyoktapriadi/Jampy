@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.fyyadi.jampy.route.HomeRoutes
+import com.fyyadi.jampy.ui.screen.bookmark.BookmarkScreen
 import com.fyyadi.jampy.ui.screen.detail.DetailPlantScreen
 import com.fyyadi.jampy.ui.screen.home.HomeScreen
 import com.fyyadi.jampy.ui.screen.search.SearchScreen
@@ -39,6 +40,15 @@ object HomeNavigation {
 
         composable<HomeRoutes.SearchScreen> {
             SearchScreen(
+                modifier = modifier,
+                onPlantClick = { idPlant ->
+                    navController.navigate(HomeRoutes.DetailPlantScreen(idPlant))
+                }
+            )
+        }
+
+        composable <HomeRoutes.BookmarkScreen> {
+            BookmarkScreen(
                 modifier = modifier,
                 onPlantClick = { idPlant ->
                     navController.navigate(HomeRoutes.DetailPlantScreen(idPlant))
