@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.fyyadi.domain.model.Plant
-import com.fyyadi.jampy.ui.theme.OrangePrimary
+import com.fyyadi.theme.OrangePrimary
 
 
 @Composable

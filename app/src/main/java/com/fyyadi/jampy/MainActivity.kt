@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.fyyadi.jampy.ui.JampyApp
-import com.fyyadi.jampy.ui.theme.JampyTheme
+import com.fyyadi.theme.JampyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

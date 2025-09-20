@@ -19,8 +19,8 @@ import com.fyyadi.jampy.route.AuthRoutes
 import com.fyyadi.jampy.route.BaseRoute
 import com.fyyadi.jampy.route.HomeRoutes
 import com.fyyadi.jampy.ui.components.BottomNavigationBar
-import com.fyyadi.jampy.ui.theme.Green600
 import com.fyyadi.jampy.utils.getItemNavScreens
+import com.fyyadi.theme.Green600
 
 @Composable
 fun JampyApp(
@@ -51,6 +51,7 @@ fun JampyApp(
             HomeRoutes.ProfileScreen.toString() -> {
                 selectedItemIndex = 3
             }
+
             else -> Unit
         }
 

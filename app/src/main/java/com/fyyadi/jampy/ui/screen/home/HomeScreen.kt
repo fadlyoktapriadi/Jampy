@@ -23,12 +23,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.UserProfile
-import com.fyyadi.jampy.ui.theme.*
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.components.PlantCard
 import com.fyyadi.jampy.ui.components.ShimmerPlantCard
 import com.fyyadi.jampy.ui.screen.home.components.WeatherCard
+import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.theme.PrimaryGreen
+import com.fyyadi.theme.RethinkSans
 
 @Composable
 fun HomeScreen(
@@ -73,7 +75,7 @@ fun TopSection(
             .background(BackgroundGreen)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.jampy),
+            painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
             contentDescription = stringResource(R.string.app_name),
             modifier = Modifier
                 .padding(start = 24.dp, top = 24.dp)
@@ -85,7 +87,7 @@ fun TopSection(
         Spacer(modifier = Modifier.weight(1f))
 
         Image(
-            painter = painterResource(id = R.drawable.illuplant_home),
+            painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.illuplant_home),
             contentDescription = "Plant Illustration",
             modifier = Modifier
                 .fillMaxWidth()

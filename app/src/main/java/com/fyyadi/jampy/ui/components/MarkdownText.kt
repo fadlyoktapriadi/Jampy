@@ -1,6 +1,5 @@
 package com.fyyadi.jampy.ui.components
 
-import android.graphics.Color
 import android.widget.TextView
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -11,7 +10,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.fyyadi.jampy.R
-import com.fyyadi.jampy.ui.theme.Black600
+import com.fyyadi.theme.Black600
 import io.noties.markwon.Markwon
 import io.noties.markwon.html.HtmlPlugin
 
@@ -32,7 +31,7 @@ fun MarkdownText(
     AndroidView(
         modifier = modifier,
         factory = { ctx ->
-            val tf = androidx.core.content.res.ResourcesCompat.getFont(ctx, R.font.rethinksans_regular)
+            val tf = androidx.core.content.res.ResourcesCompat.getFont(ctx, com.fyyadi.core_presentation.R.font.rethinksans_regular)
             TextView(ctx).apply {
                 setTextColor(textColor)
                 textSize = fontSize.value

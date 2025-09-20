@@ -26,10 +26,10 @@ import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.jampy.BuildConfig
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.R
-import com.fyyadi.jampy.ui.theme.Amarant
-import com.fyyadi.jampy.ui.theme.BackgroundGreen
-import com.fyyadi.jampy.ui.theme.PrimaryGreen
-import com.fyyadi.jampy.ui.theme.RethinkSans
+import com.fyyadi.theme.Amarant
+import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.theme.PrimaryGreen
+import com.fyyadi.theme.RethinkSans
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
@@ -81,7 +81,7 @@ fun LoginScreen(
             modifier = Modifier.padding(16.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.jampy),
+                painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
                 contentDescription = stringResource(R.string.app_name),
                 modifier = Modifier.size(100.dp)
             )
@@ -113,7 +113,7 @@ fun LoginScreen(
                         horizontalArrangement = Arrangement.Center,
                     ) {
                         Image(
-                            painter = painterResource(R.drawable.ic_google),
+                            painter = painterResource(com.fyyadi.core_presentation.R.drawable.ic_google),
                             contentDescription = "Google logo",
                             modifier = Modifier.size(18.dp)
                         )

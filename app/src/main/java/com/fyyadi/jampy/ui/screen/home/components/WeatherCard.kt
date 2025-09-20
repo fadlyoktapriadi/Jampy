@@ -24,10 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.jampy.common.ResultState
-import com.fyyadi.jampy.ui.theme.OrangePrimary
-import com.fyyadi.jampy.ui.theme.PrimaryGreen
-import com.fyyadi.jampy.ui.theme.RethinkSans
-import com.fyyadi.jampy.ui.theme.backgroundCardWhite
+import com.fyyadi.theme.OrangePrimary
+import com.fyyadi.theme.PrimaryGreen
+import com.fyyadi.theme.RethinkSans
+import com.fyyadi.theme.backgroundCardWhite
 
 
 @Composable

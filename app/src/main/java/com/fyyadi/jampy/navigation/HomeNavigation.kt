@@ -10,6 +10,7 @@ import com.fyyadi.jampy.ui.screen.bookmark.BookmarkScreen
 import com.fyyadi.jampy.ui.screen.detail.DetailPlantScreen
 import com.fyyadi.jampy.ui.screen.home.HomeScreen
 import com.fyyadi.jampy.ui.screen.search.SearchScreen
+import com.fyyadi.scan.ui.ScanScreen
 
 object HomeNavigation {
 
@@ -47,7 +48,13 @@ object HomeNavigation {
             )
         }
 
-        composable <HomeRoutes.BookmarkScreen> {
+        composable<HomeRoutes.ScanScreen> {
+            ScanScreen(
+                modifier = modifier,
+            )
+        }
+
+        composable<HomeRoutes.BookmarkScreen> {
             BookmarkScreen(
                 modifier = modifier,
                 onPlantClick = { idPlant ->

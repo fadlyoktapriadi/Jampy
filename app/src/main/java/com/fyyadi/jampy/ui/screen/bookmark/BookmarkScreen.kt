@@ -31,8 +31,8 @@ import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.components.PlantItemSearchCard
 import com.fyyadi.jampy.ui.components.ShimmerPlantCard
-import com.fyyadi.jampy.ui.theme.BackgroundGreen
-import com.fyyadi.jampy.ui.theme.RethinkSans
+import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.theme.RethinkSans
 
 @Composable
 fun BookmarkScreen(
@@ -52,7 +52,7 @@ fun BookmarkScreen(
             .background(BackgroundGreen)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.jampy),
+            painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
             contentDescription = "Jampy Logo",
             modifier = Modifier
                 .padding(start = 24.dp, top = 24.dp)

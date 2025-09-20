@@ -23,5 +23,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Jampy"
 include(":app")
-include(":domain")
-include(":data")
+include(":scan")
+include(":core:core-data")
+include(":core:core-domain")
+include(":core:core-presentation")

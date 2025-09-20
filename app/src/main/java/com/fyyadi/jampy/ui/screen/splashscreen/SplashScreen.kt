@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
-import com.fyyadi.jampy.ui.theme.BackgroundGreen
-import com.fyyadi.jampy.ui.theme.SecondaryGreen
+import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.theme.SecondaryGreen
 import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(
@@ -69,7 +69,7 @@ fun SplashScreen(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.jampy),
+            painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
             contentDescription = "App Logo",
             modifier = modifier.size(150.dp)
         )

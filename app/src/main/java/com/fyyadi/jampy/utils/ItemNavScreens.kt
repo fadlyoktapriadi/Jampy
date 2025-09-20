@@ -1,6 +1,6 @@
 package com.fyyadi.jampy.utils
 
-import com.fyyadi.jampy.R
+import com.fyyadi.core_presentation.R
 import com.fyyadi.jampy.route.HomeRoutes
 
 fun getItemNavScreens(): List<BottomNavItem> =

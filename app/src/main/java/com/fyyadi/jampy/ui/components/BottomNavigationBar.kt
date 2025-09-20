@@ -14,32 +14,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.rememberNavController
-import com.fyyadi.jampy.ui.theme.BackgroundGreen
-import com.fyyadi.jampy.ui.theme.OrangePrimary
-import com.fyyadi.jampy.ui.theme.backgroundCardWhite
-import com.fyyadi.jampy.ui.theme.PrimaryGreen
-import com.fyyadi.jampy.ui.theme.SlatePrimary
+import com.fyyadi.theme.OrangePrimary
+import com.fyyadi.theme.backgroundCardWhite
+import com.fyyadi.theme.PrimaryGreen
+import com.fyyadi.theme.SlatePrimary
 import com.fyyadi.jampy.utils.BottomNavItem
+import com.fyyadi.theme.BackgroundGreen
+
 @Composable
 fun BottomNavigationBar(
     navController: NavController,
@@ -62,7 +54,7 @@ fun BottomNavigationBar(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(50)) // Menambah bayangan
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(50))
                     .background(color = backgroundCardWhite, shape = RoundedCornerShape(50))
                     .padding(horizontal = 16.dp, vertical = 6.dp),
                 horizontalArrangement = Arrangement.SpaceAround,
@@ -112,13 +104,11 @@ private fun BottomNavItemButton(
     }
 }
 
-// PERUBAHAN: Ukuran ikon scan dibuat lebih besar agar menonjol
 private fun iconSize(isScanButton: Boolean) =
     if (isScanButton) 32.dp else 24.dp
 
-// Logika pewarnaan ikon sudah sesuai dengan desain baru
 private fun iconTint(isScanButton: Boolean, isSelected: Boolean) = when {
-    isScanButton -> OrangePrimary // Tombol scan selalu oranye
-    isSelected -> PrimaryGreen    // Item terpilih berwarna hijau
-    else -> SlatePrimary          // Item tidak terpilih berwarna abu-abu
+    isScanButton -> OrangePrimary
+    isSelected -> PrimaryGreen
+    else -> SlatePrimary
 }

@@ -36,14 +36,14 @@ import com.fyyadi.domain.model.Plant
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.components.MarkdownText
-import com.fyyadi.jampy.ui.theme.BackgroundGreen
-import com.fyyadi.jampy.ui.theme.Black600
-import com.fyyadi.jampy.ui.theme.Green400
-import com.fyyadi.jampy.ui.theme.Green500
-import com.fyyadi.jampy.ui.theme.OrangePrimary
-import com.fyyadi.jampy.ui.theme.PrimaryGreen
-import com.fyyadi.jampy.ui.theme.RethinkSans
-import com.fyyadi.jampy.ui.theme.SecondaryGreen
+import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.theme.Black600
+import com.fyyadi.theme.Green400
+import com.fyyadi.theme.Green500
+import com.fyyadi.theme.OrangePrimary
+import com.fyyadi.theme.PrimaryGreen
+import com.fyyadi.theme.RethinkSans
+import com.fyyadi.theme.SecondaryGreen
 @Composable
 fun DetailPlantScreen(
     modifier: Modifier = Modifier,
@@ -202,7 +202,6 @@ fun HeaderContent(plant: Plant?, modifier: Modifier = Modifier) {
             ) {
                 AsyncImage(
                     model = plant?.imagePlant,
-                    placeholder = painterResource(id = R.drawable.ic_launcher_background),
                     contentDescription = plant?.plantName,
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -324,7 +323,7 @@ fun StaticTopBar(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_left_arrow),
+                painter = painterResource(com.fyyadi.core_presentation.R.drawable.ic_left_arrow),
                 contentDescription = "Back",
                 tint = Color.White,
                 modifier = Modifier.size(24.dp)
@@ -351,9 +350,9 @@ fun StaticTopBar(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(R.drawable.bookmark_filled),
+                painter = painterResource(com.fyyadi.core_presentation.R.drawable.bookmark_filled),
                 contentDescription = "Bookmark",
-                tint = if (isBookmarked) OrangePrimary else Color.White,
+                tint = if (isBookmarked) PrimaryGreen else Color.White,
                 modifier = Modifier.size(24.dp)
             )
         }
