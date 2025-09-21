@@ -5,8 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,6 +35,7 @@ import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.components.PlantItemSearchCard
 import com.fyyadi.jampy.ui.components.ShimmerPlantCard
 import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 
 @Composable
@@ -51,13 +55,31 @@ fun BookmarkScreen(
             .fillMaxSize()
             .background(BackgroundGreen)
     ) {
-        Image(
-            painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
-            contentDescription = "Jampy Logo",
+        Row(
             modifier = Modifier
-                .padding(start = 24.dp, top = 24.dp)
-                .size(48.dp)
-        )
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
+                contentDescription = "Jampy Logo",
+                modifier = Modifier.size(48.dp)
+            )
+            Text(
+                text = "Bookmark Tanaman Herbal",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = PrimaryGreen,
+                fontFamily = RethinkSans,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(start = 8.dp),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                maxLines = 1
+            )
+        }
         Spacer(modifier = Modifier.height(24.dp))
 
         when (bookmarkPlantState) {

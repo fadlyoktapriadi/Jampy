@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,12 +21,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fyyadi.domain.model.Plant
-import com.fyyadi.jampy.R
+import com.fyyadi.core_presentation.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.components.PlantItemSearchCard
 import com.fyyadi.jampy.ui.components.ShimmerPlantCard
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.PrimaryGreen
+import com.fyyadi.theme.RethinkSans
 
 @Composable
 fun SearchScreen(
@@ -45,13 +47,32 @@ fun SearchScreen(
             .fillMaxSize()
             .background(BackgroundGreen)
     ) {
-        Image(
-            painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
-            contentDescription = "Jampy Logo",
+        Row(
             modifier = Modifier
-                .padding(start = 24.dp, top = 24.dp)
-                .size(48.dp)
-        )
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.jampy),
+                contentDescription = "Jampy Logo",
+                modifier = Modifier.size(48.dp)
+            )
+            Text(
+                text = "Cari Tanaman Herbal",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = PrimaryGreen,
+                fontFamily = RethinkSans,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(start = 8.dp),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                maxLines = 1
+            )
+        }
+
         Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(

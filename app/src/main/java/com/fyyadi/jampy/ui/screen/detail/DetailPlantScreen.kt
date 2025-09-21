@@ -307,7 +307,6 @@ fun StaticTopBar(
     modifier: Modifier = Modifier
 ) {
 
-    Log.e("CEKK BOOKMARK DI STATIC", isBookmarked.toString())
     Row(
         modifier = modifier
             .fillMaxWidth()
