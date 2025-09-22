@@ -7,7 +7,7 @@
     <string name="plant_populer">Tumbuhan Populer</string>
     <string name="see_all">See All</string>
     <string name="search_hint">Search plant...</string>
-    <string name= "failed_to_load_data">Failed to load data</string>
+    <string name="failed_to_load_data">Failed to load data</string>
     <string name="description">Deskripsi:</string>
     <string name="benefits">Manfaat:</string>
     <string name="how_to_usage">Cara Pengolahan:</string>

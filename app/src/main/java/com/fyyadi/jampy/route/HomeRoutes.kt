@@ -15,9 +15,6 @@ sealed class HomeRoutes : BaseRoute() {
     data object SearchScreen : HomeRoutes()
 
     @Serializable
-    data object ScanScreen : HomeRoutes()
-
-    @Serializable
     data object BookmarkScreen : HomeRoutes()
 
     @Serializable

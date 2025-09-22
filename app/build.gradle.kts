@@ -74,6 +74,9 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.constraintlayout.compose.android)
     implementation(libs.play.services.basement)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
 
     // Testing
     testImplementation(libs.junit)

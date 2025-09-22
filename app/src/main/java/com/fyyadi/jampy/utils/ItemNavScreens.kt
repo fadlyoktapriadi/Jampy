@@ -2,6 +2,7 @@ package com.fyyadi.jampy.utils
 
 import com.fyyadi.core_presentation.R
 import com.fyyadi.jampy.route.HomeRoutes
+import com.fyyadi.jampy.route.ScanRoutes
 
 fun getItemNavScreens(): List<BottomNavItem> =
     listOf(
@@ -21,7 +22,7 @@ fun getItemNavScreens(): List<BottomNavItem> =
             title = "Scan",
             selectedIcon = R.drawable.scan_orange,
             unselectedIcon = R.drawable.scan_grey,
-            route = HomeRoutes.ScanScreen
+            route = ScanRoutes.ScanScreen
         ),
         BottomNavItem(
             title = "Bookmark",

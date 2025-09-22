@@ -48,12 +48,6 @@ object HomeNavigation {
             )
         }
 
-        composable<HomeRoutes.ScanScreen> {
-            ScanScreen(
-                modifier = modifier,
-            )
-        }
-
         composable<HomeRoutes.BookmarkScreen> {
             BookmarkScreen(
                 modifier = modifier,
