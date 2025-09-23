@@ -2,6 +2,7 @@ package com.fyyadi.scan.ui
 
 import android.app.Activity
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +47,7 @@ import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.launch
 
 @Composable
 fun ScanScreen(
@@ -58,8 +61,14 @@ fun ScanScreen(
     val viewModel: ScanViewModel = hiltViewModel()
 
     val selectedImage by viewModel.selectedImage.collectAsState()
+    val isProcessing by viewModel.isProcessing.collectAsState()
+    val classificationResult by viewModel.classificationResults.collectAsState()
+    val error by viewModel.errorMessage.collectAsState()
+
     var showCamera by remember { mutableStateOf(false) }
     val context = androidx.compose.ui.platform.LocalContext.current
+
+    val coroutineScope = rememberCoroutineScope()
 
     val cropLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -263,7 +272,14 @@ fun ScanScreen(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 48.dp, bottom = 24.dp, start = 24.dp, end = 24.dp),
+                .padding(top = 48.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
+                .clickable {
+                    selectedImage?.let { uri ->
+                        coroutineScope.launch {
+                            processImage(context, uri, viewModel)
+                        }
+                    }
+                },
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = PrimaryGreen),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
@@ -288,8 +304,63 @@ fun ScanScreen(
                 )
             }
         }
+
+        classificationResult?.let { result ->
+            Log.e("RESULT", result.toString())
+        }
+
+        // Error message
+        error?.let { errorMessage ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.Red.copy(alpha = 0.1f)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            ) {
+                Log.e("ScanScreen", "Error: $errorMessage")
+                Text(
+                    text = "Error: $errorMessage",
+                    fontSize = 14.sp,
+                    color = Color.Red,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        }
     }
 }
+
+private suspend fun processImage(
+    context: android.content.Context,
+    uri: Uri,
+    viewModel: ScanViewModel
+) {
+    // Remove this line: viewModel.setProcessing(true)
+    val bitmap = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                val source = android.graphics.ImageDecoder.createSource(context.contentResolver, uri)
+                android.graphics.ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
+                    decoder.isMutableRequired = true
+                }
+            } else {
+                @Suppress("DEPRECATION")
+                android.provider.MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+            }
+        } catch (_: Exception) {
+            null
+        }
+    }
+    if (bitmap != null) {
+        viewModel.classifyImage(bitmap)
+    } else {
+        // Add error handling for failed bitmap creation
+        viewModel.setProcessing(false)
+    }
+}
+
+
 
 private fun startCrop(
     context: android.content.Context,

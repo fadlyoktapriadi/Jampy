@@ -38,6 +38,7 @@ android {
 dependencies {
 
     implementation(project(":core:core-domain"))
+    implementation(project(":scan"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -74,4 +75,13 @@ dependencies {
     implementation(libs.supabase.compose.auth.ui)
     implementation(libs.auth.kt)
     implementation(libs.realtime.kt)
+
+    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
+    implementation("com.google.firebase:firebase-ml-modeldownloader")
+
+    // TensorFlow Lite for inference
+    implementation("org.tensorflow:tensorflow-lite:2.17.0")
+    implementation("org.tensorflow:tensorflow-lite-support:0.5.0")
 }
