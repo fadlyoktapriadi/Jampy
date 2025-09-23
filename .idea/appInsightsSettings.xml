@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.fyyadi.jampy" />
+                  <option name="mobileSdkAppId" value="1:808105113506:android:feaf8b86ba5e97e77da4fb" />
+                  <option name="projectId" value="jampy-c6347" />
+                  <option name="projectNumber" value="808105113506" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

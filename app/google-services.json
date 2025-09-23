@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "808105113506",
+    "project_id": "jampy-c6347",
+    "storage_bucket": "jampy-c6347.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808105113506:android:feaf8b86ba5e97e77da4fb",
+        "android_client_info": {
+          "package_name": "com.fyyadi.jampy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAluo_lZjtVLXuHAmBom72Nns8y3ZulkYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

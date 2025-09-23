@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
 }
 
 android {
@@ -77,6 +79,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
+    implementation(libs.firebase.crashlytics)
 
     // Testing
     testImplementation(libs.junit)
@@ -121,6 +124,9 @@ dependencies {
     // Markdown
     implementation(libs.markwon.core)
     implementation(libs.markwon.html)
+
+    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
+    implementation("com.google.firebase:firebase-analytics")
 
 
 

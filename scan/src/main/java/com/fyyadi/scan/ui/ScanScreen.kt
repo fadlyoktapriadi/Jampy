@@ -260,35 +260,32 @@ fun ScanScreen(
             }
         }
 
-
-        if (capturedImageUri != null) {
-            Card(
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 48.dp, bottom = 24.dp, start = 24.dp, end = 24.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = PrimaryGreen),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        ) {
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 48.dp, bottom = 24.dp, start = 24.dp, end = 24.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = PrimaryGreen),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.ic_image_process),
-                        contentDescription = "Processing",
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.size(8.dp))
-                    Text(
-                        text = "Processing Image...",
-                        color = Color.White,
-                        fontSize = 14.sp
-                    )
-                }
+                Image(
+                    painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.ic_image_process),
+                    contentDescription = "Processing",
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    text = "Processing Image...",
+                    color = Color.White,
+                    fontSize = 14.sp
+                )
             }
         }
     }
