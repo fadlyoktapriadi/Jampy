@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import com.fyyadi.domain.model.PlantLabel
 import com.fyyadi.scan.R
 import com.fyyadi.scan.utils.MediaStoreUtils
 import com.fyyadi.theme.BackgroundGreen
@@ -57,6 +58,7 @@ fun ScanScreen(
         onResult: (Uri) -> Unit,
         onCancel: () -> Unit
     ) -> Unit,
+    onResultClassification: (List<PlantLabel>) -> Unit
 ) {
     val viewModel: ScanViewModel = hiltViewModel()
 
@@ -90,10 +92,10 @@ fun ScanScreen(
                 onLaunch = { cropLauncher.launch(it) },
                 setProcessing = viewModel::setProcessing,
                 createDest = {
-                    MediaStoreUtils.createImageUri(
+                    MediaStoreUtils.createInternalImageUri(
                         context,
                         "IMG_CROP_${System.currentTimeMillis()}"
-                    )!!
+                    )
                 }
             )
         }
@@ -109,10 +111,10 @@ fun ScanScreen(
                     onLaunch = { cropLauncher.launch(it) },
                     setProcessing = viewModel::setProcessing,
                     createDest = {
-                        MediaStoreUtils.createImageUri(
+                        MediaStoreUtils.createInternalImageUri(
                             context,
                             "IMG_CROP_${System.currentTimeMillis()}"
-                        )!!
+                        )
                     }
                 )
             },
@@ -130,10 +132,10 @@ fun ScanScreen(
                 onLaunch = { cropLauncher.launch(it) },
                 setProcessing = viewModel::setProcessing,
                 createDest = {
-                    MediaStoreUtils.createImageUri(
+                    MediaStoreUtils.createInternalImageUri(
                         context,
                         "IMG_CROP_${System.currentTimeMillis()}"
-                    )!!
+                    )
                 }
             )
         }
@@ -243,7 +245,7 @@ fun ScanScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 24.dp, start = 24.dp, end = 24.dp)
-                .clickable { photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }, // Add this click handler
+                .clickable { photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
@@ -305,11 +307,16 @@ fun ScanScreen(
             }
         }
 
-        classificationResult?.let { result ->
+        classificationResult.let { result ->
             Log.e("RESULT", result.toString())
+            if (result.isNotEmpty()) {
+                LaunchedEffect(result) {
+                    onResultClassification(result)
+                    viewModel.setImage(null)
+                }
+            }
         }
 
-        // Error message
         error?.let { errorMessage ->
             Card(
                 modifier = Modifier
@@ -336,7 +343,6 @@ private suspend fun processImage(
     uri: Uri,
     viewModel: ScanViewModel
 ) {
-    // Remove this line: viewModel.setProcessing(true)
     val bitmap = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
         try {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
@@ -354,13 +360,9 @@ private suspend fun processImage(
     }
     if (bitmap != null) {
         viewModel.classifyImage(bitmap)
-    } else {
-        // Add error handling for failed bitmap creation
         viewModel.setProcessing(false)
     }
 }
-
-
 
 private fun startCrop(
     context: android.content.Context,

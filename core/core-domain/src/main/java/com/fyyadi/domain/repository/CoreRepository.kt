@@ -10,6 +10,8 @@ interface CoreRepository {
     fun addUser(user: UserProfile) : Flow<Result<Unit>>
     fun checkUserLogin(user: UserProfile): Flow<Result<Boolean>>
 
+    fun getProfileUser(email: String): Flow<Result<UserProfile?>>
+
     // Preferences
     fun saveUserLogin(user: UserProfile): Flow<Result<Unit>>
     fun clearUserLogin(): Flow<Result<Unit>>

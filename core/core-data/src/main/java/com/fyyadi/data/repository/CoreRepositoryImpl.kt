@@ -1,6 +1,7 @@
 package com.fyyadi.data.repository
 
 import com.fyyadi.data.mapper.toPlant
+import com.fyyadi.data.mapper.toProfileUser
 import com.fyyadi.data.source.local.sharedpreference.PreferenceManager
 import com.fyyadi.data.source.network.dto.PlantDto
 import com.fyyadi.data.source.network.dto.UserProfileDto
@@ -35,8 +36,8 @@ class CoreRepositoryImpl @Inject constructor(
     override fun addUser(user: UserProfile): Flow<Result<Unit>> = flow {
         val result = runCatching {
             val userDto = mapOf(
-                "full_name" to user.fullName,
-                "email" to user.email,
+                "user_full_name" to user.userFullName,
+                "user_email" to user.userEmail,
                 "photo_profile" to user.photoProfile,
                 "role" to user.role
             )
@@ -51,7 +52,7 @@ class CoreRepositoryImpl @Inject constructor(
             val response = postgrest.from("users")
                 .select {
                     filter {
-                        eq("email", user.email ?: "")
+                        eq("user_email", user.userEmail ?: "")
                     }
                 }
                 .decodeList<UserProfileDto>()
@@ -64,8 +65,8 @@ class CoreRepositoryImpl @Inject constructor(
     override fun saveUserLogin(user: UserProfile): Flow<Result<Unit>> = flow {
         val result = runCatching {
             preferenceManager.isLoggedIn = true
-            preferenceManager.userEmail = user.email
-            preferenceManager.userFullName = user.fullName
+            preferenceManager.userEmail = user.userEmail
+            preferenceManager.userFullName = user.userFullName
             preferenceManager.userPhotoProfileUrl = user.photoProfile
             preferenceManager.userRole = user.role
         }
@@ -90,9 +91,9 @@ class CoreRepositoryImpl @Inject constructor(
         val result = runCatching {
             if (preferenceManager.isLoggedIn) {
                 UserProfile(
-                    idUser = null,
-                    fullName = preferenceManager.userFullName,
-                    email = preferenceManager.userEmail,
+                    userId = null,
+                    userFullName = preferenceManager.userFullName,
+                    userEmail = preferenceManager.userEmail,
                     photoProfile = preferenceManager.userPhotoProfileUrl,
                     role = preferenceManager.userRole
                 )
@@ -101,7 +102,20 @@ class CoreRepositoryImpl @Inject constructor(
         emit(result)
     }
 
-    // DATA SOURCE
+    override fun getProfileUser(email: String): Flow<Result<UserProfile?>> = flow {
+        val result = runCatching {
+            val response = postgrest.from("users")
+                .select {
+                    filter {
+                        eq("user_email", email)
+                    }
+                }
+                .decodeList<UserProfileDto>()
+            response.firstOrNull()?.toProfileUser()
+        }
+        emit(result)
+    }
+
     override fun getPlantHome(): Flow<Result<List<Plant>>> = flow {
         val result = runCatching {
             val response = postgrest.from("herb_plants")
@@ -130,7 +144,7 @@ class CoreRepositoryImpl @Inject constructor(
                 val response = postgrest.from("herb_plants")
                     .select {
                         filter {
-                            eq("id_plant", plantId)
+                            eq("plant_id", plantId)
                         }
                     }
                     .decodeList<PlantDto>()

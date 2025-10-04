@@ -5,12 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserProfileDto(
-    @SerialName("id_user")
-    val id: Int? = null,
-    @SerialName("full_name")
-    val fullName: String?,
-    @SerialName("email")
-    val email: String?,
+    @SerialName("user_id")
+    val userId: Int? = null,
+    @SerialName("user_full_name")
+    val userFullName: String?,
+    @SerialName("user_email")
+    val userEmail: String?,
     @SerialName("photo_profile")
     val photoProfile: String?,
     @SerialName("role")

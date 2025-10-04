@@ -74,7 +74,7 @@ fun WeatherCard(
                 {
                     is ResultState.Success -> {
                         Text(
-                            text = profileUserState.data?.fullName ?: "",
+                            text = profileUserState.data?.userFullName ?: "",
                             fontSize = 18.sp,
                             fontFamily = RethinkSans,
                             fontWeight = FontWeight.Bold,

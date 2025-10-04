@@ -38,12 +38,11 @@ fun JampyApp(
 
     navController.addOnDestinationChangedListener { _, navDestination, _ ->
         val destRoute = navDestination.route?.takeLastWhile { it != '.' }
-        Log.e("JampyApp", "Current Route: $destRoute")
         when (destRoute) {
             HomeRoutes.HomeScreen.toString() -> selectedItemIndex = 0
             HomeRoutes.SearchScreen.toString() -> selectedItemIndex = 1
-            HomeRoutes.BookmarkScreen.toString() -> selectedItemIndex = 2
-            HomeRoutes.ProfileScreen.toString() -> selectedItemIndex = 3
+            HomeRoutes.BookmarkScreen.toString() -> selectedItemIndex = 3
+            HomeRoutes.ProfileScreen.toString() -> selectedItemIndex = 4
         }
     }
 

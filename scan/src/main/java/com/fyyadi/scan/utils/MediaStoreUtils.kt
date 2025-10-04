@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import java.io.File
 
 object MediaStoreUtils {
     fun createImageUri(context: Context, fileName: String): Uri? {
@@ -19,5 +20,13 @@ object MediaStoreUtils {
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             contentValues
         )
+    }
+    fun createInternalImageUri(context: Context, filename: String): Uri {
+        val internalDir = File(context.filesDir, "cropped_images")
+        if (!internalDir.exists()) {
+            internalDir.mkdirs()
+        }
+        val file = File(internalDir, "$filename.jpg")
+        return Uri.fromFile(file)
     }
 }

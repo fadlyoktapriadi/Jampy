@@ -141,7 +141,7 @@ fun CameraScreen(
             SmallFloatingActionButton(
                 onClick = {
                     val name = "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis())}"
-                    val outputUri = MediaStoreUtils.createImageUri(context, name)
+                    val outputUri = MediaStoreUtils.createInternalImageUri(context, name)
                     val outputOptions = ImageCapture.OutputFileOptions.Builder(
                         context.contentResolver,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,

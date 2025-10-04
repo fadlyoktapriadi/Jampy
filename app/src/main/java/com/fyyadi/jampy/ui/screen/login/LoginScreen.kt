@@ -246,9 +246,9 @@ private suspend fun performGoogleSignIn(
         val googleIdCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
         val googleIdToken = googleIdCredential.idToken
         val userProfile = UserProfile(
-            idUser = null,
-            email = googleIdCredential.id,
-            fullName = googleIdCredential.displayName,
+            userId = null,
+            userEmail = googleIdCredential.id,
+            userFullName = googleIdCredential.displayName,
             photoProfile = googleIdCredential.profilePictureUri.toString(),
             role = "User"
         )

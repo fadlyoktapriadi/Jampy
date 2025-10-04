@@ -9,8 +9,8 @@ import com.fyyadi.jampy.route.HomeRoutes
 import com.fyyadi.jampy.ui.screen.bookmark.BookmarkScreen
 import com.fyyadi.jampy.ui.screen.detail.DetailPlantScreen
 import com.fyyadi.jampy.ui.screen.home.HomeScreen
+import com.fyyadi.jampy.ui.screen.profile.ProfileScreen
 import com.fyyadi.jampy.ui.screen.search.SearchScreen
-import com.fyyadi.scan.ui.ScanScreen
 
 object HomeNavigation {
 
@@ -54,6 +54,12 @@ object HomeNavigation {
                 onPlantClick = { idPlant ->
                     navController.navigate(HomeRoutes.DetailPlantScreen(idPlant))
                 }
+            )
+        }
+
+        composable<HomeRoutes.ProfileScreen> {
+            ProfileScreen(
+                modifier = modifier,
             )
         }
     }

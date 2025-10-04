@@ -1,5 +1,6 @@
 package com.fyyadi.jampy.ui.screen.detail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fyyadi.domain.model.Plant
@@ -31,6 +32,7 @@ class DetailPlantViewModel @Inject constructor(
                     result
                         .onSuccess { plant ->
                             _plantDetailState.value = ResultState.Success(plant)
+                            Log.e("DetailPlantViewModel", "getDetailPlant: $plant" )
                         }
                         .onFailure { exception ->
                             _plantDetailState.value = ResultState.Error(exception.message)

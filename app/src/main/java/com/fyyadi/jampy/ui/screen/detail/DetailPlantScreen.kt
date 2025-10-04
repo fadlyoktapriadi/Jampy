@@ -55,6 +55,7 @@ fun DetailPlantScreen(
     val isBookmarked by viewModel.isBookmarked.collectAsState()
 
     LaunchedEffect(idPlant) {
+        Log.e("CEK ID PLANT", "DetailPlantScreen: $idPlant" )
         viewModel.getDetailPlant(idPlant)
         viewModel.getBookmarkStatus(idPlant)
     }

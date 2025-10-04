@@ -7,25 +7,19 @@ data class PlantLabel(
 )
 
 object PlantLabels {
-    // Order must match the model's output indices
     val LABELS = listOf(
-        "belimbing_wuluh",  // index 0
-        "jahe",             // index 1
-        "jambu_biji",       // index 2
-        "jeruk_nipis",      // index 3
-        "kemangi",          // index 4
-        "kunyit",           // index 5
-        "lidah_buaya",      // index 6
-        "mint",             // index 7
-        "pepaya",           // index 8
-        "sirih"             // index 9
+        "belimbing_wuluh",
+        "jahe",
+        "jambu_biji",
+        "jeruk_nipis",
+        "kemangi",
+        "kunyit",
+        "lidah_buaya",
+        "mint",
+        "pepaya",
+        "sirih"
     )
-
-    // Optional: Create a map for reverse lookup
-    val LABEL_TO_INDEX = LABELS.mapIndexed { index, label -> label to index }.toMap()
-    val INDEX_TO_LABEL = LABELS.mapIndexed { index, label -> index to label }.toMap()
-
-    // Keep your existing DISPLAY_NAMES map
+    
     val DISPLAY_NAMES = mapOf(
         "belimbing_wuluh" to "Belimbing Wuluh",
         "jahe" to "Jahe",

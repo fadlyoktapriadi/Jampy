@@ -12,6 +12,6 @@ sealed class ScanRoutes : BaseRoute() {
     data object CameraScreen : ScanRoutes()
 
     @Serializable
-    data object ResultScanScreen : ScanRoutes()
+    data class ResultScanScreen(val plantLabels: String) : ScanRoutes()
 
 }

@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PlantDto(
-    @SerialName("id_plant")
+    @SerialName("plant_id")
     val idPlant: Int? = null,
 
     @SerialName("plant_name")

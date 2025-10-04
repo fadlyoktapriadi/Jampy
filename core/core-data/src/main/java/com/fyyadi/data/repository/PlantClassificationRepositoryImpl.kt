@@ -21,10 +21,7 @@ import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.get
 import kotlin.coroutines.resume
-import kotlin.run
-import kotlin.text.get
 
 @Singleton
 class PlantClassificationRepositoryImpl @Inject constructor(
@@ -73,42 +70,31 @@ class PlantClassificationRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun getModelOutputShape(): Int {
-        val currentInterpreter = interpreter ?: return 0
-        val outputTensor = currentInterpreter.getOutputTensor(0)
-        return outputTensor.shape()[1] // This will tell you the actual number of classes
-    }
-
     override suspend fun classifyPlant(bitmap: Bitmap): Result<List<PlantLabel>> =
         withContext(Dispatchers.Default) {
             return@withContext try {
                 val currentInterpreter = interpreter
                     ?: return@withContext Result.failure(Exception("Model not loaded"))
 
-                // Preprocess image
                 val tensorImage = TensorImage.fromBitmap(bitmap)
                 val processedImage = imageProcessor.process(tensorImage)
 
-                // Prepare input and output (should be 10 classes based on your metadata)
                 val inputBuffer = processedImage.buffer
-                val outputArray = Array(1) { FloatArray(10) } // Fixed size based on metadata
+                val outputArray = Array(1) { FloatArray(10) }
 
-                // Run inference
                 currentInterpreter.run(inputBuffer, outputArray)
 
-                // Process results using the correct label mapping
                 val predictions = outputArray[0]
                 val results = mutableListOf<PlantLabel>()
 
                 predictions.forEachIndexed { index, confidence ->
                     if (confidence > CONFIDENCE_THRESHOLD && index < PlantLabels.LABELS.size) {
-                        val label = PlantLabels.LABELS[index] // Use index to get correct label
+                        val label = PlantLabels.LABELS[index]
                         val displayName = PlantLabels.DISPLAY_NAMES[label] ?: label
                         results.add(PlantLabel(label, displayName, confidence))
                     }
                 }
 
-                // Sort by confidence descending
                 results.sortByDescending { it.confidence }
 
                 Log.e("PlantClassification", "Classification results: $results")
