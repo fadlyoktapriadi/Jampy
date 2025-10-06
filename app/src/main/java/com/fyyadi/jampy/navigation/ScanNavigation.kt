@@ -33,12 +33,12 @@ object ScanNavigation {
                 onCameraClick = { onResult, onCancel ->
                     navController.navigate(ScanRoutes.CameraScreen)
                 },
-                onResultClassification = { plantLabels ->
+                onResultClassification = { plantLabels, imageResultUri ->
                     val labelsJson = plantLabels.joinToString(separator = "|") {
                         "${it.name},${it.displayName},${it.confidence}"
                     }
                     navController.navigate(
-                        ScanRoutes.ResultScanScreen(plantLabels = labelsJson)
+                        ScanRoutes.ResultScanScreen(plantLabels = labelsJson, imageResultUri)
                     )
                 }
             )
@@ -59,7 +59,7 @@ object ScanNavigation {
 
         composable<ScanRoutes.ResultScanScreen> { backStackEntry ->
             val args = backStackEntry.toRoute<ScanRoutes.ResultScanScreen>()
-            val plantLabels = args.plantLabels.split("|").mapNotNull { item ->
+            val plantResult = args.plantLabels.split("|").mapNotNull { item ->
                 val parts = item.split(",")
                 if (parts.size == 3) {
                     PlantLabel(
@@ -72,7 +72,8 @@ object ScanNavigation {
 
             ResultScanScreen(
                 modifier = modifier,
-                plantLabels = plantLabels,
+                plantResult = plantResult,
+                imageResultUri = args.imageResultUri,
                 onBackClick = { navController.popBackStack() }
             )
         }

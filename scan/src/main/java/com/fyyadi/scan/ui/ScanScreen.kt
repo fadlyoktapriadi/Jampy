@@ -45,6 +45,7 @@ import com.fyyadi.domain.model.PlantLabel
 import com.fyyadi.scan.R
 import com.fyyadi.scan.utils.MediaStoreUtils
 import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.yalantis.ucrop.UCrop
@@ -58,7 +59,7 @@ fun ScanScreen(
         onResult: (Uri) -> Unit,
         onCancel: () -> Unit
     ) -> Unit,
-    onResultClassification: (List<PlantLabel>) -> Unit
+    onResultClassification: (List<PlantLabel>, String) -> Unit
 ) {
     val viewModel: ScanViewModel = hiltViewModel()
 
@@ -283,7 +284,7 @@ fun ScanScreen(
                     }
                 },
             shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = PrimaryGreen),
+            colors = CardDefaults.cardColors(containerColor = OrangePrimary),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
             Row(
@@ -310,8 +311,9 @@ fun ScanScreen(
         classificationResult.let { result ->
             Log.e("RESULT", result.toString())
             if (result.isNotEmpty()) {
+                val imageUriString = selectedImage?.toString().orEmpty()
                 LaunchedEffect(result) {
-                    onResultClassification(result)
+                    onResultClassification(result, imageUriString)
                     viewModel.setImage(null)
                 }
             }

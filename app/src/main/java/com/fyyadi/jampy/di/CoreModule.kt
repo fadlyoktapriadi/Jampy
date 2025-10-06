@@ -19,6 +19,7 @@ import com.fyyadi.domain.usecase.GetAllPlantsUseCase
 import com.fyyadi.domain.usecase.GetLoginStatusUseCase
 import com.fyyadi.domain.usecase.GetDetailPlantUseCase
 import com.fyyadi.domain.usecase.GetPlantHomeUseCase
+import com.fyyadi.domain.usecase.GetPlantResultUseCase
 import com.fyyadi.domain.usecase.GetUserProfileUseCase
 import com.fyyadi.domain.usecase.IsPlantBookmarkedUseCase
 import com.fyyadi.domain.usecase.RemoveBookmarkPlantUseCase
@@ -109,6 +110,7 @@ object CoreModule {
         getAllBookmarkedPlantsUseCase = GetAllBookmarkedPlantsUseCase(bookmarkRepository),
         saveBookmarkPlantUseCase = SaveBookmarkPlantUseCase(bookmarkRepository),
         removeBookmarkPlantUseCase = RemoveBookmarkPlantUseCase(bookmarkRepository),
-        isPlantBookmarkedUseCase = IsPlantBookmarkedUseCase(bookmarkRepository)
+        isPlantBookmarkedUseCase = IsPlantBookmarkedUseCase(bookmarkRepository),
+        getPlantResultUseCase = GetPlantResultUseCase(coreRepository)
     )
 }

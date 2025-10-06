@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-
+    // Markdown
+    implementation(libs.markwon.core)
+    implementation(libs.markwon.html)
 
 }

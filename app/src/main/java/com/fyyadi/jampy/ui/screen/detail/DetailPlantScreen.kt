@@ -32,10 +32,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import com.fyyadi.components.MarkdownText
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
-import com.fyyadi.jampy.ui.components.MarkdownText
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Black600
 import com.fyyadi.theme.Green400

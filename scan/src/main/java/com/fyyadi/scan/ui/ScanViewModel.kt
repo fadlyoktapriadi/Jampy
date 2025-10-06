@@ -5,9 +5,11 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.PlantLabel
 import com.fyyadi.domain.repository.PlantClassificationRepository
 import com.fyyadi.domain.usecase.CoreUseCase
+import com.fyyadi.scan.common.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,6 +30,9 @@ class ScanViewModel @Inject constructor(
 
     private val _classificationResults = MutableStateFlow<List<PlantLabel>>(emptyList())
     val classificationResults = _classificationResults.asStateFlow()
+
+    private val _resultScan = MutableStateFlow<ResultState<Plant?>>(ResultState.Idle)
+    val resultScan = _resultScan.asStateFlow()
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
@@ -85,5 +90,22 @@ class ScanViewModel @Inject constructor(
 
     fun clearError() {
         _errorMessage.value = null
+    }
+
+    fun getPlantResult(plantName: String) {
+        viewModelScope.launch {
+            coreUseCase.getPlantResultUseCase(plantName)
+                .collect { result ->
+                    result
+                        .onSuccess { plant ->
+                            Log.e("SCAN DI VIEWMODEL", "getPlantResult: $plant" )
+                            _resultScan.value  = ResultState.Success(plant)
+                        }
+                        .onFailure { exception ->
+
+                            _resultScan.value = ResultState.Error(exception.message)
+                        }
+                }
+        }
     }
 }

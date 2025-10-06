@@ -21,15 +21,15 @@ object PlantLabels {
     )
     
     val DISPLAY_NAMES = mapOf(
-        "belimbing_wuluh" to "Belimbing Wuluh",
+        "belimbing_wuluh" to "Daun Belimbing Wuluh",
         "jahe" to "Jahe",
-        "jambu_biji" to "Jambu Biji",
-        "jeruk_nipis" to "Jeruk Nipis",
-        "kemangi" to "Kemangi",
+        "jambu_biji" to "Daun Jambu Biji",
+        "jeruk_nipis" to "Daun Jeruk Nipis",
+        "kemangi" to "Daun Kemangi",
         "kunyit" to "Kunyit",
         "lidah_buaya" to "Lidah Buaya",
-        "mint" to "Mint",
-        "pepaya" to "Pepaya",
-        "sirih" to "Sirih"
+        "mint" to "Daun Mint",
+        "pepaya" to "DaunPepaya",
+        "sirih" to "Daun Sirih"
     )
 }
