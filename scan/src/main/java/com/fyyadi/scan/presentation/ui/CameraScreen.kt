@@ -1,7 +1,8 @@
-package com.fyyadi.scan.ui
+package com.fyyadi.scan.presentation.ui
 
 import android.Manifest
 import android.content.ContentValues
+import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -25,7 +26,6 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -44,7 +44,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.fyyadi.scan.utils.MediaStoreUtils
+import com.fyyadi.scan.R
+import com.fyyadi.scan.presentation.utils.MediaStoreUtils
 import com.fyyadi.theme.OrangePrimary
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -52,7 +53,7 @@ import java.util.Locale
 @Composable
 fun CameraScreen(
     modifier: Modifier = Modifier,
-    onResult: (android.net.Uri) -> Unit,
+    onResult: (Uri) -> Unit,
     onCancel: () -> Unit
 ) {
 
@@ -172,7 +173,7 @@ fun CameraScreen(
                 modifier = Modifier.size(48.dp) // small button
             ) {
                 Icon(
-                    painter = painterResource(com.fyyadi.scan.R.drawable.ic_camera),
+                    painter = painterResource(R.drawable.ic_camera),
                     contentDescription = "Capture",
                     modifier = Modifier.size(24.dp),
                     tint = Color.White

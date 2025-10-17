@@ -2,13 +2,17 @@ package com.fyyadi.jampy.di
 
 import android.content.Context
 import androidx.room.Room
+import com.fyyadi.data.repository.AuthRepositoryImpl
 import com.fyyadi.data.repository.BookmarkRepositoryImpl
 import com.fyyadi.data.repository.CoreRepositoryImpl
+import com.fyyadi.data.repository.PlantRepositoryImpl
 import com.fyyadi.data.source.local.room.AppDatabase
 import com.fyyadi.data.source.local.room.dao.PlantBookmarkDao
 import com.fyyadi.data.source.local.sharedpreference.PreferenceManager
+import com.fyyadi.domain.repository.AuthRepository
 import com.fyyadi.domain.repository.BookmarkRepository
 import com.fyyadi.domain.repository.CoreRepository
+import com.fyyadi.domain.repository.PlantRepository
 import com.fyyadi.domain.usecase.AddUserUseCase
 import com.fyyadi.domain.usecase.AuthUseCase
 import com.fyyadi.domain.usecase.CheckUserLoginUseCase
@@ -19,7 +23,6 @@ import com.fyyadi.domain.usecase.GetAllPlantsUseCase
 import com.fyyadi.domain.usecase.GetLoginStatusUseCase
 import com.fyyadi.domain.usecase.GetDetailPlantUseCase
 import com.fyyadi.domain.usecase.GetPlantHomeUseCase
-import com.fyyadi.domain.usecase.GetPlantResultUseCase
 import com.fyyadi.domain.usecase.GetUserProfileUseCase
 import com.fyyadi.domain.usecase.IsPlantBookmarkedUseCase
 import com.fyyadi.domain.usecase.RemoveBookmarkPlantUseCase
@@ -73,11 +76,27 @@ object CoreModule {
 
     @Provides
     @Singleton
-    fun provideCoreRepositoryImpl(
-        auth: Auth,
-        postgrest: Postgrest,
+    fun provideCoreRepository(
         preferenceManager: PreferenceManager
-    ): CoreRepository = CoreRepositoryImpl(auth, postgrest, preferenceManager)
+    ): CoreRepository = CoreRepositoryImpl(preferenceManager)
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(
+        auth: Auth,
+        postgrest: Postgrest
+    ): AuthRepository = AuthRepositoryImpl(auth, postgrest)
+
+    @Provides
+    @Singleton
+    fun providePlantRepository(
+        postgrest: Postgrest
+    ): PlantRepository = PlantRepositoryImpl(postgrest)
+
+    @Provides
+    @Singleton
+    fun provideBookmarkRepository(dao: PlantBookmarkDao): BookmarkRepository =
+        BookmarkRepositoryImpl(dao)
 
     @Provides
     @Singleton
@@ -88,29 +107,25 @@ object CoreModule {
     fun providePlantBookmarkDao(db: AppDatabase): PlantBookmarkDao = db.plantBookmarkDao()
 
     @Provides
-    @Singleton
-    fun provideBookmarkRepository(dao: PlantBookmarkDao): BookmarkRepository =
-        BookmarkRepositoryImpl(dao)
-
-    @Provides
     fun providesCoreUseCases(
         coreRepository: CoreRepository,
-        bookmarkRepository: BookmarkRepository
+        bookmarkRepository: BookmarkRepository,
+        plantRepository: PlantRepository,
+        authRepository: AuthRepository
     ) = CoreUseCase(
-        authUseCase = AuthUseCase(coreRepository),
-        addUserUseCase = AddUserUseCase(coreRepository),
-        checkUserLoginUseCase = CheckUserLoginUseCase(coreRepository),
+        authUseCase = AuthUseCase(authRepository),
+        addUserUseCase = AddUserUseCase(authRepository),
+        checkUserLoginUseCase = CheckUserLoginUseCase(authRepository),
         clearUserLoginUseCase = ClearUserLoginUseCase(coreRepository),
         getUserProfileUseCase = GetUserProfileUseCase(coreRepository),
         getLoginStatusUseCase = GetLoginStatusUseCase(coreRepository),
         saveUserLoginUseCase = SaveUserLoginUseCase(coreRepository),
-        getPlantHomeUseCase = GetPlantHomeUseCase(coreRepository),
-        getAllPlantUseCase = GetAllPlantsUseCase(coreRepository),
-        getDetailPlantUseCase = GetDetailPlantUseCase(coreRepository),
+        getPlantHomeUseCase = GetPlantHomeUseCase(plantRepository),
+        getAllPlantUseCase = GetAllPlantsUseCase(plantRepository),
+        getDetailPlantUseCase = GetDetailPlantUseCase(plantRepository),
         getAllBookmarkedPlantsUseCase = GetAllBookmarkedPlantsUseCase(bookmarkRepository),
         saveBookmarkPlantUseCase = SaveBookmarkPlantUseCase(bookmarkRepository),
         removeBookmarkPlantUseCase = RemoveBookmarkPlantUseCase(bookmarkRepository),
-        isPlantBookmarkedUseCase = IsPlantBookmarkedUseCase(bookmarkRepository),
-        getPlantResultUseCase = GetPlantResultUseCase(coreRepository)
+        isPlantBookmarkedUseCase = IsPlantBookmarkedUseCase(bookmarkRepository)
     )
 }

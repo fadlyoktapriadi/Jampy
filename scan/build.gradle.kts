@@ -39,6 +39,8 @@ dependencies {
 
     implementation(project(":core:core-domain"))
     implementation(project(":core:core-presentation"))
+    implementation(project(":core:core-data"))
+
     // Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -73,13 +75,18 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.ucrop)
 
+    // Supabase
+    implementation(platform(libs.supabase.core))
+    implementation(libs.postgrest.kt)
+    implementation(libs.realtime.kt)
+
     implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
     implementation("com.google.firebase:firebase-analytics")
 
     implementation("com.google.firebase:firebase-ml-modeldownloader")
 
     // TensorFlow Lite for inference
-    implementation("org.tensorflow:tensorflow-lite:2.17.0")
-    implementation("org.tensorflow:tensorflow-lite-support:0.5.0")
+    implementation(libs.tensorflow.lite)
+    implementation(libs.tensorflow.lite.support)
 
 }

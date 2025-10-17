@@ -19,5 +19,6 @@ class BookmarkRepositoryImpl @Inject constructor(
         dao.getAll()
             .map { list -> Result.success(list.map { it.toDomain() }) }
             .catch { emit(Result.failure(it)) }
+
     override fun isBookmarked(id: Int): Flow<Boolean> = dao.isBookmarked(id)
 }

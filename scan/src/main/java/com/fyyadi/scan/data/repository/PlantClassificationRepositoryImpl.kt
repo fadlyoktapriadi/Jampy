@@ -1,17 +1,21 @@
-package com.fyyadi.data.repository
+package com.fyyadi.scan.data.repository
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
-import com.fyyadi.domain.model.PlantLabel
-import com.fyyadi.domain.model.PlantLabels
-import com.fyyadi.domain.repository.PlantClassificationRepository
+import com.fyyadi.data.mapper.toPlant
+import com.fyyadi.data.source.network.dto.PlantDto
+import com.fyyadi.domain.model.Plant
+import com.fyyadi.scan.domain.model.PlantLabel
+import com.fyyadi.scan.domain.model.PlantLabels
+import com.fyyadi.scan.domain.repository.PlantClassificationRepository
 import com.google.firebase.ml.modeldownloader.CustomModel
 import com.google.firebase.ml.modeldownloader.CustomModelDownloadConditions
 import com.google.firebase.ml.modeldownloader.DownloadType
 import com.google.firebase.ml.modeldownloader.FirebaseModelDownloader
-import dagger.hilt.android.qualifiers.ApplicationContext
+import io.github.jan.supabase.postgrest.Postgrest
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.tensorflow.lite.Interpreter
@@ -25,14 +29,8 @@ import kotlin.coroutines.resume
 
 @Singleton
 class PlantClassificationRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    private val postgrest: Postgrest
 ) : PlantClassificationRepository {
-
-    companion object {
-        private const val MODEL_NAME = "jampy_model"
-        private const val INPUT_SIZE = 224
-        private const val CONFIDENCE_THRESHOLD = 0.3f
-    }
 
     private var interpreter: Interpreter? = null
     private val imageProcessor = ImageProcessor.Builder()
@@ -107,5 +105,28 @@ class PlantClassificationRepositoryImpl @Inject constructor(
 
 
     override fun isModelReady(): Boolean = interpreter != null
+
+    override fun getDetailResultClassify(plantName: String): Flow<Result<Plant>> {
+        return flow {
+            val result = runCatching {
+                val response = postgrest.from("herb_plants")
+                    .select {
+                        filter {
+                            eq("plant_name", plantName)
+                        }
+                        limit(1)
+                    }
+                    .decodeList<PlantDto>()
+                response.first().toPlant()
+            }
+            emit(result)
+        }
+    }
+
+    companion object {
+        private const val MODEL_NAME = "jampy_model"
+        private const val INPUT_SIZE = 224
+        private const val CONFIDENCE_THRESHOLD = 0.3f
+    }
 
 }

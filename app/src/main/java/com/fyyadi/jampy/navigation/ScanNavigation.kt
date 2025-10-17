@@ -6,18 +6,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.fyyadi.domain.model.PlantLabel
-import com.fyyadi.jampy.route.HomeRoutes
 import com.fyyadi.jampy.route.ScanRoutes
-import com.fyyadi.jampy.ui.screen.bookmark.BookmarkScreen
-import com.fyyadi.jampy.ui.screen.detail.DetailPlantScreen
-import com.fyyadi.jampy.ui.screen.home.HomeScreen
-import com.fyyadi.jampy.ui.screen.search.SearchScreen
-import com.fyyadi.scan.ui.CameraScreen
-import com.fyyadi.scan.ui.ResultScanScreen
-import com.fyyadi.scan.ui.ScanScreen
-import kotlin.collections.set
-import kotlin.text.get
-import kotlin.toString
+import com.fyyadi.scan.presentation.ui.CameraScreen
+import com.fyyadi.scan.presentation.ui.ResultScanScreen
+import com.fyyadi.scan.presentation.ui.ScanScreen
 
 object ScanNavigation {
 

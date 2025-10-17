@@ -1,4 +1,4 @@
-package com.fyyadi.scan.utils
+package com.fyyadi.scan.presentation.utils
 
 import android.content.ContentValues
 import android.content.Context

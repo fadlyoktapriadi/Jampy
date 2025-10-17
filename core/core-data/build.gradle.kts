@@ -38,7 +38,6 @@ android {
 dependencies {
 
     implementation(project(":core:core-domain"))
-    implementation(project(":scan"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

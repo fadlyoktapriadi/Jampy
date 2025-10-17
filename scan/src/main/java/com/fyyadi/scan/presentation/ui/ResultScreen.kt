@@ -1,5 +1,4 @@
-
-package com.fyyadi.scan.ui
+package com.fyyadi.scan.presentation.ui
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -48,11 +47,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import com.fyyadi.common.ResultState
 import com.fyyadi.components.MarkdownText
 import com.fyyadi.core_presentation.R
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.PlantLabel
-import com.fyyadi.scan.common.ResultState
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Black600
 import com.fyyadi.theme.Green400
@@ -69,22 +68,20 @@ fun ResultScanScreen(
     imageResultUri: String,
     onBackClick: () -> Unit
 ) {
-//    val isBookmarked by viewModel.isBookmarked.collectAsState()
 
     val viewModel: ScanViewModel = hiltViewModel()
-    val plantResultState by viewModel.resultScan.collectAsState()
+    val detailResultClassify by viewModel.detailResultClassify.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.getPlantResult(plantResult.first().displayName)
+        viewModel.getDetailResultClassify(plantResult.first().displayName)
     }
 
-    when (plantResultState) {
+    when (detailResultClassify) {
         is ResultState.Loading -> {
             // Show loading indicator
         }
         is ResultState.Success -> {
-            val plant = (plantResultState as ResultState.Success<Plant?>).data
-            Log.e("CEK RESULT", "ResultScanScreen: $plant")
+            val plant = (detailResultClassify as ResultState.Success<Plant?>).data
             DetailPlantResult(
                 plant = plant,
                 imageResultUri = imageResultUri,
@@ -96,12 +93,12 @@ fun ResultScanScreen(
             )
         }
         is ResultState.Error -> {
-            val errorMsg = (plantResultState as ResultState.Error).message
+            val errorMsg = (detailResultClassify as ResultState.Error).message
             Log.e("CEK ERROR", "ResultScanScreen: $errorMsg")
-            // Show error message
         }
 
         ResultState.Idle -> {
+            // Initial state, do nothing or show a placeholder
         }
     }
 }

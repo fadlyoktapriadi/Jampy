@@ -1,6 +1,6 @@
 [versions]
 activityKtx = "1.11.0"
-agp = "8.12.1"
+agp = "8.13.0"
 cameraCore = "1.5.0"
 cameraCamera2 = "1.5.0"
 cameraLifecycle = "1.5.0"
@@ -45,6 +45,8 @@ appcompat = "1.7.1"
 material = "1.12.0"
 material3 = "1.3.2"
 foundation = "1.9.1"
+tensorflowLite = "2.17.0"
+tensorflowLiteSupport = "0.5.0"
 ucrop = "2.2.11"
 activity = "1.11.0"
 firebaseCrashlytics = "20.0.2"
@@ -110,6 +112,8 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
+tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }

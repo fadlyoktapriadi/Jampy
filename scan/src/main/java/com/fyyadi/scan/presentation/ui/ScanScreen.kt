@@ -1,7 +1,12 @@
-package com.fyyadi.scan.ui
+package com.fyyadi.scan.presentation.ui
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -35,21 +40,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
-import com.fyyadi.domain.model.PlantLabel
 import com.fyyadi.scan.R
-import com.fyyadi.scan.utils.MediaStoreUtils
+import com.fyyadi.scan.domain.model.PlantLabel
+import com.fyyadi.scan.presentation.utils.MediaStoreUtils
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import androidx.core.net.toUri
 
 @Composable
 fun ScanScreen(
@@ -64,19 +74,16 @@ fun ScanScreen(
     val viewModel: ScanViewModel = hiltViewModel()
 
     val selectedImage by viewModel.selectedImage.collectAsState()
-    val isProcessing by viewModel.isProcessing.collectAsState()
     val classificationResult by viewModel.classificationResults.collectAsState()
-    val error by viewModel.errorMessage.collectAsState()
 
     var showCamera by remember { mutableStateOf(false) }
-    val context = androidx.compose.ui.platform.LocalContext.current
+    val context = LocalContext.current
 
     val coroutineScope = rememberCoroutineScope()
 
     val cropLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        viewModel.setProcessing(false)
         if (result.resultCode == Activity.RESULT_OK) {
             val resultUri = UCrop.getOutput(result.data!!)
             viewModel.setImage(resultUri)
@@ -91,7 +98,6 @@ fun ScanScreen(
                 context = context,
                 source = uri,
                 onLaunch = { cropLauncher.launch(it) },
-                setProcessing = viewModel::setProcessing,
                 createDest = {
                     MediaStoreUtils.createInternalImageUri(
                         context,
@@ -110,7 +116,6 @@ fun ScanScreen(
                     context = context,
                     source = uri,
                     onLaunch = { cropLauncher.launch(it) },
-                    setProcessing = viewModel::setProcessing,
                     createDest = {
                         MediaStoreUtils.createInternalImageUri(
                             context,
@@ -126,12 +131,11 @@ fun ScanScreen(
 
     LaunchedEffect(capturedImageUri) {
         if (capturedImageUri != null) {
-            val uri = Uri.parse(capturedImageUri)
+            val uri = capturedImageUri.toUri()
             startCrop(
                 context = context,
                 source = uri,
                 onLaunch = { cropLauncher.launch(it) },
-                setProcessing = viewModel::setProcessing,
                 createDest = {
                     MediaStoreUtils.createInternalImageUri(
                         context,
@@ -169,7 +173,7 @@ fun ScanScreen(
                     .weight(1f)
                     .fillMaxWidth()
                     .padding(start = 12.dp),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                textAlign = TextAlign.Center,
                 maxLines = 1
             )
         }
@@ -279,7 +283,19 @@ fun ScanScreen(
                 .clickable {
                     selectedImage?.let { uri ->
                         coroutineScope.launch {
-                            processImage(context, uri, viewModel)
+                            val bitmap = withContext(Dispatchers.IO) {
+                                try {
+                                    val source = ImageDecoder.createSource(context.contentResolver, uri)
+                                    ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
+                                        decoder.isMutableRequired = true
+                                    }
+                                } catch (_: Exception) {
+                                    null
+                                }
+                            }
+                            if (bitmap != null) {
+                                viewModel.classifyImage(bitmap)
+                            }
                         }
                     }
                 },
@@ -310,70 +326,70 @@ fun ScanScreen(
 
         classificationResult.let { result ->
             Log.e("RESULT", result.toString())
-            if (result.isNotEmpty()) {
-                val imageUriString = selectedImage?.toString().orEmpty()
-                LaunchedEffect(result) {
-                    onResultClassification(result, imageUriString)
-                    viewModel.setImage(null)
+            when (result) {
+                is com.fyyadi.common.ResultState.Idle -> {
+                    // no-op
+                }
+
+                is com.fyyadi.common.ResultState.Loading -> {
+                    Text(
+                        text = "Loading...",
+                        fontSize = 14.sp,
+                        color = PrimaryGreen,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp, vertical = 8.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                is com.fyyadi.common.ResultState.Success -> {
+                    val data = result.data
+                    if (data.isNotEmpty()) {
+                        onResultClassification(data, selectedImage.toString())
+                        viewModel.setImage(null)
+                    } else {
+                        Text(
+                            text = "No plants recognized. Please try another image.",
+                            fontSize = 14.sp,
+                            color = PrimaryGreen,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp, vertical = 8.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+
+                is com.fyyadi.common.ResultState.Error -> {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp, vertical = 8.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.Red.copy(alpha = 0.1f)),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                    ) {
+                        Log.e("ScanScreen", "Error: ${result.message}")
+                        Text(
+                            text = "Error: ${result.message ?: "Unknown error"}",
+                            fontSize = 14.sp,
+                            color = Color.Red,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
                 }
             }
         }
-
-        error?.let { errorMessage ->
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.Red.copy(alpha = 0.1f)),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-            ) {
-                Log.e("ScanScreen", "Error: $errorMessage")
-                Text(
-                    text = "Error: $errorMessage",
-                    fontSize = 14.sp,
-                    color = Color.Red,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-        }
-    }
-}
-
-private suspend fun processImage(
-    context: android.content.Context,
-    uri: Uri,
-    viewModel: ScanViewModel
-) {
-    val bitmap = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-        try {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                val source = android.graphics.ImageDecoder.createSource(context.contentResolver, uri)
-                android.graphics.ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
-                    decoder.isMutableRequired = true
-                }
-            } else {
-                @Suppress("DEPRECATION")
-                android.provider.MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-            }
-        } catch (_: Exception) {
-            null
-        }
-    }
-    if (bitmap != null) {
-        viewModel.classifyImage(bitmap)
-        viewModel.setProcessing(false)
     }
 }
 
 private fun startCrop(
-    context: android.content.Context,
+    context: Context,
     source: Uri,
-    onLaunch: (android.content.Intent) -> Unit,
-    setProcessing: (Boolean) -> Unit,
+    onLaunch: (Intent) -> Unit,
     createDest: () -> Uri
 ) {
-    setProcessing(true)
     val destinationUri = createDest()
     val options = UCrop.Options().apply {
         setFreeStyleCropEnabled(true)

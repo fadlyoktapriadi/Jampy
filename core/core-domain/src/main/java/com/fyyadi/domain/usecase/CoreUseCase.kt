@@ -14,6 +14,5 @@ data class CoreUseCase (
     val getAllBookmarkedPlantsUseCase: GetAllBookmarkedPlantsUseCase,
     val saveBookmarkPlantUseCase: SaveBookmarkPlantUseCase,
     val removeBookmarkPlantUseCase: RemoveBookmarkPlantUseCase,
-    val isPlantBookmarkedUseCase: IsPlantBookmarkedUseCase,
-    var getPlantResultUseCase: GetPlantResultUseCase
+    val isPlantBookmarkedUseCase: IsPlantBookmarkedUseCase
 )
