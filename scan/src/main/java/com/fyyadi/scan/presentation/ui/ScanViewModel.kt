@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fyyadi.common.ResultState
 import com.fyyadi.domain.model.Plant
+import com.fyyadi.domain.model.UserProfile
+import com.fyyadi.domain.usecase.CoreUseCase
 import com.fyyadi.scan.domain.model.PlantLabel
 import com.fyyadi.scan.domain.usecase.ScanUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ScanViewModel @Inject constructor(
     private val scanUseCase: ScanUseCase,
+    private val coreUseCase: CoreUseCase
 ) : ViewModel() {
 
     private val _selectedImage = MutableStateFlow<Uri?>(null)
@@ -31,6 +34,12 @@ class ScanViewModel @Inject constructor(
 
     private val _isModelReady = MutableStateFlow<ResultState<Boolean>>(ResultState.Idle)
     val isModelReady = _isModelReady.asStateFlow()
+
+    private val _profileUserState = MutableStateFlow<ResultState<UserProfile?>>(
+        ResultState.Idle)
+
+    val profileUserState = _profileUserState.asStateFlow()
+
 
 
     init {
@@ -84,6 +93,45 @@ class ScanViewModel @Inject constructor(
                             _detailResultClassify.value = ResultState.Error(exception.message)
                         }
                 }
+        }
+    }
+
+    fun getUserProfile() {
+        viewModelScope.launch {
+            _profileUserState.value = ResultState.Loading
+            coreUseCase.getUserProfileUseCase()
+                .collect { result ->
+                    result
+                        .onSuccess { profile ->
+                            _profileUserState.value = ResultState.Success(profile)
+                        }
+                        .onFailure { exception ->
+                            _profileUserState.value = ResultState.Error(exception.message)
+                        }
+                }
+        }
+    }
+
+    fun saveHistoryScan(
+        userEmail: String,
+        plantId: Int,
+        accuracy: Int
+    ) {
+        viewModelScope.launch {
+            scanUseCase.saveHistoryScanUseCase(
+                userEmail = userEmail,
+                plantId = plantId,
+                accuracy = accuracy
+            ).collect {
+                result ->
+                result
+                    .onSuccess {
+                        Log.e("ScanViewModel", "saveHistoryScan: Success" )
+                    }
+                    .onFailure { exception ->
+                        Log.e("ScanViewModel", "saveHistoryScan: Failure ${exception.message}" )
+                    }
+            }
         }
     }
 }

@@ -66,6 +66,7 @@ fun ResultScanScreen(
     modifier: Modifier = Modifier,
     plantResult: List<PlantLabel>,
     imageResultUri: String,
+    userEmail: String,
     onBackClick: () -> Unit
 ) {
 
@@ -76,19 +77,35 @@ fun ResultScanScreen(
         viewModel.getDetailResultClassify(plantResult.first().displayName)
     }
 
+    LaunchedEffect(plantResult.firstOrNull()?.displayName) {
+        plantResult.firstOrNull()?.displayName?.let { viewModel.getDetailResultClassify(it) }
+    }
+
     when (detailResultClassify) {
         is ResultState.Loading -> {
             // Show loading indicator
         }
         is ResultState.Success -> {
             val plant = (detailResultClassify as ResultState.Success<Plant?>).data
+
+            LaunchedEffect(plant?.idPlant) {
+                plant?.let {
+                    val acc = (plantResult.firstOrNull()?.confidence?.times(100))?.toInt() ?: 0
+                    viewModel.saveHistoryScan(
+                        userEmail = userEmail,
+                        plantId = it.idPlant,
+                        accuracy = acc,
+                    )
+                }
+            }
+
             DetailPlantResult(
                 plant = plant,
                 imageResultUri = imageResultUri,
-                accuracy = plantResult.first().confidence,
+                accuracy = plantResult.firstOrNull()?.confidence ?: 0f,
                 isBookmarked = false,
                 onBackClick = onBackClick,
-                onBookmarkClick = { false },
+                onBookmarkClick = { },
                 modifier = modifier
             )
         }

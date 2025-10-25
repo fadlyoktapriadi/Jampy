@@ -8,6 +8,7 @@ import com.fyyadi.scan.domain.repository.PlantClassificationRepository
 import com.fyyadi.scan.domain.usecase.DownloadModelUseCase
 import com.fyyadi.scan.domain.usecase.GetDetailResultClassifyUseCase
 import com.fyyadi.scan.domain.usecase.PlantClassifyUseCase
+import com.fyyadi.scan.domain.usecase.SaveHistoryScanUseCase
 import com.fyyadi.scan.domain.usecase.ScanUseCase
 import dagger.Module
 import dagger.Provides
@@ -43,5 +44,8 @@ object ScanModule {
         downloadModelUseCase = DownloadModelUseCase(
             plantClassificationRepository
         ),
+        saveHistoryScanUseCase = SaveHistoryScanUseCase(
+            plantClassificationRepository
+        )
     )
 }

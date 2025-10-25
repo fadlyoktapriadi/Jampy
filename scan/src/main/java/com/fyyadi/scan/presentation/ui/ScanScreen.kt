@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -60,6 +58,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.core.net.toUri
+import com.fyyadi.common.ResultState
+import com.fyyadi.domain.model.UserProfile
 
 @Composable
 fun ScanScreen(
@@ -69,17 +69,23 @@ fun ScanScreen(
         onResult: (Uri) -> Unit,
         onCancel: () -> Unit
     ) -> Unit,
-    onResultClassification: (List<PlantLabel>, String) -> Unit
+    onResultClassification: (List<PlantLabel>, String, String) -> Unit
 ) {
     val viewModel: ScanViewModel = hiltViewModel()
 
     val selectedImage by viewModel.selectedImage.collectAsState()
     val classificationResult by viewModel.classificationResults.collectAsState()
+    val profileState by viewModel.profileUserState.collectAsState()
 
     var showCamera by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     val coroutineScope = rememberCoroutineScope()
+
+    val userEmail = when (profileState) {
+        is ResultState.Success -> (profileState as ResultState.Success<UserProfile?>).data?.userEmail ?: ""
+        else -> ""
+    }
 
     val cropLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -144,6 +150,10 @@ fun ScanScreen(
                 }
             )
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getUserProfile()
     }
 
     Column(
@@ -327,11 +337,11 @@ fun ScanScreen(
         classificationResult.let { result ->
             Log.e("RESULT", result.toString())
             when (result) {
-                is com.fyyadi.common.ResultState.Idle -> {
+                is ResultState.Idle -> {
                     // no-op
                 }
 
-                is com.fyyadi.common.ResultState.Loading -> {
+                is ResultState.Loading -> {
                     Text(
                         text = "Loading...",
                         fontSize = 14.sp,
@@ -343,10 +353,10 @@ fun ScanScreen(
                     )
                 }
 
-                is com.fyyadi.common.ResultState.Success -> {
+                is ResultState.Success -> {
                     val data = result.data
                     if (data.isNotEmpty()) {
-                        onResultClassification(data, selectedImage.toString())
+                        onResultClassification(data, selectedImage.toString(), userEmail)
                         viewModel.setImage(null)
                     } else {
                         Text(
@@ -361,7 +371,7 @@ fun ScanScreen(
                     }
                 }
 
-                is com.fyyadi.common.ResultState.Error -> {
+                is ResultState.Error -> {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()

@@ -25,12 +25,12 @@ object ScanNavigation {
                 onCameraClick = { onResult, onCancel ->
                     navController.navigate(ScanRoutes.CameraScreen)
                 },
-                onResultClassification = { plantLabels, imageResultUri ->
+                onResultClassification = { plantLabels, imageResultUri, userEmail ->
                     val labelsJson = plantLabels.joinToString(separator = "|") {
                         "${it.name},${it.displayName},${it.confidence}"
                     }
                     navController.navigate(
-                        ScanRoutes.ResultScanScreen(plantLabels = labelsJson, imageResultUri)
+                        ScanRoutes.ResultScanScreen(plantLabels = labelsJson, imageResultUri, userEmail)
                     )
                 }
             )
@@ -66,6 +66,7 @@ object ScanNavigation {
                 modifier = modifier,
                 plantResult = plantResult,
                 imageResultUri = args.imageResultUri,
+                userEmail = args.userEmail,
                 onBackClick = { navController.popBackStack() }
             )
         }

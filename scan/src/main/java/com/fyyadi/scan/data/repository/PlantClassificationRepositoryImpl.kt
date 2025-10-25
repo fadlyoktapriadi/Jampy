@@ -5,8 +5,10 @@ import android.util.Log
 import com.fyyadi.data.mapper.toPlant
 import com.fyyadi.data.source.network.dto.PlantDto
 import com.fyyadi.domain.model.Plant
+import com.fyyadi.scan.data.mapper.toHistoryScanUpsertDto
 import com.fyyadi.scan.domain.model.PlantLabel
 import com.fyyadi.scan.domain.model.PlantLabels
+import com.fyyadi.scan.domain.model.SaveHistoryScanRequest
 import com.fyyadi.scan.domain.repository.PlantClassificationRepository
 import com.google.firebase.ml.modeldownloader.CustomModel
 import com.google.firebase.ml.modeldownloader.CustomModelDownloadConditions
@@ -26,6 +28,8 @@ import org.tensorflow.lite.support.image.ops.ResizeOp
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 @Singleton
 class PlantClassificationRepositoryImpl @Inject constructor(
@@ -121,6 +125,22 @@ class PlantClassificationRepositoryImpl @Inject constructor(
             }
             emit(result)
         }
+    }
+
+    override fun saveHistoryScan(
+        saveHistoryScanRequest: SaveHistoryScanRequest
+    ): Flow<Result<Unit>> = flow {
+        val result = runCatching {
+            postgrest.from("history_scan").insert(
+                value = buildJsonObject {
+                    put("user_email", saveHistoryScanRequest.userEmail)
+                    put("plant_id", saveHistoryScanRequest.plantId)
+                    put("accuracy", saveHistoryScanRequest.accuracy)
+                }
+            )
+            Unit
+        }
+        emit(result)
     }
 
     companion object {
