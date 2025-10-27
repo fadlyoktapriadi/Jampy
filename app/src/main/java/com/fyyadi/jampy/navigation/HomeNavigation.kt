@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.fyyadi.jampy.route.AuthRoutes
 import com.fyyadi.jampy.route.HomeRoutes
 import com.fyyadi.jampy.ui.screen.bookmark.BookmarkScreen
 import com.fyyadi.jampy.ui.screen.detail.DetailPlantScreen
@@ -60,6 +61,9 @@ object HomeNavigation {
         composable<HomeRoutes.ProfileScreen> {
             ProfileScreen(
                 modifier = modifier,
+                onLoggedOut = {
+                    navController.navigate(AuthRoutes.LoginScreen)
+                }
             )
         }
     }

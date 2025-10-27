@@ -14,10 +14,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val coreUseCase: CoreUseCase
+    private val coreUseCase: CoreUseCase,
 ) : ViewModel() {
     private val _profileUserState = MutableStateFlow<ResultState<UserProfile?>>(ResultState.Idle)
     val profileUserState = _profileUserState.asStateFlow()
+
+    private val _logoutState = MutableStateFlow<ResultState<Unit>>(ResultState.Idle)
+    val logoutState = _logoutState.asStateFlow()
 
     fun getUserProfile() {
         viewModelScope.launch {
@@ -30,6 +33,21 @@ class ProfileViewModel @Inject constructor(
                         }
                         .onFailure { exception ->
                             _profileUserState.value = ResultState.Error(exception.message)
+                        }
+                }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            coreUseCase.logoutUseCase()
+                .collect { result ->
+                    result
+                        .onSuccess {
+                            _logoutState.value = ResultState.Success(Unit)
+                        }
+                        .onFailure { exception ->
+                            _logoutState.value = ResultState.Error(exception.message)
                         }
                 }
         }

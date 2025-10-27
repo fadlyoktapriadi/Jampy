@@ -170,13 +170,11 @@ fun PopularPlantsSection(
             }
 
             is ResultState.Success -> {
-                Log.e("HomeScreen", "PopularPlantsSection: ${plantHomeState.data}" )
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 24.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(plantHomeState.data) { plant ->
-                        Log.e("CEK ID", "PopularPlantsSection: ${plant.idPlant}" )
                         PlantCard(
                             plant = plant,
                             onClick = { onPlantClick(plant.idPlant) })

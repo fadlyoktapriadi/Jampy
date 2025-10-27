@@ -27,3 +27,6 @@ val Green400 = Color(0xFFE8F5E9)
 val Green500 = Color(0xFFB4C5B7)
 val Green600 = Color(0xFFFCFFF8)
 val BackgroundGreen = Color(0xFFF1F8E8)
+
+// Red
+val RedPrimary = Color(0xFFECD2C58)

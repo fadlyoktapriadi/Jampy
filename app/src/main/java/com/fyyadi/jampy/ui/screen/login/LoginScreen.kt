@@ -195,7 +195,7 @@ private fun onCheckUserLoginState(
 private fun onLoginAuthState(
     state: ResultState<*>,
     viewModel: LoginViewModel,
-    context: android.content.Context
+    context: Context
 ) {
     when (state) {
         is ResultState.Success -> viewModel.checkUserLogin()

@@ -8,5 +8,6 @@ interface AuthRepository {
     fun addUser(user: UserProfile) : Flow<Result<Unit>>
     fun checkUserLogin(user: UserProfile): Flow<Result<Boolean>>
     fun getProfileUser(email: String): Flow<Result<UserProfile?>>
+    fun logout(): Flow<Result<Unit>>
 
 }

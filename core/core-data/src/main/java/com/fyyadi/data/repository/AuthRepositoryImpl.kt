@@ -1,11 +1,11 @@
 package com.fyyadi.data.repository
 
+import android.util.Log
 import com.fyyadi.data.mapper.toProfileUser
 import com.fyyadi.data.source.local.sharedpreference.PreferenceManager
 import com.fyyadi.data.source.network.dto.UserProfileDto
 import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.domain.repository.AuthRepository
-import com.fyyadi.domain.repository.CoreRepository
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.IDToken
@@ -16,7 +16,8 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val auth: Auth,
-    private val postgrest: Postgrest
+    private val postgrest: Postgrest,
+    private val preferenceManager: PreferenceManager
 ) : AuthRepository {
 
     override fun signInWithGoogle(idToken: String): Flow<Result<Unit>> = flow {
@@ -69,6 +70,18 @@ class AuthRepositoryImpl @Inject constructor(
             response.firstOrNull()?.toProfileUser()
         }
         emit(result)
+    }
+
+    override fun logout(): Flow<Result<Unit>> {
+        return flow {
+            val result = runCatching {
+                preferenceManager.clearUserData()
+                auth.signOut()
+                Log.e("AuthRepositoryImpl", "User logged out successfully" )
+                Unit
+            }
+            emit(result)
+        }
     }
 
 }

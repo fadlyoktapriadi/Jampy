@@ -1,5 +1,6 @@
 package com.fyyadi.jampy.ui.screen.profile
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -7,13 +8,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -23,30 +27,48 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.theme.Black600
+import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
+import com.fyyadi.theme.RedPrimary
 import com.fyyadi.theme.RethinkSans
 
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
+    onLoggedOut: () -> Unit
 ) {
     val viewModel: ProfileViewModel = hiltViewModel()
     val profileState by viewModel.profileUserState.collectAsState()
+    val logoutState by viewModel.logoutState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.getUserProfile()
+    }
+
+    LaunchedEffect(logoutState) {
+        when (logoutState) {
+            is ResultState.Success -> {
+                onLoggedOut()
+            }
+
+            else -> {}
+        }
     }
 
     Column(
@@ -71,8 +93,8 @@ fun ProfileScreen(
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .height(280.dp)
-                .padding(top = 86.dp, bottom = 8.dp, start = 24.dp, end = 24.dp)
+                .fillMaxHeight(0.7f)
+                .padding(vertical = 32.dp, horizontal = 24.dp)
         ) {
             Card(
                 modifier = Modifier.fillMaxSize(),
@@ -83,7 +105,8 @@ fun ProfileScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp)
+                        .padding(vertical = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     when (profileState) {
                         is ResultState.Loading -> {
@@ -98,55 +121,112 @@ fun ProfileScreen(
                         }
 
                         is ResultState.Success -> {
-                            val profile = (profileState as ResultState.Success<com.fyyadi.domain.model.UserProfile?>).data
+                            val profile = (profileState as ResultState.Success<UserProfile?>).data
+                            Log.e("ProfileScreen", "Profile data: $profile")
+                            Text(
+                                text = stringResource(R.string.profile),
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = PrimaryGreen,
+                                fontFamily = RethinkSans,
+                                modifier = Modifier.align(Alignment.CenterHorizontally),
+                                textAlign = TextAlign.Center
+                            )
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
                             AsyncImage(
                                 model = profile?.photoProfile,
                                 contentDescription = profile?.photoProfile,
                                 modifier = Modifier
-                                    .fillMaxWidth(),
-                                contentScale = ContentScale.Fit
+                                    .size(62.dp)
+                                    .align(Alignment.CenterHorizontally)
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
                             )
 
                             Spacer(modifier = Modifier.height(8.dp))
 
                             Text(
                                 text = profile?.userFullName ?: "No Name",
-                                fontSize = 20.sp,
+                                fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = PrimaryGreen,
                                 fontFamily = RethinkSans,
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                maxLines = 1
+                                color = Color.Black,
+                                modifier = Modifier.align(Alignment.CenterHorizontally),
+                                maxLines = 1,
+                                textAlign = TextAlign.Center
                             )
-                            Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 text = profile?.userEmail ?: "No Email",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Normal,
-                                color = PrimaryGreen,
                                 fontFamily = RethinkSans,
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                maxLines = 1
+                                color = Color.Black,
+                                modifier = Modifier.align(Alignment.CenterHorizontally),
+                                maxLines = 1,
+                                textAlign = TextAlign.Center
                             )
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = profile?.role ?: "No Role",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = OrangePrimary,
+                                fontFamily = RethinkSans,
+                                modifier = Modifier.align(Alignment.CenterHorizontally),
+                                maxLines = 1,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            if (profile?.role != "User") {
+                                Button(
+                                    onClick = {
+                                    },
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 24.dp),
+                                    shape = RoundedCornerShape(12.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = PrimaryGreen,
+                                        contentColor = Color.White
+                                    )
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.management_app),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        fontFamily = RethinkSans
+                                    )
+                                }
+                            }
                             Button(
-                                onClick = { /* TODO: Implement logout functionality */ },
+                                onClick = {
+                                    viewModel.logout()
+                                },
                                 modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
                                     .fillMaxWidth()
-                                    .height(48.dp)
+                                    .padding(horizontal = 24.dp),
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = RedPrimary,
+                                    contentColor = Color.White
+                                )
                             ) {
-                                Text(text = stringResource(R.string.logout), fontSize = 16.sp,
+                                Text(
+                                    text = stringResource(R.string.logout),
+                                    fontSize = 14.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color.White, fontFamily = RethinkSans
+                                    fontFamily = RethinkSans
                                 )
                             }
 
                         }
 
                         is ResultState.Error -> {
-                            val message = (profileState as ResultState.Error).message ?: "Unknown Error"
+                            val message =
+                                (profileState as ResultState.Error).message ?: "Unknown Error"
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
@@ -157,7 +237,8 @@ fun ProfileScreen(
                                     text = message,
                                     fontSize = 16.sp,
                                     color = Color.Black,
-                                    fontFamily = RethinkSans
+                                    fontFamily = RethinkSans,
+                                    textAlign = TextAlign.Center
                                 )
                             }
 
@@ -167,8 +248,6 @@ fun ProfileScreen(
 
                         }
                     }
-
-
                 }
             }
         }

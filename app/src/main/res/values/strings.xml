@@ -13,5 +13,7 @@
     <string name="how_to_usage">Cara Pengolahan:</string>
     <string name="detail_plant">Detail Tanaman</string>
     <string name="no_bookmark">Tidak ada tumbuhan yang disimpan</string>
+    <string name="profile">Profile</string>
     <string name="logout">Keluar</string>
+    <string name="management_app">Kelola Aplikasi</string>
 </resources>

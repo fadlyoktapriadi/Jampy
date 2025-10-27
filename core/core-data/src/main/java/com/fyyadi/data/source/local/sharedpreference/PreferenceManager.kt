@@ -2,6 +2,7 @@ package com.fyyadi.data.source.local.sharedpreference
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,28 +23,14 @@ class PreferenceManager @Inject constructor(
     var userEmail: String?
         get() = prefs.getString(KEY_USER_EMAIL, null)
         set(value) = prefs.edit { putString(KEY_USER_EMAIL, value)}
-
-    var userFullName: String?
-        get() = prefs.getString(KEY_USER_FULL_NAME, null)
-        set(value) = prefs.edit { putString(KEY_USER_FULL_NAME, value)}
-
-    var userPhotoProfileUrl: String?
-        get() = prefs.getString(KEY_USER_PHOTO_PROFILE, null)
-        set(value) = prefs.edit { putString(KEY_USER_PHOTO_PROFILE, value)}
-
-    var userRole: String?
-        get() = prefs.getString("user_role", null)
-        set(value) = prefs.edit { putString("user_role", value) }
-
     fun clearUserData() {
         prefs.edit { clear() }
+        Log.e("CEK DATA", prefs.all.toString())
     }
 
     companion object {
         private const val PREF_NAME = "jampy_prefs"
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
         private const val KEY_USER_EMAIL = "user_email"
-        private const val KEY_USER_FULL_NAME = "user_name"
-        private const val KEY_USER_PHOTO_PROFILE = "user_avatar"
     }
 }

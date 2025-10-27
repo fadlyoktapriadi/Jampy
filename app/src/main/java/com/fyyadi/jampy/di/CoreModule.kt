@@ -25,6 +25,7 @@ import com.fyyadi.domain.usecase.GetDetailPlantUseCase
 import com.fyyadi.domain.usecase.GetPlantHomeUseCase
 import com.fyyadi.domain.usecase.GetUserProfileUseCase
 import com.fyyadi.domain.usecase.IsPlantBookmarkedUseCase
+import com.fyyadi.domain.usecase.LogoutUseCase
 import com.fyyadi.domain.usecase.RemoveBookmarkPlantUseCase
 import com.fyyadi.domain.usecase.SaveBookmarkPlantUseCase
 import com.fyyadi.domain.usecase.SaveUserLoginUseCase
@@ -77,15 +78,17 @@ object CoreModule {
     @Provides
     @Singleton
     fun provideCoreRepository(
-        preferenceManager: PreferenceManager
-    ): CoreRepository = CoreRepositoryImpl(preferenceManager)
+        preferenceManager: PreferenceManager,
+        postgrest: Postgrest,
+    ): CoreRepository = CoreRepositoryImpl(preferenceManager, postgrest)
 
     @Provides
     @Singleton
     fun provideAuthRepository(
         auth: Auth,
-        postgrest: Postgrest
-    ): AuthRepository = AuthRepositoryImpl(auth, postgrest)
+        postgrest: Postgrest,
+        preferenceManager: PreferenceManager
+    ): AuthRepository = AuthRepositoryImpl(auth, postgrest, preferenceManager)
 
     @Provides
     @Singleton
@@ -126,6 +129,7 @@ object CoreModule {
         getAllBookmarkedPlantsUseCase = GetAllBookmarkedPlantsUseCase(bookmarkRepository),
         saveBookmarkPlantUseCase = SaveBookmarkPlantUseCase(bookmarkRepository),
         removeBookmarkPlantUseCase = RemoveBookmarkPlantUseCase(bookmarkRepository),
-        isPlantBookmarkedUseCase = IsPlantBookmarkedUseCase(bookmarkRepository)
+        isPlantBookmarkedUseCase = IsPlantBookmarkedUseCase(bookmarkRepository),
+        logoutUseCase = LogoutUseCase(authRepository)
     )
 }

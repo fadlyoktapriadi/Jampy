@@ -1,6 +1,5 @@
 package com.fyyadi.domain.repository
 
-import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.UserProfile
 import kotlinx.coroutines.flow.Flow
 
