@@ -93,8 +93,8 @@ fun ProfileScreen(
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.7f)
-                .padding(vertical = 32.dp, horizontal = 24.dp)
+                .fillMaxHeight(0.8f)
+                .padding(vertical = 16.dp, horizontal = 24.dp)
         ) {
             Card(
                 modifier = Modifier.fillMaxSize(),
@@ -110,14 +110,6 @@ fun ProfileScreen(
                 ) {
                     when (profileState) {
                         is ResultState.Loading -> {
-                            Column(
-                                Modifier
-                                    .padding(bottom = 6.dp, start = 24.dp, end = 24.dp)
-                                    .fillMaxSize(),
-                                verticalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-//                    repeat(6) { ShimmerPlantCard(search = true) }
-                            }
                         }
 
                         is ResultState.Success -> {
@@ -193,9 +185,49 @@ fun ProfileScreen(
                                     )
                                 ) {
                                     Text(
-                                        text = stringResource(R.string.management_app),
+                                        text = stringResource(R.string.users_management),
                                         fontSize = 14.sp,
-                                        fontWeight = FontWeight.Bold,
+                                        fontWeight = FontWeight.Normal,
+                                        fontFamily = RethinkSans
+                                    )
+                                }
+                                Button(
+                                    onClick = {
+                                    },
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 24.dp),
+                                    shape = RoundedCornerShape(12.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = PrimaryGreen,
+                                        contentColor = Color.White
+                                    )
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.plants_management),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Normal,
+                                        fontFamily = RethinkSans
+                                    )
+                                }
+                                Button(
+                                    onClick = {
+                                    },
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 24.dp),
+                                    shape = RoundedCornerShape(12.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = PrimaryGreen,
+                                        contentColor = Color.White
+                                    )
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.report),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Normal,
                                         fontFamily = RethinkSans
                                     )
                                 }
@@ -217,7 +249,7 @@ fun ProfileScreen(
                                 Text(
                                     text = stringResource(R.string.logout),
                                     fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold,
+                                    fontWeight = FontWeight.Normal,
                                     fontFamily = RethinkSans
                                 )
                             }

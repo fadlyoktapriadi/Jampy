@@ -2,6 +2,7 @@ package com.fyyadi.jampy.ui.screen.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fyyadi.auth.domain.usecase.AuthUseCase
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.domain.usecase.CoreUseCase
@@ -15,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val coreUseCase: CoreUseCase,
+    private val authUseCase: AuthUseCase
 ) : ViewModel() {
     private val _profileUserState = MutableStateFlow<ResultState<UserProfile?>>(ResultState.Idle)
     val profileUserState = _profileUserState.asStateFlow()
@@ -40,7 +42,7 @@ class ProfileViewModel @Inject constructor(
 
     fun logout() {
         viewModelScope.launch {
-            coreUseCase.logoutUseCase()
+            authUseCase.logoutUseCase()
                 .collect { result ->
                     result
                         .onSuccess {

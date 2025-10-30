@@ -11,10 +11,13 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/auth" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/core-data" />
             <option value="$PROJECT_DIR$/core/core-domain" />
             <option value="$PROJECT_DIR$/core/core-presentation" />
+            <option value="$PROJECT_DIR$/management" />
+            <option value="$PROJECT_DIR$/report" />
             <option value="$PROJECT_DIR$/scan" />
           </set>
         </option>

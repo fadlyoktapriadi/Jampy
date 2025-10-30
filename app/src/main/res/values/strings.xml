@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">Jampy</string>
-    <string name="welcome_text_nature">Nature\'s medicine</string>
-    <string name="welcome_text_explore">Explore the herbal world.</string>
-    <string name="welcome_text_discover">Identifikasi tanaman dengan mudah dan temukan khasiatnya hanya dalam sekali klik.</string>
-    <string name="button_login">Sign in with Google</string>
     <string name="plant_populer">Tumbuhan Populer</string>
     <string name="see_all">See All</string>
     <string name="search_hint">Search plant...</string>
@@ -15,5 +11,7 @@
     <string name="no_bookmark">Tidak ada tumbuhan yang disimpan</string>
     <string name="profile">Profile</string>
     <string name="logout">Keluar</string>
-    <string name="management_app">Kelola Aplikasi</string>
+    <string name="users_management">Kelola Pengguna / User</string>
+    <string name="plants_management">Kelola Data Tanaman</string>
+    <string name="report">Laporan</string>
 </resources>
