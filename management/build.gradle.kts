@@ -72,4 +72,6 @@ dependencies {
     implementation(platform(libs.supabase.core))
     implementation(libs.postgrest.kt)
     implementation(libs.realtime.kt)
+
+    implementation(libs.coil.compose)
 }

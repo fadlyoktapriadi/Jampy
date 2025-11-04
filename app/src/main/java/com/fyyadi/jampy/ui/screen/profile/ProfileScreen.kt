@@ -51,7 +51,8 @@ import com.fyyadi.theme.RethinkSans
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    onLoggedOut: () -> Unit
+    onLoggedOut: () -> Unit,
+    onPlantManagementNavigate: () -> Unit
 ) {
     val viewModel: ProfileViewModel = hiltViewModel()
     val profileState by viewModel.profileUserState.collectAsState()
@@ -193,6 +194,7 @@ fun ProfileScreen(
                                 }
                                 Button(
                                     onClick = {
+                                        onPlantManagementNavigate()
                                     },
                                     modifier = Modifier
                                         .align(Alignment.CenterHorizontally)

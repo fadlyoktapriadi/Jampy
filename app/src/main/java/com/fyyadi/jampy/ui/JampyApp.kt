@@ -16,6 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fyyadi.jampy.navigation.AuthNavigation.authNavigation
 import com.fyyadi.jampy.navigation.HomeNavigation.homeNavigation
+import com.fyyadi.jampy.navigation.ManagementNavigation.managementNavigation
 import com.fyyadi.jampy.navigation.ScanNavigation.scanNavigation
 import com.fyyadi.jampy.route.AuthRoutes
 import com.fyyadi.jampy.route.BaseRoute
@@ -77,6 +78,10 @@ fun JampyApp(
                 modifier = Modifier.fillMaxWidth()
             )
             scanNavigation(
+                navController = navController,
+                modifier = Modifier.fillMaxWidth()
+            )
+            managementNavigation(
                 navController = navController,
                 modifier = Modifier.fillMaxWidth()
             )
