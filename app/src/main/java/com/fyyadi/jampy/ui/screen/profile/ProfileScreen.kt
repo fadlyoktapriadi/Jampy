@@ -52,7 +52,8 @@ import com.fyyadi.theme.RethinkSans
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     onLoggedOut: () -> Unit,
-    onPlantManagementNavigate: () -> Unit
+    onPlantManagementNavigate: () -> Unit,
+    onUsersManagementNavigate: () -> Unit
 ) {
     val viewModel: ProfileViewModel = hiltViewModel()
     val profileState by viewModel.profileUserState.collectAsState()
@@ -174,6 +175,7 @@ fun ProfileScreen(
                             if (profile?.role != "User") {
                                 Button(
                                     onClick = {
+                                        onUsersManagementNavigate()
                                     },
                                     modifier = Modifier
                                         .align(Alignment.CenterHorizontally)

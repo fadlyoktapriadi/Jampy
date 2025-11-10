@@ -73,11 +73,12 @@ fun PlantManagementScreen(
                 )
             }
         }
-    ) {
+    ) { paddingValues ->
 
         Column(
             modifier = modifier
                 .fillMaxSize()
+                .padding(paddingValues)
                 .background(BackgroundGreen)
         ) {
 

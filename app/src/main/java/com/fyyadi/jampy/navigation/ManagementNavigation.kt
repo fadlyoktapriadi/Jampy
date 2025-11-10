@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.fyyadi.jampy.route.ManagementRoutes
 import com.fyyadi.management.presentation.ui.plant.PlantManagementScreen
+import com.fyyadi.management.presentation.ui.users.UsersManagementScreen
 
 object ManagementNavigation {
 
@@ -22,6 +23,18 @@ object ManagementNavigation {
                 onBackClick = {
                     navController.popBackStack()
                 },
+            )
+        }
+
+        composable<ManagementRoutes.UsersManagementScreen> {
+            UsersManagementScreen(
+                modifier = modifier,
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onUserClick = {
+
+                }
             )
         }
 

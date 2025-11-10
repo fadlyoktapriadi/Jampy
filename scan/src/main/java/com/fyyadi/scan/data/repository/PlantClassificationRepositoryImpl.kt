@@ -5,7 +5,6 @@ import android.util.Log
 import com.fyyadi.data.mapper.toPlant
 import com.fyyadi.data.source.network.dto.PlantDto
 import com.fyyadi.domain.model.Plant
-import com.fyyadi.scan.data.mapper.toHistoryScanUpsertDto
 import com.fyyadi.scan.domain.model.PlantLabel
 import com.fyyadi.scan.domain.model.PlantLabels
 import com.fyyadi.scan.domain.model.SaveHistoryScanRequest

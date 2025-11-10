@@ -17,8 +17,8 @@ class PlantManagementViewModel @Inject constructor(
     private val coreUseCase: CoreUseCase
 ) : ViewModel() {
 
-    private val _PlantsState = MutableStateFlow<ResultState<List<Plant>>>(ResultState.Idle)
-    val plantsState = _PlantsState.asStateFlow()
+    private val _plantsState = MutableStateFlow<ResultState<List<Plant>>>(ResultState.Idle)
+    val plantsState = _plantsState.asStateFlow()
 
     fun getAllPlants() {
         viewModelScope.launch {
@@ -26,10 +26,10 @@ class PlantManagementViewModel @Inject constructor(
                 .collect { result ->
                     result
                         .onSuccess { plants ->
-                            _PlantsState.value = ResultState.Success(plants)
+                            _plantsState.value = ResultState.Success(plants)
                         }
                         .onFailure { exception ->
-                            _PlantsState.value = ResultState.Error(exception.message)
+                            _plantsState.value = ResultState.Error(exception.message)
                         }
                 }
         }

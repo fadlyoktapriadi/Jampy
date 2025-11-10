@@ -67,6 +67,9 @@ object HomeNavigation {
                 },
                 onPlantManagementNavigate = {
                     navController.navigate(ManagementRoutes.PlantManagementScreen)
+                },
+                onUsersManagementNavigate = {
+                    navController.navigate(ManagementRoutes.UsersManagementScreen)
                 }
             )
         }
