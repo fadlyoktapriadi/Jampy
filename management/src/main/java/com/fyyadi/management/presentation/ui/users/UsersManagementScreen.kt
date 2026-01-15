@@ -17,15 +17,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,16 +43,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fyyadi.common.ResultState
 import com.fyyadi.core_presentation.R
-import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.UserProfile
-import com.fyyadi.management.presentation.ui.plant.ItemPlantManagement
-import com.fyyadi.management.presentation.ui.plant.PlantManagementViewModel
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Green500
 import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
+import com.fyyadi.theme.SlatePrimary
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UsersManagementScreen(
     modifier: Modifier = Modifier,
@@ -55,6 +60,10 @@ fun UsersManagementScreen(
 ) {
     val viewModel: UsersManagementViewModel = hiltViewModel()
     val usersState by viewModel.usersState.collectAsState()
+
+    val sheetState = rememberModalBottomSheetState()
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var selectedUser by remember { mutableStateOf<UserProfile?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.getAllUsers()
@@ -106,7 +115,7 @@ fun UsersManagementScreen(
                     )
                 }
                 Text(
-                    text = "Kelola Data Tanaman Herbal",
+                    text = "Kelola Data Users",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = PrimaryGreen,
@@ -120,7 +129,33 @@ fun UsersManagementScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Button(
+                    onClick = { /* TODO: filter users */ },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = "Users")
+                }
+                Button(
+                    onClick = { /* TODO: filter petugas */ },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = SlatePrimary,
+                        contentColor = PrimaryGreen
+                    ),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = "Petugas")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             when (usersState) {
                 is ResultState.Loading -> {
@@ -158,7 +193,10 @@ fun UsersManagementScreen(
                             contentPadding = PaddingValues(bottom = 45.dp)
                         ) {
                             items(users) { user ->
-                                ItemUserManagement(user = user, onUserClick)
+                                ItemUserManagement(user = user, onUserClick, onChangeRole = {
+                                    showBottomSheet = true
+                                    selectedUser = user
+                                })
                             }
                         }
                     }
@@ -194,5 +232,21 @@ fun UsersManagementScreen(
                 }
             }
         }
+    }
+
+    if (showBottomSheet && selectedUser != null) {
+        ChangeRoleBottomSheet(
+            sheetState = sheetState,
+            user = selectedUser!!,
+            onDismiss = {
+                showBottomSheet = false
+                selectedUser = null
+            },
+            onSave = { userId, newRole ->
+//                viewModel.updateUserRole(userId, newRole)
+                showBottomSheet = false
+                selectedUser = null
+            }
+        )
     }
 }

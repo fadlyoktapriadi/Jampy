@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Jampy</string>
-    <string name="welcome_text_nature">Nature\'s medicine</string>
-    <string name="welcome_text_explore">Explore the herbal world.</string>
+    <string name="welcome_text_nature">Obat Dari Alam,</string>
+    <string name="welcome_text_explore">Jelajahi Dunia Herbal</string>
     <string name="welcome_text_discover">Identifikasi tanaman dengan mudah dan temukan khasiatnya hanya dalam sekali klik.</string>
     <string name="button_login">Sign in with Google</string>
     <string name="description">Deskripsi:</string>

@@ -16,9 +16,7 @@ class PlantRepositoryImpl @Inject constructor(
     override fun getPlantHome(): Flow<Result<List<Plant>>> = flow {
         val result = runCatching {
             val response = postgrest.from("herb_plants")
-                .select{
-                    limit(4)
-                }
+                .select()
                 .decodeList<PlantDto>()
             response.map { it.toPlant() }
         }

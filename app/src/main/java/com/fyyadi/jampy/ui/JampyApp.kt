@@ -24,6 +24,7 @@ import com.fyyadi.jampy.route.HomeRoutes
 import com.fyyadi.jampy.ui.components.BottomNavigationBar
 import com.fyyadi.jampy.utils.getItemNavScreens
 import com.fyyadi.theme.Green600
+import com.fyyadi.theme.whiteBackground
 
 @Composable
 fun JampyApp(
@@ -48,7 +49,7 @@ fun JampyApp(
     }
 
     Scaffold(
-        containerColor = Green600,
+        containerColor = whiteBackground,
         modifier = Modifier
             .fillMaxWidth(),
         bottomBar = {
@@ -72,7 +73,6 @@ fun JampyApp(
                 navController = navController,
                 modifier = Modifier.fillMaxWidth()
             )
-
             homeNavigation(
                 navController = navController,
                 modifier = Modifier.fillMaxWidth()

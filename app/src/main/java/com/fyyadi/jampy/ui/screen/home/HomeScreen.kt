@@ -1,10 +1,15 @@
 package com.fyyadi.jampy.ui.screen.home
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,11 +32,13 @@ import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.components.PlantCard
+import com.fyyadi.jampy.ui.components.PlantItemSearchCard
 import com.fyyadi.jampy.ui.components.ShimmerPlantCard
-import com.fyyadi.jampy.ui.screen.home.components.WeatherCard
-import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.theme.Green400
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
+import com.fyyadi.theme.TersieryGreen
+import com.fyyadi.theme.whiteBackground
 
 @Composable
 fun HomeScreen(
@@ -42,91 +49,218 @@ fun HomeScreen(
 
     val profileUserState by viewModel.profileUserState.collectAsState()
     val plantHomeState by viewModel.plantHomeState.collectAsState()
+    val searchPlantState by viewModel.searchPlantState.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
+
 
     LaunchedEffect(Unit) {
         viewModel.getUserProfile()
         viewModel.getPlantHome()
     }
 
-    Scaffold { paddingValues ->
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .background(BackgroundGreen)
-                .padding(paddingValues)
-        ) {
-            TopSection(profileUserState)
-            BottomContentSheet(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                plantHomeState,
-                onPlantClick = onPlantClick,
-            )
+    LaunchedEffect(searchQuery) {
+        if (searchQuery.isNotEmpty()) {
+            viewModel.getPlants()
         }
     }
-}
 
-@Composable
-fun TopSection(
-    profileUserState: ResultState<UserProfile?>
-) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(380.dp)
-            .background(BackgroundGreen)
+            .fillMaxSize()
+            .background(whiteBackground)
     ) {
-        Image(
-            painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
-            contentDescription = stringResource(R.string.app_name),
-            modifier = Modifier
-                .padding(start = 24.dp, top = 24.dp)
-                .size(48.dp)
-        )
+        Row {
+            Image(
+                painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
+                contentDescription = stringResource(R.string.app_name),
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 24.dp)
+                    .size(48.dp)
+            )
+
+            Spacer(modifier = Modifier.padding(horizontal = 8.dp))
+
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { viewModel.onSearchQueryChange(it) },
+                textStyle = LocalTextStyle.current.copy(color = Color.Black),
+                placeholder = { Text("Cari tanaman...", color = Color.Gray) },
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.search_grey),
+                        contentDescription = "Search Icon",
+                        modifier = Modifier.size(16.dp)
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp),
+                shape = RoundedCornerShape(14.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.White,
+                    unfocusedBorderColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White
+                )
+            )
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
 
-        WeatherCard(profileUserState)
-        Spacer(modifier = Modifier.weight(1f))
+        if (!searchQuery.isNotEmpty()) {
+            when (profileUserState) {
+                is ResultState.Loading -> {}
+                is ResultState.Success -> {
+                    val userProfile = (profileUserState as ResultState.Success<UserProfile?>).data
+                    Text(
+                        text = "Hai, ${userProfile?.userFullName}",
+                        fontSize = 24.sp,
+                        fontFamily = RethinkSans,
+                        fontWeight = FontWeight.Bold,
+                        color = PrimaryGreen,
+                        modifier = Modifier
+                            .padding(horizontal = 24.dp)
+                    )
+                }
 
-        Image(
-            painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.illuplant_home),
-            contentDescription = "Plant Illustration",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp),
-            contentScale = ContentScale.FillWidth
-        )
+                is ResultState.Error -> {}
+                ResultState.Idle -> {}
+            }
+
+            CardInformationHome()
+
+            PopularPlantsSection(plantHomeState, onPlantClick)
+        } else {
+            when (searchPlantState) {
+                is ResultState.Loading -> {
+                    Column(
+                        Modifier
+                            .padding(bottom = 6.dp, start = 24.dp, end = 24.dp)
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        repeat(6) { ShimmerPlantCard(search = true) }
+                    }
+                }
+
+                is ResultState.Success -> {
+                    val plants = (searchPlantState as ResultState.Success<List<Plant>>).data
+                    if (plants.isEmpty() && searchQuery.isNotBlank()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(24.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Tidak ada hasil untuk \"$searchQuery\"",
+                                color = PrimaryGreen,
+                                fontSize = 16.sp
+                            )
+                        }
+                    } else {
+                        LazyColumn(
+                            Modifier
+                                .padding(bottom = 6.dp, start = 24.dp, end = 24.dp)
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            items(plants) { plant ->
+                                PlantItemSearchCard(plant = plant, onPlantClick)
+                            }
+                        }
+                    }
+                }
+
+                is ResultState.Error -> {
+                    val msg = (searchPlantState as ResultState.Error).message ?: "Error"
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(24.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = "Error: $msg", color = Color.Red)
+                            Spacer(Modifier.height(12.dp))
+                            Button(onClick = { viewModel.getPlants() }) {
+                                Text("Retry")
+                            }
+                        }
+                    }
+                }
+
+                ResultState.Idle -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(24.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = PrimaryGreen)
+                    }
+                }
+            }
+        }
+
     }
+
 }
 
-
 @Composable
-fun BottomContentSheet(
-    modifier: Modifier = Modifier,
-    plantHomeState: ResultState<List<Plant>>,
-    onPlantClick: (Int) -> Unit = {}
-) {
-    Surface(
-        modifier = modifier
+fun CardInformationHome() {
+    Card(
+        modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.46f),
-        color = Color.White,
-        shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
+            .padding(16.dp),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Green400
+        ),
+        border = BorderStroke(2.dp, PrimaryGreen)
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 12.dp)
+                .fillMaxWidth()
         ) {
-            Box(
+            Surface(
+                shape = RoundedCornerShape(12.dp),
+                border = BorderStroke(1.dp, PrimaryGreen),
+                color = Color.White,
+                modifier = Modifier.padding(start = 16.dp, top = 12.dp)
+            ) {
+                Text(
+                    text = "Jampy",
+                    color = PrimaryGreen,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                )
+            }
+            Row(
                 modifier = Modifier
-                    .width(40.dp)
-                    .height(4.dp)
-                    .clip(CircleShape)
-                    .background(Color.LightGray)
-                    .align(Alignment.CenterHorizontally)
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            PopularPlantsSection(plantHomeState, onPlantClick)
+                    .padding(bottom = 24.dp, start = 16.dp, end = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(3f)) {
+                    Text(
+                        text = "Cukup satu foto, untuk kenali tanaman herbal dan resepnya",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 14.sp,
+                        lineHeight = 16.sp
+                    )
+                }
+
+                Image(
+                    painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.illustration_plant),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .weight(1f),
+                    contentScale = ContentScale.Fit
+                )
+            }
         }
     }
 }
@@ -141,11 +275,10 @@ fun PopularPlantsSection(
 
     Column {
         Text(
-            text = stringResource(R.string.plant_populer),
+            text = stringResource(R.string.list_plant),
             fontSize = 18.sp,
             fontFamily = RethinkSans,
             fontWeight = FontWeight.Bold,
-            color = PrimaryGreen,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
@@ -163,21 +296,24 @@ fun PopularPlantsSection(
                         16.dp
                     )
                 ) {
-                    repeat(4){
+                    repeat(4) {
                         ShimmerPlantCard()
                     }
                 }
             }
 
             is ResultState.Success -> {
-                LazyRow(
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
                     contentPadding = PaddingValues(horizontal = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(plantHomeState.data) { plant ->
                         PlantCard(
                             plant = plant,
-                            onClick = { onPlantClick(plant.idPlant) })
+                            onClick = { onPlantClick(plant.idPlant) }
+                        )
                     }
                 }
             }

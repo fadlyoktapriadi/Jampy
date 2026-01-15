@@ -44,6 +44,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.fyyadi.scan.R
 import com.fyyadi.scan.presentation.utils.MediaStoreUtils
 import com.fyyadi.theme.OrangePrimary
@@ -58,7 +59,7 @@ fun CameraScreen(
 ) {
 
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
 
     var hasPermission by remember { mutableStateOf(false) }
     val requestPermission = rememberLauncherForActivityResult(
@@ -161,7 +162,7 @@ fun CameraScreen(
                             }
                             override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                                 val savedUri = output.savedUri ?: outputUri
-                                if (savedUri != null) onResult(savedUri)
+                                onResult(savedUri)
                             }
                         }
                     )

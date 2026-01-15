@@ -6,7 +6,9 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -16,13 +18,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.fyyadi.theme.OrangePrimary
@@ -30,7 +38,10 @@ import com.fyyadi.theme.backgroundCardWhite
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.SlatePrimary
 import com.fyyadi.jampy.utils.BottomNavItem
+import com.fyyadi.theme.Amarant
 import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.theme.GreenNavBar
+import com.fyyadi.theme.RethinkSans
 
 @Composable
 fun BottomNavigationBar(
@@ -45,70 +56,56 @@ fun BottomNavigationBar(
         enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
         exit = fadeOut() + slideOutVertically(targetOffsetY = { it })
     ) {
-        Box(
+        NavigationBar(
+            containerColor = GreenNavBar,
             modifier = Modifier
-                .fillMaxWidth()
-                .background(if(selectedIndex == 0) Color.Transparent else BackgroundGreen)
-                .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
+                .shadow(elevation = 10.dp, shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(50))
-                    .background(color = backgroundCardWhite, shape = RoundedCornerShape(50))
-                    .padding(horizontal = 16.dp, vertical = 6.dp),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                itemNavScreens.forEachIndexed { index, item ->
-                    BottomNavItemButton(
-                        isSelected = selectedIndex == index,
-                        isScanButton = index == 2,
-                        onClick = {
-                            if (selectedIndex != index) {
-                                navController.navigate(item.route) {
-                                    launchSingleTop = true
-                                    restoreState = true
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
+            itemNavScreens.forEachIndexed { index, item ->
+                val isSelected = selectedIndex == index
+                NavigationBarItem(
+                    selected = isSelected,
+                    colors = NavigationBarItemColors(
+                        selectedIconColor = Color.White,
+                        selectedTextColor = Color.White,
+                        unselectedIconColor = SlatePrimary,
+                        unselectedTextColor = SlatePrimary,
+                        selectedIndicatorColor = Color.Unspecified,
+                        disabledIconColor = Color.Unspecified,
+                        disabledTextColor = Color.Unspecified
+                    ),
+                    modifier = Modifier.padding(vertical = 6.dp),
+                    onClick = {
+                        if (!isSelected) {
+                            navController.navigate(item.route) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
                                 }
-                                Log.d("BottomNav", "Navigating to ${item.route}, index $index")
-                                onSelectedIndexChange(index)
                             }
-                        },
-                        item = item
-                    )
-                }
+                            onSelectedIndexChange(index)
+                        }
+                    },
+                    icon = {
+                        Image(
+                            painter = painterResource(
+                                id = if (isSelected) item.selectedIcon else item.unselectedIcon
+                            ),
+                            modifier = Modifier.size(28.dp),
+                            contentDescription = item.title,
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = item.title,
+                            fontFamily = Amarant,
+                            fontSize = 13.sp,
+                        )
+                    }
+                )
             }
         }
     }
-}
-
-@Composable
-private fun BottomNavItemButton(
-    item: BottomNavItem,
-    isSelected: Boolean,
-    isScanButton: Boolean,
-    onClick: () -> Unit
-) {
-    IconButton(onClick = onClick) {
-        Icon(
-            painter = painterResource(
-                id = if (isSelected) item.selectedIcon else item.unselectedIcon
-            ),
-            contentDescription = item.title,
-            modifier = Modifier.size(iconSize(isScanButton)),
-            tint = iconTint(isScanButton, isSelected)
-        )
-    }
-}
-
-private fun iconSize(isScanButton: Boolean) =
-    if (isScanButton) 32.dp else 24.dp
-
-private fun iconTint(isScanButton: Boolean, isSelected: Boolean) = when {
-    isScanButton -> OrangePrimary
-    isSelected -> PrimaryGreen
-    else -> SlatePrimary
 }

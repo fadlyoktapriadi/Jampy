@@ -8,32 +8,32 @@ fun getItemNavScreens(): List<BottomNavItem> =
     listOf(
         BottomNavItem(
             title = "Home",
-            selectedIcon = R.drawable.home_filled,
-            unselectedIcon = R.drawable.home_gray,
+            selectedIcon = R.drawable.ic_home,
+            unselectedIcon = R.drawable.ic_home_unselect,
             route = HomeRoutes.HomeScreen
         ),
         BottomNavItem(
-            title = "Search",
-            selectedIcon = R.drawable.search_filled,
-            unselectedIcon = R.drawable.search_grey,
+            title = "Activity",
+            selectedIcon = R.drawable.ic_activity,
+            unselectedIcon = R.drawable.ic_activity_unselect,
             route = HomeRoutes.SearchScreen
         ),
         BottomNavItem(
             title = "Scan",
-            selectedIcon = R.drawable.scan_orange,
-            unselectedIcon = R.drawable.scan_grey,
+            selectedIcon = R.drawable.ic_scan,
+            unselectedIcon = R.drawable.ic_scan_unselect,
             route = ScanRoutes.ScanScreen
         ),
         BottomNavItem(
             title = "Bookmark",
-            selectedIcon = R.drawable.bookmark_filled,
-            unselectedIcon = R.drawable.bookmark_grey,
+            selectedIcon = R.drawable.ic_bookmark,
+            unselectedIcon = R.drawable.ic_bookmark_unselect,
             route = HomeRoutes.BookmarkScreen
         ),
         BottomNavItem(
             title = "Profile",
-            selectedIcon = R.drawable.profile_filled,
-            unselectedIcon = R.drawable.profile_grey,
+            selectedIcon = R.drawable.ic_profile,
+            unselectedIcon = R.drawable.ic_profile_unselect,
             route = HomeRoutes.ProfileScreen
         )
     )

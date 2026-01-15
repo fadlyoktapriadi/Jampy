@@ -47,7 +47,7 @@ fun PlantCard(
                 contentDescription = plant.plantName,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(130.dp)
+                    .height(110.dp)
                     .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop
             )
@@ -57,23 +57,13 @@ fun PlantCard(
                 fontFamily = RethinkSans,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
-                color = Color.Black
+                color = PrimaryGreen
             )
             Text(
                 text = plant.plantSpecies,
                 fontSize = 12.sp,
-                color = Color.Black,
-                lineHeight = 14.sp
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = plant.plantDescription,
-                fontSize = 10.sp,
-                fontFamily = RethinkSans,
                 color = PrimaryGreen,
-                maxLines = 2,
-                lineHeight = 14.sp,
-                overflow = TextOverflow.Ellipsis
+                lineHeight = 14.sp
             )
         }
     }

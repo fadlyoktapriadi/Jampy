@@ -11,6 +11,8 @@ val Pink40 = Color(0xFF7D5260)
 
 // White
 val backgroundCardWhite = Color(0xFFFAFAFA)
+val whiteBackground = Color(0xFFFCFCFC)
+
 // Black
 val Black600 = Color(0xFF424242)
 // Orange
@@ -23,6 +25,7 @@ val PrimaryGreen = Color(0xFF3E5F44)
 val SecondaryGreen = Color(0xFF80AF81)
 val TersieryGreen = Color(0xFFD0E8C5)
 val Green400 = Color(0xFFE8F5E9)
+val GreenNavBar = Color(0xFF118B50)
 
 val Green500 = Color(0xFFB4C5B7)
 val Green600 = Color(0xFFFCFFF8)

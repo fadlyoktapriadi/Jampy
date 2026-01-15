@@ -35,7 +35,8 @@ import com.fyyadi.theme.PrimaryGreen
 @Composable
 fun ItemUserManagement(
     user: UserProfile,
-    onUsersClick: (Int) -> Unit = {}
+    onUsersClick: (Int) -> Unit = {},
+    onChangeRole: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier
@@ -87,7 +88,7 @@ fun ItemUserManagement(
                 horizontalArrangement = Arrangement.End
             ) {
                 IconButton(
-                    onClick = { /* TODO: handle edit */ },
+                    onClick = { onChangeRole() },
                     modifier = Modifier.size(32.dp)
                 ) {
                     Icon(

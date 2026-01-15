@@ -3,7 +3,6 @@ package com.fyyadi.auth.presentation.ui.login
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -26,7 +25,6 @@ import com.fyyadi.auth.BuildConfig
 import com.fyyadi.common.ResultState
 import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.theme.Amarant
-import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
@@ -71,10 +69,15 @@ fun LoginScreen(
 
     Box(
         Modifier
-            .fillMaxSize()
-            .background(BackgroundGreen),
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
+        Image(
+            painter = painterResource(id = com.fyyadi.auth.R.drawable.bg_login_jampy),
+            contentDescription = null,
+            modifier = Modifier.matchParentSize(),
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop
+        )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(16.dp)
@@ -105,7 +108,8 @@ fun LoginScreen(
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .border(1.dp, PrimaryGreen, shape = ButtonDefaults.shape)
+                        .padding(top = 14.dp)
+                        .border(2.dp, PrimaryGreen, shape = ButtonDefaults.shape)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -119,7 +123,7 @@ fun LoginScreen(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = stringResource(com.fyyadi.core_presentation.R.string.button_login),
-                            fontSize = 14.sp,
+                            fontSize = 16.sp,
                             fontFamily = RethinkSans,
                             fontWeight = FontWeight.Normal
                         )
