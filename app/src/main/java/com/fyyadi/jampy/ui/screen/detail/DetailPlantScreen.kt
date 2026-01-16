@@ -38,12 +38,16 @@ import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Black600
+import com.fyyadi.theme.Green100
 import com.fyyadi.theme.Green400
-import com.fyyadi.theme.Green500
+import com.fyyadi.theme.Green600
 import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.fyyadi.theme.SecondaryGreen
+import com.fyyadi.theme.SlateSecondary
+import com.fyyadi.theme.whiteBackground
+
 @Composable
 fun DetailPlantScreen(
     modifier: Modifier = Modifier,
@@ -55,7 +59,6 @@ fun DetailPlantScreen(
     val isBookmarked by viewModel.isBookmarked.collectAsState()
 
     LaunchedEffect(idPlant) {
-        Log.e("CEK ID PLANT", "DetailPlantScreen: $idPlant" )
         viewModel.getDetailPlant(idPlant)
         viewModel.getBookmarkStatus(idPlant)
     }
@@ -65,7 +68,7 @@ fun DetailPlantScreen(
             Box(
                 modifier = modifier
                     .fillMaxSize()
-                    .background(BackgroundGreen),
+                    .background(whiteBackground),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(color = PrimaryGreen)
@@ -125,7 +128,7 @@ private fun DetailPlantLoaded(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(BackgroundGreen)
+            .background(whiteBackground)
     ) {
         Column {
             HeaderContent(
@@ -173,7 +176,7 @@ fun TitleContent(plant: Plant?, modifier: Modifier = Modifier) {
         )
         Text(
             text = plant?.plantSpecies ?: "",
-            fontSize = 14.sp,
+            fontSize = 16.sp,
             fontFamily = RethinkSans,
             color = SecondaryGreen,
             modifier = Modifier.padding(top = 4.dp)
@@ -265,7 +268,7 @@ fun BodyContent(plant: Plant?, modifier: Modifier = Modifier, headerHeight: Dp) 
                             Box(
                                 modifier = Modifier
                                     .background(
-                                        color = OrangePrimary,
+                                        color = PrimaryGreen,
                                         shape = RoundedCornerShape(16.dp)
                                     )
                                     .padding(horizontal = 12.dp, vertical = 6.dp)
@@ -318,14 +321,14 @@ fun StaticTopBar(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
-                .background(Green500.copy(alpha = 0.8f))
+                .background(Green100)
                 .clickable(onClick = onBackClick),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 painter = painterResource(com.fyyadi.core_presentation.R.drawable.ic_left_arrow),
                 contentDescription = "Back",
-                tint = Color.White,
+                tint = Green600,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -345,14 +348,14 @@ fun StaticTopBar(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
-                .background(Green500.copy(alpha = 0.7f))
+                .background(Green100)
                 .clickable(onClick = onBookmarkClick),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 painter = painterResource(com.fyyadi.core_presentation.R.drawable.bookmark_filled),
                 contentDescription = "Bookmark",
-                tint = if (isBookmarked) PrimaryGreen else Color.White,
+                tint = if (isBookmarked) Green600 else SlateSecondary,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -368,7 +371,7 @@ fun DynamicTopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Green400.copy(alpha = alpha))
+            .background(Green600.copy(alpha = alpha))
             .padding(horizontal = 14.dp, vertical = 24.dp)
             .graphicsLayer { this.alpha = alpha },
         horizontalArrangement = Arrangement.Center,
@@ -379,7 +382,7 @@ fun DynamicTopBar(
             fontSize = 18.sp,
             fontFamily = RethinkSans,
             fontWeight = FontWeight.SemiBold,
-            color = Color(0xFF2E7D32),
+            color = Color.White,
             modifier = Modifier.padding(horizontal = 32.dp)
         )
     }
