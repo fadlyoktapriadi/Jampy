@@ -25,6 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,12 +55,16 @@ import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.PlantLabel
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Black600
+import com.fyyadi.theme.Green100
 import com.fyyadi.theme.Green400
 import com.fyyadi.theme.Green500
+import com.fyyadi.theme.Green600
 import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.fyyadi.theme.SecondaryGreen
+import com.fyyadi.theme.SlateSecondary
+import com.fyyadi.theme.whiteBackground
 
 @Composable
 fun ResultScanScreen(
@@ -83,7 +88,14 @@ fun ResultScanScreen(
 
     when (detailResultClassify) {
         is ResultState.Loading -> {
-            // Show loading indicator
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(whiteBackground),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = PrimaryGreen)
+            }
         }
         is ResultState.Success -> {
             val plant = (detailResultClassify as ResultState.Success<Plant?>).data
@@ -96,6 +108,13 @@ fun ResultScanScreen(
                         plantId = it.idPlant,
                         accuracy = acc,
                     )
+
+                    viewModel.saveHistoryScanLocal(
+                        userEmail = userEmail,
+                        plantId = it.idPlant,
+                        imageResultUri = imageResultUri,
+                        accuracy = acc
+                    )
                 }
             }
 
@@ -103,9 +122,7 @@ fun ResultScanScreen(
                 plant = plant,
                 imageResultUri = imageResultUri,
                 accuracy = plantResult.firstOrNull()?.confidence ?: 0f,
-                isBookmarked = false,
                 onBackClick = onBackClick,
-                onBookmarkClick = { },
                 modifier = modifier
             )
         }
@@ -125,9 +142,7 @@ private fun DetailPlantResult(
     plant: Plant?,
     imageResultUri: String,
     accuracy: Float,
-    isBookmarked: Boolean,
     onBackClick: () -> Unit,
-    onBookmarkClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
@@ -142,7 +157,7 @@ private fun DetailPlantResult(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(BackgroundGreen)
+            .background(whiteBackground)
     ) {
         Column {
             HeaderContent(
@@ -168,9 +183,7 @@ private fun DetailPlantResult(
             headerHeight = headerHeight + 80.dp
         )
         StaticTopBar(
-            isBookmarked = isBookmarked,
             onBackClick = onBackClick,
-            onBookmarkClick = onBookmarkClick
         )
         DynamicTopBar(
             plantName = plant?.plantName ?: "",
@@ -201,7 +214,7 @@ fun TitleContent(plant: Plant?, accuracy: Float, modifier: Modifier = Modifier) 
                 fontSize = 16.sp,
                 fontFamily = RethinkSans,
                 fontWeight = FontWeight.ExtraBold,
-                color = OrangePrimary
+                color = Green600
             )
         }
 
@@ -299,7 +312,7 @@ fun BodyContent(plant: Plant?, modifier: Modifier = Modifier, headerHeight: Dp) 
                             Box(
                                 modifier = Modifier
                                     .background(
-                                        color = OrangePrimary,
+                                        color = PrimaryGreen,
                                         shape = RoundedCornerShape(16.dp)
                                     )
                                     .padding(horizontal = 12.dp, vertical = 6.dp)
@@ -336,9 +349,7 @@ fun BodyContent(plant: Plant?, modifier: Modifier = Modifier, headerHeight: Dp) 
 
 @Composable
 fun StaticTopBar(
-    isBookmarked: Boolean,
     onBackClick: () -> Unit,
-    onBookmarkClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -352,14 +363,14 @@ fun StaticTopBar(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
-                .background(Green500.copy(alpha = 0.8f))
+                .background(Green100)
                 .clickable(onClick = onBackClick),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_left_arrow),
                 contentDescription = "Back",
-                tint = Color.White,
+                tint = Green600,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -375,21 +386,6 @@ fun StaticTopBar(
                 color = PrimaryGreen
             )
         }
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .background(Green500.copy(alpha = 0.7f))
-                .clickable(onClick = onBookmarkClick),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.bookmark_filled),
-                contentDescription = "Bookmark",
-                tint = if (isBookmarked) PrimaryGreen else Color.White,
-                modifier = Modifier.size(24.dp)
-            )
-        }
     }
 }
 
@@ -402,7 +398,7 @@ fun DynamicTopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Green400.copy(alpha = alpha))
+            .background(Green600.copy(alpha = alpha))
             .padding(horizontal = 14.dp, vertical = 24.dp)
             .graphicsLayer { this.alpha = alpha },
         horizontalArrangement = Arrangement.Center,
@@ -413,7 +409,7 @@ fun DynamicTopBar(
             fontSize = 18.sp,
             fontFamily = RethinkSans,
             fontWeight = FontWeight.SemiBold,
-            color = Color(0xFF2E7D32),
+            color = Color.White,
             modifier = Modifier.padding(horizontal = 32.dp)
         )
     }

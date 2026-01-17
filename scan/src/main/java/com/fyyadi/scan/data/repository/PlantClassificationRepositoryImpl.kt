@@ -3,8 +3,11 @@ package com.fyyadi.scan.data.repository
 import android.graphics.Bitmap
 import android.util.Log
 import com.fyyadi.data.mapper.toPlant
+import com.fyyadi.data.source.local.room.dao.ScanHistoryDao
 import com.fyyadi.data.source.network.dto.PlantDto
 import com.fyyadi.domain.model.Plant
+import com.fyyadi.scan.data.mapper.toEntity
+import com.fyyadi.scan.domain.model.HistoryScanLocal
 import com.fyyadi.scan.domain.model.PlantLabel
 import com.fyyadi.scan.domain.model.PlantLabels
 import com.fyyadi.scan.domain.model.SaveHistoryScanRequest
@@ -32,7 +35,8 @@ import kotlinx.serialization.json.put
 
 @Singleton
 class PlantClassificationRepositoryImpl @Inject constructor(
-    private val postgrest: Postgrest
+    private val postgrest: Postgrest,
+    private val dao: ScanHistoryDao
 ) : PlantClassificationRepository {
 
     private var interpreter: Interpreter? = null
@@ -141,6 +145,15 @@ class PlantClassificationRepositoryImpl @Inject constructor(
         }
         emit(result)
     }
+
+    override fun saveHistoryScanLocal(
+        history: HistoryScanLocal
+    ): Flow<Result<Unit>> = flow {
+        dao.saveScanHistory(
+            history.toEntity()
+        )
+    }
+
 
     companion object {
         private const val MODEL_NAME = "jampy_model"

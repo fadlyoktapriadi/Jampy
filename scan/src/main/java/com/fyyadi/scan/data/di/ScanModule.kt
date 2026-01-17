@@ -1,13 +1,12 @@
 package com.fyyadi.scan.data.di
 
-import com.fyyadi.data.repository.CoreRepositoryImpl
-import com.fyyadi.data.source.local.sharedpreference.PreferenceManager
-import com.fyyadi.domain.repository.CoreRepository
+import com.fyyadi.data.source.local.room.dao.ScanHistoryDao
 import com.fyyadi.scan.data.repository.PlantClassificationRepositoryImpl
 import com.fyyadi.scan.domain.repository.PlantClassificationRepository
 import com.fyyadi.scan.domain.usecase.DownloadModelUseCase
 import com.fyyadi.scan.domain.usecase.GetDetailResultClassifyUseCase
 import com.fyyadi.scan.domain.usecase.PlantClassifyUseCase
+import com.fyyadi.scan.domain.usecase.SaveHistoryScanLocalUseCase
 import com.fyyadi.scan.domain.usecase.SaveHistoryScanUseCase
 import com.fyyadi.scan.domain.usecase.ScanUseCase
 import dagger.Module
@@ -24,9 +23,11 @@ object ScanModule {
     @Provides
     @Singleton
     fun providePlantClassificationRepositoryImpl(
-        postgrest: Postgrest
+        postgrest: Postgrest,
+        dao: ScanHistoryDao
     ): PlantClassificationRepository = PlantClassificationRepositoryImpl(
         postgrest,
+        dao
     )
 
 
@@ -45,6 +46,9 @@ object ScanModule {
             plantClassificationRepository
         ),
         saveHistoryScanUseCase = SaveHistoryScanUseCase(
+            plantClassificationRepository
+        ),
+        saveHistoryScanLocalUseCase = SaveHistoryScanLocalUseCase(
             plantClassificationRepository
         )
     )

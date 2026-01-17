@@ -7,6 +7,7 @@ import com.fyyadi.data.repository.CoreRepositoryImpl
 import com.fyyadi.data.repository.PlantRepositoryImpl
 import com.fyyadi.data.source.local.room.AppDatabase
 import com.fyyadi.data.source.local.room.dao.PlantBookmarkDao
+import com.fyyadi.data.source.local.room.dao.ScanHistoryDao
 import com.fyyadi.data.source.local.sharedpreference.PreferenceManager
 import com.fyyadi.domain.repository.BookmarkRepository
 import com.fyyadi.domain.repository.CoreRepository
@@ -92,6 +93,9 @@ object CoreModule {
 
     @Provides
     fun providePlantBookmarkDao(db: AppDatabase): PlantBookmarkDao = db.plantBookmarkDao()
+
+    @Provides
+    fun provideScanHistoryDao(db: AppDatabase): ScanHistoryDao = db.scanHistoryDao()
 
     @Provides
     fun providesCoreUseCases(

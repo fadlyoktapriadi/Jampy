@@ -60,6 +60,10 @@ import kotlinx.coroutines.withContext
 import androidx.core.net.toUri
 import com.fyyadi.common.ResultState
 import com.fyyadi.domain.model.UserProfile
+import com.fyyadi.theme.Slate200
+import com.fyyadi.theme.SlatePrimary
+import com.fyyadi.theme.SlateSecondary
+import com.fyyadi.theme.whiteBackground
 
 @Composable
 fun ScanScreen(
@@ -83,7 +87,9 @@ fun ScanScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val userEmail = when (profileState) {
-        is ResultState.Success -> (profileState as ResultState.Success<UserProfile?>).data?.userEmail ?: ""
+        is ResultState.Success -> (profileState as ResultState.Success<UserProfile?>).data?.userEmail
+            ?: ""
+
         else -> ""
     }
 
@@ -159,7 +165,7 @@ fun ScanScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(BackgroundGreen)
+            .background(whiteBackground)
 
     ) {
         Row(
@@ -193,64 +199,86 @@ fun ScanScreen(
             modifier = modifier
                 .fillMaxWidth()
                 .height(280.dp)
-                .padding(top = 32.dp, bottom = 8.dp, start = 24.dp, end = 24.dp)
+                .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            if (selectedImage != null) {
+                AsyncImage(
+                    model = selectedImage,
+                    contentDescription = "Selected",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                Image(
+                    painter = painterResource(id = R.drawable.image_placeholder_filled),
+                    contentDescription = "Placeholder",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(120.dp)
+                )
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Card(
-                modifier = Modifier.fillMaxSize(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { showCamera = true },
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = Slate200)
             ) {
-                Box(
+                Row(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp),
-                    contentAlignment = Alignment.Center
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp, horizontal = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    if (selectedImage != null) {
-                        AsyncImage(
-                            model = selectedImage,
-                            contentDescription = "Selected",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    } else {
-                        Image(
-                            painter = painterResource(id = R.drawable.image_placeholder_filled),
-                            contentDescription = "Placeholder",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.size(120.dp)
-                        )
-                    }
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_camera),
+                        contentDescription = "Camera",
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.size(16.dp))
+                    Text(
+                        text = "Kamera",
+                        fontSize = 14.sp,
+                        color = PrimaryGreen,
+                        fontFamily = RethinkSans
+                    )
                 }
             }
-        }
 
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 14.dp, horizontal = 24.dp)
-                .clickable { showCamera = true },
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-        ) {
-            Row(
+            Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .weight(1f)
+                    .clickable { photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = Slate200)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_camera),
-                    contentDescription = "Jampy Logo",
-                    modifier = Modifier.size(24.dp)
-                )
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp, horizontal = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_gallery),
+                        contentDescription = "Gallery",
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.size(16.dp))
                     Text(
-                        text = "Take by Camera",
+                        text = "Galeri",
                         fontSize = 14.sp,
-                        color = PrimaryGreen
+                        color = PrimaryGreen,
+                        fontFamily = RethinkSans
                     )
                 }
             }
@@ -259,43 +287,14 @@ fun ScanScreen(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 24.dp, start = 24.dp, end = 24.dp)
-                .clickable { photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_gallery),
-                    contentDescription = "Gallery",
-                    modifier = Modifier.size(24.dp)
-                )
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    Text(
-                        text = "Select from Gallery",
-                        fontSize = 14.sp,
-                        color = PrimaryGreen
-                    )
-                }
-            }
-        }
-
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 48.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
+                .padding(top = 24.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
                 .clickable {
                     selectedImage?.let { uri ->
                         coroutineScope.launch {
                             val bitmap = withContext(Dispatchers.IO) {
                                 try {
-                                    val source = ImageDecoder.createSource(context.contentResolver, uri)
+                                    val source =
+                                        ImageDecoder.createSource(context.contentResolver, uri)
                                     ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
                                         decoder.isMutableRequired = true
                                     }
@@ -327,7 +326,7 @@ fun ScanScreen(
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    text = "Processing Image...",
+                    text = "Processing Image",
                     color = Color.White,
                     fontSize = 14.sp
                 )

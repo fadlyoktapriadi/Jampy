@@ -21,6 +21,8 @@ val OrangePrimary = Color(0xFFE28843)
 val SlatePrimary = Color(0xFFD4D4D4)
 val SlateSecondary = Color(0xFFC7C7C7)
 
+val Slate200 = Color(0xFFF2F2F2)
+
 
 // Green
 val PrimaryGreen = Color(0xFF3E5F44)
