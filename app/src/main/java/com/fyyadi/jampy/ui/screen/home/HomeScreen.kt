@@ -37,7 +37,6 @@ import com.fyyadi.jampy.ui.components.ShimmerPlantCard
 import com.fyyadi.theme.Green400
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
-import com.fyyadi.theme.TersieryGreen
 import com.fyyadi.theme.whiteBackground
 
 @Composable

@@ -42,7 +42,7 @@ fun JampyApp(
         val destRoute = navDestination.route?.takeLastWhile { it != '.' }
         when (destRoute) {
             HomeRoutes.HomeScreen.toString() -> selectedItemIndex = 0
-            HomeRoutes.SearchScreen.toString() -> selectedItemIndex = 1
+            HomeRoutes.ActivityHistoryScan.toString() -> selectedItemIndex = 1
             HomeRoutes.BookmarkScreen.toString() -> selectedItemIndex = 3
             HomeRoutes.ProfileScreen.toString() -> selectedItemIndex = 4
         }

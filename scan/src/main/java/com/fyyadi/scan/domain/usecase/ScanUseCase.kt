@@ -5,5 +5,6 @@ data class ScanUseCase (
     val plantClassifyUseCase: PlantClassifyUseCase,
     val downloadModelUseCase: DownloadModelUseCase,
     val saveHistoryScanUseCase: SaveHistoryScanUseCase,
-    val saveHistoryScanLocalUseCase: SaveHistoryScanLocalUseCase
+    val saveHistoryScanLocalUseCase: SaveHistoryScanLocalUseCase,
+    val getAllHistoryScan: GetAllHistoryScanUseCase,
 )

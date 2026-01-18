@@ -1,4 +1,4 @@
-package com.fyyadi.jampy.ui.screen.bookmark
+package com.fyyadi.jampy.ui.screen.activity
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,29 +26,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
+import com.fyyadi.jampy.ui.components.PlantHistoryScanCard
 import com.fyyadi.jampy.ui.components.PlantItemSearchCard
 import com.fyyadi.jampy.ui.components.ShimmerPlantCard
-import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.jampy.ui.screen.bookmark.BookmarkViewModel
+import com.fyyadi.scan.domain.model.HistoryScan
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.fyyadi.theme.whiteBackground
 
 @Composable
-fun BookmarkScreen(
+fun ActivityHistoryScreen(
     modifier: Modifier = Modifier,
-    onPlantClick: (Int) -> Unit = {}
+    onPlantClick: (Int, String, String) -> Unit
 ) {
-    val viewModel: BookmarkViewModel = hiltViewModel()
-    val bookmarkPlantState by viewModel.bookmarkPlantState.collectAsState()
+    val viewModel: ActivityHistoryViewModel = hiltViewModel()
+    val activityHistoryState by viewModel.activityHistoryState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.getAllBookmarkPlants()
+        viewModel.getAllHistoryScanPlants()
     }
 
     Column(
@@ -68,7 +71,7 @@ fun BookmarkScreen(
                 modifier = Modifier.size(48.dp)
             )
             Text(
-                text = "Bookmark",
+                text = "Aktivitas",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryGreen,
@@ -83,7 +86,7 @@ fun BookmarkScreen(
         }
         Spacer(modifier = Modifier.height(24.dp))
 
-        when (bookmarkPlantState) {
+        when (activityHistoryState) {
             is ResultState.Loading -> {
                 Column(
                     Modifier
@@ -96,20 +99,23 @@ fun BookmarkScreen(
             }
 
             is ResultState.Success -> {
-                val plants = (bookmarkPlantState as ResultState.Success<List<Plant>>).data
+                val plants = (activityHistoryState as ResultState.Success<List<HistoryScan>>).data
                 if (plants.isEmpty()) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(24.dp),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
-                        Text(text = stringResource(R.string.no_bookmark), fontSize = 16.sp,
-                            color = Color.Black, fontFamily = RethinkSans
+                        Text(
+                            text = stringResource(R.string.no_history),
+                            fontSize = 16.sp,
+                            color = Color.Black,
+                            fontFamily = RethinkSans,
+                            textAlign = TextAlign.Center
                         )
                     }
-                    return@Column
-                }else {
+                } else {
                     LazyColumn(
                         Modifier
                             .padding(bottom = 6.dp, start = 24.dp, end = 24.dp)
@@ -117,14 +123,14 @@ fun BookmarkScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         items(plants) { plant ->
-                            PlantItemSearchCard(plant = plant, onPlantClick)
+                            PlantHistoryScanCard(history = plant, onPlantClick)
                         }
                     }
                 }
             }
 
             is ResultState.Error -> {
-                val message = (bookmarkPlantState as ResultState.Error).message ?: "Unknown Error"
+                val message = (activityHistoryState as ResultState.Error).message ?: "Unknown Error"
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -134,6 +140,7 @@ fun BookmarkScreen(
                     Text(text = message, color = Color.Red, fontSize = 16.sp)
                 }
             }
+
             ResultState.Idle -> {
                 Box(
                     modifier = Modifier
@@ -141,7 +148,7 @@ fun BookmarkScreen(
                         .padding(24.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Button(onClick = { viewModel.getAllBookmarkPlants() }) {
+                    Button(onClick = { viewModel.getAllHistoryScanPlants() }) {
                         Text(text = "Load Bookmarks")
                     }
                 }

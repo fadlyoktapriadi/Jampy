@@ -8,6 +8,9 @@ import androidx.navigation.toRoute
 import com.fyyadi.jampy.route.AuthRoutes
 import com.fyyadi.jampy.route.HomeRoutes
 import com.fyyadi.jampy.route.ManagementRoutes
+import com.fyyadi.jampy.route.ScanRoutes
+import com.fyyadi.jampy.ui.screen.activity.ActivityHistoryScreen
+import com.fyyadi.jampy.ui.screen.activity.DetailActivityHistoryScanScreen
 import com.fyyadi.jampy.ui.screen.bookmark.BookmarkScreen
 import com.fyyadi.jampy.ui.screen.detail.DetailPlantScreen
 import com.fyyadi.jampy.ui.screen.home.HomeScreen
@@ -41,11 +44,17 @@ object HomeNavigation {
             )
         }
 
-        composable<HomeRoutes.SearchScreen> {
-            SearchScreen(
+        composable<HomeRoutes.ActivityHistoryScan> {
+            ActivityHistoryScreen(
                 modifier = modifier,
-                onPlantClick = { idPlant ->
-                    navController.navigate(HomeRoutes.DetailPlantScreen(idPlant))
+                onPlantClick = { plantId, imageResultUri, accuracy ->
+                    navController.navigate(
+                        HomeRoutes.DetailActivityHistoryScanScreen(
+                            plantId = plantId,
+                            imageResultUri = imageResultUri,
+                            accuracy = accuracy
+                        )
+                    )
                 }
             )
         }
@@ -73,5 +82,20 @@ object HomeNavigation {
                 }
             )
         }
+
+        composable<HomeRoutes.DetailActivityHistoryScanScreen> { backStackEntry ->
+            val history = backStackEntry.toRoute<HomeRoutes.DetailActivityHistoryScanScreen>()
+
+            DetailActivityHistoryScanScreen(
+                idPlant = history.plantId,
+                imageResultUri = history.imageResultUri,
+                accuracy = history.accuracy,
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                modifier = modifier
+            )
+        }
+
     }
 }

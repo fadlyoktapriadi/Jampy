@@ -8,6 +8,7 @@ data class ScanHistoryEntity(
     @PrimaryKey(autoGenerate = true) val idHistory: Int = 0,
     val userEmail: String,
     val plantId: Int,
+    val plantNamePredict: String,
     val imageResultUri: String,
     val accuracy: Int,
     val scanDate: Long = System.currentTimeMillis()

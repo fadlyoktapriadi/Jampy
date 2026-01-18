@@ -138,6 +138,7 @@ class ScanViewModel @Inject constructor(
     fun saveHistoryScanLocal(
         userEmail: String,
         plantId: Int,
+        plantNamePredict: String,
         imageResultUri: String,
         accuracy: Int
     ) {
@@ -145,6 +146,7 @@ class ScanViewModel @Inject constructor(
             scanUseCase.saveHistoryScanLocalUseCase(
                 userEmail = userEmail,
                 plantId = plantId,
+                plantNamePredict = plantNamePredict,
                 imageResultUri = imageResultUri,
                 accuracy = accuracy
             ).collect {

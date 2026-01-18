@@ -12,7 +12,10 @@ sealed class HomeRoutes : BaseRoute() {
     data class DetailPlantScreen(val plantId: Int) : HomeRoutes()
 
     @Serializable
-    data object SearchScreen : HomeRoutes()
+    data object ActivityHistoryScan : HomeRoutes()
+
+    @Serializable
+    data class DetailActivityHistoryScanScreen(val plantId: Int, val imageResultUri: String, val accuracy: String) : HomeRoutes()
 
     @Serializable
     data object BookmarkScreen : HomeRoutes()

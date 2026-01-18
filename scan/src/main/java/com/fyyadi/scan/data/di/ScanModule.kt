@@ -4,6 +4,7 @@ import com.fyyadi.data.source.local.room.dao.ScanHistoryDao
 import com.fyyadi.scan.data.repository.PlantClassificationRepositoryImpl
 import com.fyyadi.scan.domain.repository.PlantClassificationRepository
 import com.fyyadi.scan.domain.usecase.DownloadModelUseCase
+import com.fyyadi.scan.domain.usecase.GetAllHistoryScanUseCase
 import com.fyyadi.scan.domain.usecase.GetDetailResultClassifyUseCase
 import com.fyyadi.scan.domain.usecase.PlantClassifyUseCase
 import com.fyyadi.scan.domain.usecase.SaveHistoryScanLocalUseCase
@@ -49,6 +50,9 @@ object ScanModule {
             plantClassificationRepository
         ),
         saveHistoryScanLocalUseCase = SaveHistoryScanLocalUseCase(
+            plantClassificationRepository
+        ),
+        getAllHistoryScan = GetAllHistoryScanUseCase(
             plantClassificationRepository
         )
     )

@@ -1,4 +1,4 @@
-package com.fyyadi.scan.presentation.ui
+package com.fyyadi.jampy.ui.screen.activity
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -6,28 +6,12 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -48,16 +32,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
-import com.fyyadi.common.ResultState
 import com.fyyadi.components.MarkdownText
-import com.fyyadi.core_presentation.R
 import com.fyyadi.domain.model.Plant
-import com.fyyadi.domain.model.PlantLabel
+import com.fyyadi.jampy.R
+import com.fyyadi.jampy.common.ResultState
+import com.fyyadi.jampy.ui.screen.detail.DetailPlantViewModel
+import com.fyyadi.scan.presentation.ui.TitleContent
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Black600
 import com.fyyadi.theme.Green100
 import com.fyyadi.theme.Green400
-import com.fyyadi.theme.Green500
 import com.fyyadi.theme.Green600
 import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
@@ -67,26 +51,21 @@ import com.fyyadi.theme.SlateSecondary
 import com.fyyadi.theme.whiteBackground
 
 @Composable
-fun ResultScanScreen(
+fun DetailActivityHistoryScanScreen(
     modifier: Modifier = Modifier,
-    plantResult: List<PlantLabel>,
+    idPlant: Int,
     imageResultUri: String,
-    userEmail: String,
-    onBackClick: () -> Unit
+    accuracy: String,
+    onBackClick: () -> Unit = {},
 ) {
+    val viewModel: DetailPlantViewModel = hiltViewModel()
+    val plantDetailState by viewModel.plantDetailState.collectAsState()
 
-    val viewModel: ScanViewModel = hiltViewModel()
-    val detailResultClassify by viewModel.detailResultClassify.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.getDetailResultClassify(plantResult.first().displayName)
+    LaunchedEffect(idPlant) {
+        viewModel.getDetailPlant(idPlant)
     }
 
-    LaunchedEffect(plantResult.firstOrNull()?.displayName) {
-        plantResult.firstOrNull()?.displayName?.let { viewModel.getDetailResultClassify(it) }
-    }
-
-    when (detailResultClassify) {
+    when (val state = plantDetailState) {
         is ResultState.Loading -> {
             Box(
                 modifier = modifier
@@ -97,52 +76,45 @@ fun ResultScanScreen(
                 CircularProgressIndicator(color = PrimaryGreen)
             }
         }
-        is ResultState.Success -> {
-            val plant = (detailResultClassify as ResultState.Success<Plant?>).data
-
-            LaunchedEffect(plant?.idPlant) {
-                plant?.let {
-                    val acc = (plantResult.firstOrNull()?.confidence?.times(100))?.toInt() ?: 0
-                    viewModel.saveHistoryScan(
-                        userEmail = userEmail,
-                        plantId = it.idPlant,
-                        accuracy = acc,
+        is ResultState.Error -> {
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(BackgroundGreen),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = state.message ?: stringResource(R.string.failed_to_load_data),
+                        color = Color.Red,
+                        fontFamily = RethinkSans
                     )
-
-                    viewModel.saveHistoryScanLocal(
-                        userEmail = userEmail,
-                        plantId = it.idPlant,
-                        plantNamePredict = it.plantName,
-                        imageResultUri = imageResultUri,
-                        accuracy = acc
-                    )
+                    Spacer(Modifier.height(8.dp))
+                    Button(onClick = { viewModel.getDetailPlant(idPlant) }) {
+                        Text("Retry")
+                    }
                 }
             }
-
-            DetailPlantResult(
-                plant = plant,
+        }
+        is ResultState.Success -> {
+            DetailHistoryScanLoaded(
+                plant = state.data,
                 imageResultUri = imageResultUri,
-                accuracy = plantResult.firstOrNull()?.confidence ?: 0f,
+                accuracy = accuracy,
                 onBackClick = onBackClick,
                 modifier = modifier
             )
         }
-        is ResultState.Error -> {
-            val errorMsg = (detailResultClassify as ResultState.Error).message
-            Log.e("CEK ERROR", "ResultScanScreen: $errorMsg")
-        }
 
-        ResultState.Idle -> {
-            // Initial state, do nothing or show a placeholder
-        }
+        ResultState.Idle -> { /* Do nothing */ }
     }
 }
 
 @Composable
-private fun DetailPlantResult(
+private fun DetailHistoryScanLoaded(
     plant: Plant?,
     imageResultUri: String,
-    accuracy: Float,
+    accuracy: String,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -168,7 +140,7 @@ private fun DetailPlantResult(
                     .height(headerHeight)
                     .padding(top = 16.dp, bottom = 8.dp)
             )
-            TitleContent(
+            TitleContentHistoryScan(
                 plant = plant,
                 accuracy = accuracy,
                 modifier = Modifier
@@ -194,7 +166,7 @@ private fun DetailPlantResult(
 }
 
 @Composable
-fun TitleContent(plant: Plant?, accuracy: Float, modifier: Modifier = Modifier) {
+fun TitleContentHistoryScan(plant: Plant?, accuracy: String, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
@@ -209,9 +181,9 @@ fun TitleContent(plant: Plant?, accuracy: Float, modifier: Modifier = Modifier) 
                 fontWeight = FontWeight.ExtraBold,
                 color = PrimaryGreen
             )
-            val accuracyPercent = (accuracy * 100).toInt()
+//            val accuracyPercent = (accuracy * 100).toInt()
             Text(
-                text = "Akurasi: ${accuracyPercent}%",
+                text = "Akurasi: ${accuracy}%",
                 fontSize = 16.sp,
                 fontFamily = RethinkSans,
                 fontWeight = FontWeight.ExtraBold,
@@ -251,7 +223,7 @@ fun HeaderContent(imageResultUri: String, modifier: Modifier = Modifier) {
             ) {
                 AsyncImage(
                     model = imageResultUri,
-                    contentDescription = "Result Image",
+                    contentDescription = imageResultUri,
                     modifier = Modifier
                         .fillMaxWidth(),
                     contentScale = ContentScale.Fit
@@ -369,7 +341,7 @@ fun StaticTopBar(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_left_arrow),
+                painter = painterResource(com.fyyadi.core_presentation.R.drawable.ic_left_arrow),
                 contentDescription = "Back",
                 tint = Green600,
                 modifier = Modifier.size(24.dp)
@@ -380,7 +352,7 @@ fun StaticTopBar(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = stringResource(R.string.result_scan),
+                text = stringResource(R.string.detail_history_scan),
                 fontFamily = RethinkSans,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,

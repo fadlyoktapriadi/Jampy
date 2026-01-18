@@ -4,6 +4,7 @@ import com.fyyadi.data.source.local.room.entity.ScanHistoryEntity
 import com.fyyadi.data.source.network.dto.PlantDto
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.scan.data.source.network.dto.HistoryScanUpsertDto
+import com.fyyadi.scan.domain.model.HistoryScan
 import com.fyyadi.scan.domain.model.HistoryScanLocal
 import com.fyyadi.scan.domain.model.SaveHistoryScanRequest
 
@@ -29,6 +30,16 @@ fun HistoryScanLocal.toEntity(): ScanHistoryEntity =
     ScanHistoryEntity(
         userEmail = userEmail,
         plantId = plantId,
+        plantNamePredict = plantNamePredict,
         imageResultUri = imageResultUri,
-        accuracy = accuracy
+        accuracy = accuracy,
+    )
+
+fun ScanHistoryEntity.toDomain(): HistoryScan =
+    HistoryScan(
+        plantId = plantId,
+        plantNamePredict = plantNamePredict,
+        imageResultUri = imageResultUri,
+        accuracy = accuracy,
+        date = scanDate
     )

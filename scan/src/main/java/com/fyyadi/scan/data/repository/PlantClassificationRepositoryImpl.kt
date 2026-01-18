@@ -2,11 +2,14 @@ package com.fyyadi.scan.data.repository
 
 import android.graphics.Bitmap
 import android.util.Log
+import com.fyyadi.data.mapper.toDomain
 import com.fyyadi.data.mapper.toPlant
 import com.fyyadi.data.source.local.room.dao.ScanHistoryDao
 import com.fyyadi.data.source.network.dto.PlantDto
 import com.fyyadi.domain.model.Plant
+import com.fyyadi.scan.data.mapper.toDomain
 import com.fyyadi.scan.data.mapper.toEntity
+import com.fyyadi.scan.domain.model.HistoryScan
 import com.fyyadi.scan.domain.model.HistoryScanLocal
 import com.fyyadi.scan.domain.model.PlantLabel
 import com.fyyadi.scan.domain.model.PlantLabels
@@ -19,7 +22,9 @@ import com.google.firebase.ml.modeldownloader.FirebaseModelDownloader
 import io.github.jan.supabase.postgrest.Postgrest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.tensorflow.lite.Interpreter
@@ -32,6 +37,7 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import kotlin.collections.map
 
 @Singleton
 class PlantClassificationRepositoryImpl @Inject constructor(
@@ -153,6 +159,11 @@ class PlantClassificationRepositoryImpl @Inject constructor(
             history.toEntity()
         )
     }
+
+    override fun getAllHistoryScan(): Flow<Result<List<HistoryScan>>> =
+        dao.getAllHistory()
+            .map { list -> Result.success(list.map { it.toDomain() }) }
+            .catch { emit(Result.failure(it)) }
 
 
     companion object {

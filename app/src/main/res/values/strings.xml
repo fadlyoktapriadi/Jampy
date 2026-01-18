@@ -13,4 +13,6 @@
     <string name="users_management">Kelola Pengguna / User</string>
     <string name="plants_management">Kelola Data Tanaman</string>
     <string name="report">Laporan</string>
+    <string name="no_history">Tidak ada riwayat aktivitas scan tanaman herbal</string>
+    <string name="detail_history_scan">Detail Riwayat Aktivitas Scan</string>
 </resources>

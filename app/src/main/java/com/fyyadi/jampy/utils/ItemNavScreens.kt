@@ -16,7 +16,7 @@ fun getItemNavScreens(): List<BottomNavItem> =
             title = "Activity",
             selectedIcon = R.drawable.ic_activity,
             unselectedIcon = R.drawable.ic_activity_unselect,
-            route = HomeRoutes.SearchScreen
+            route = HomeRoutes.ActivityHistoryScan
         ),
         BottomNavItem(
             title = "Scan",
