@@ -43,10 +43,12 @@ import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Black600
+import com.fyyadi.theme.Green600
 import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RedPrimary
 import com.fyyadi.theme.RethinkSans
+import com.fyyadi.theme.whiteBackground
 
 @Composable
 fun ProfileScreen(
@@ -76,7 +78,7 @@ fun ProfileScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(BackgroundGreen)
+            .background(whiteBackground)
     ) {
         Row(
             modifier = Modifier
@@ -88,6 +90,18 @@ fun ProfileScreen(
                 painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
                 contentDescription = "Jampy Logo",
                 modifier = Modifier.size(48.dp)
+            )
+            Text(
+                text = "Profile",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = PrimaryGreen,
+                fontFamily = RethinkSans,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                maxLines = 1
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
@@ -116,19 +130,6 @@ fun ProfileScreen(
 
                         is ResultState.Success -> {
                             val profile = (profileState as ResultState.Success<UserProfile?>).data
-                            Log.e("ProfileScreen", "Profile data: $profile")
-                            Text(
-                                text = stringResource(R.string.profile),
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = PrimaryGreen,
-                                fontFamily = RethinkSans,
-                                modifier = Modifier.align(Alignment.CenterHorizontally),
-                                textAlign = TextAlign.Center
-                            )
-
-                            Spacer(modifier = Modifier.height(12.dp))
-
                             AsyncImage(
                                 model = profile?.photoProfile,
                                 contentDescription = profile?.photoProfile,
@@ -183,7 +184,7 @@ fun ProfileScreen(
                                         .padding(horizontal = 24.dp),
                                     shape = RoundedCornerShape(12.dp),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = PrimaryGreen,
+                                        containerColor = Green600,
                                         contentColor = Color.White
                                     )
                                 ) {
@@ -204,7 +205,7 @@ fun ProfileScreen(
                                         .padding(horizontal = 24.dp),
                                     shape = RoundedCornerShape(12.dp),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = PrimaryGreen,
+                                        containerColor = Green600,
                                         contentColor = Color.White
                                     )
                                 ) {
@@ -224,7 +225,7 @@ fun ProfileScreen(
                                         .padding(horizontal = 24.dp),
                                     shape = RoundedCornerShape(12.dp),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = PrimaryGreen,
+                                        containerColor = Green600,
                                         contentColor = Color.White
                                     )
                                 ) {

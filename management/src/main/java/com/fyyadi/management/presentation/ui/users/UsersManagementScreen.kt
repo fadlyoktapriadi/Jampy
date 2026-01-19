@@ -45,11 +45,14 @@ import com.fyyadi.common.ResultState
 import com.fyyadi.core_presentation.R
 import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.theme.Green100
 import com.fyyadi.theme.Green500
+import com.fyyadi.theme.Green600
 import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.fyyadi.theme.SlatePrimary
+import com.fyyadi.theme.whiteBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,6 +63,8 @@ fun UsersManagementScreen(
 ) {
     val viewModel: UsersManagementViewModel = hiltViewModel()
     val usersState by viewModel.usersState.collectAsState()
+    val updateRoleState by viewModel.updateRoleState.collectAsState()
+    val deleteUserState by viewModel.deleteUserState.collectAsState()
 
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -69,30 +74,28 @@ fun UsersManagementScreen(
         viewModel.getAllUsers()
     }
 
+    LaunchedEffect(updateRoleState) {
+        if (updateRoleState is ResultState.Success) {
+            viewModel.getAllUsers()
+        }
+    }
+
+    LaunchedEffect(deleteUserState){
+        if (deleteUserState is ResultState.Success){
+            viewModel.getAllUsers()
+        }
+    }
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { /* TODO: handle add plant */ },
-                containerColor = OrangePrimary,
-                contentColor = Color.White
-            ) {
-                Icon(
-                    painter = painterResource(com.fyyadi.management.R.drawable.ic_add),
-                    contentDescription = "Add Plant",
-                    modifier = Modifier.size(16.dp)
-                )
-            }
-        }
     ) { paddingValues ->
 
         Column(
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(BackgroundGreen)
+                .background(whiteBackground)
         ) {
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -103,14 +106,14 @@ fun UsersManagementScreen(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
-                        .background(Green500.copy(alpha = 0.8f))
+                        .background(Green100)
                         .clickable(onClick = onBackClick),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_left_arrow),
                         contentDescription = "Back",
-                        tint = Color.White,
+                        tint = Green600,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -131,29 +134,33 @@ fun UsersManagementScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Button(
-                    onClick = { /* TODO: filter users */ },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(text = "Users")
-                }
-                Button(
-                    onClick = { /* TODO: filter petugas */ },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = SlatePrimary,
-                        contentColor = PrimaryGreen
-                    ),
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(text = "Petugas")
-                }
-            }
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(horizontal = 24.dp),
+//                horizontalArrangement = Arrangement.spacedBy(12.dp)
+//            ) {
+//                Button(
+//                    onClick = { /* TODO: filter users */ },
+//                    colors = ButtonDefaults.buttonColors(
+//                        containerColor = OrangePrimary,
+//                        contentColor = Color.White
+//                    ),
+//                    modifier = Modifier.weight(1f)
+//                ) {
+//                    Text(text = "Users")
+//                }
+//                Button(
+//                    onClick = { /* TODO: filter petugas */ },
+//                    colors = ButtonDefaults.buttonColors(
+//                        containerColor = SlatePrimary,
+//                        contentColor = Color.White
+//                    ),
+//                    modifier = Modifier.weight(1f)
+//                ) {
+//                    Text(text = "Petugas")
+//                }
+//            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -196,6 +203,8 @@ fun UsersManagementScreen(
                                 ItemUserManagement(user = user, onUserClick, onChangeRole = {
                                     showBottomSheet = true
                                     selectedUser = user
+                                }, onDeleteUser = {
+                                    viewModel.deleteUser(user.userId ?: 0)
                                 })
                             }
                         }
@@ -235,7 +244,7 @@ fun UsersManagementScreen(
     }
 
     if (showBottomSheet && selectedUser != null) {
-        ChangeRoleBottomSheet(
+        ChangeRoleUserBottomSheet(
             sheetState = sheetState,
             user = selectedUser!!,
             onDismiss = {
@@ -243,7 +252,7 @@ fun UsersManagementScreen(
                 selectedUser = null
             },
             onSave = { userId, newRole ->
-//                viewModel.updateUserRole(userId, newRole)
+                viewModel.updateUserRole(userId, newRole)
                 showBottomSheet = false
                 selectedUser = null
             }

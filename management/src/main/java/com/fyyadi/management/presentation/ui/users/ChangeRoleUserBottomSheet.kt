@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -27,19 +28,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fyyadi.domain.model.UserProfile
+import com.fyyadi.theme.Green600
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChangeRoleBottomSheet(
+fun ChangeRoleUserBottomSheet(
     sheetState: SheetState,
     user: UserProfile,
     onDismiss: () -> Unit,
     onSave: (Int, String) -> Unit
 ) {
     val roles = listOf("Pengguna", "Petugas")
-    var selectedRole by remember { mutableStateOf(user.role ?: "Pengguna") }
+    var selectedRole by remember { mutableStateOf(user.role ?: "") }
     var expanded by remember { mutableStateOf(false) }
 
     ModalBottomSheet(
@@ -50,17 +52,17 @@ fun ChangeRoleBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp)
+                .padding(vertical = 4.dp, horizontal = 24.dp)
         ) {
             Text(
                 text = "Ubah Role Pengguna",
-                fontSize = 20.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryGreen,
                 fontFamily = RethinkSans
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             Text(
                 text = user.userFullName ?: "Unknown",
@@ -68,9 +70,8 @@ fun ChangeRoleBottomSheet(
                 color = Color.Gray
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-            // Dropdown
             ExposedDropdownMenuBox(
                 expanded = expanded,
                 onExpandedChange = { expanded = !expanded }
@@ -79,25 +80,38 @@ fun ChangeRoleBottomSheet(
                     value = selectedRole,
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Role") },
+                    label = {
+                        Text(
+                            text = "Pilih Role",
+                            color = PrimaryGreen,
+                            fontFamily = RethinkSans
+                        )
+                    },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                     },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = PrimaryGreen,
-                        unfocusedBorderColor = Color.Gray
+                        unfocusedBorderColor = Color.Gray,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
                     ),
                     modifier = Modifier
+                        .menuAnchor()
                         .fillMaxWidth()
                 )
-
                 ExposedDropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
                     roles.forEach { role ->
                         DropdownMenuItem(
-                            text = { Text(role) },
+                            text = {
+                                Text(
+                                    text = role,
+                                    fontFamily = RethinkSans
+                                )
+                            },
                             onClick = {
                                 selectedRole = role
                                 expanded = false
@@ -107,7 +121,7 @@ fun ChangeRoleBottomSheet(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Button(
                 onClick = {
@@ -115,18 +129,19 @@ fun ChangeRoleBottomSheet(
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = PrimaryGreen
+                    containerColor = Green600
                 )
             ) {
                 Text(
                     text = "Simpan",
                     color = Color.White,
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
+                    fontFamily = RethinkSans,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         }
     }
 }

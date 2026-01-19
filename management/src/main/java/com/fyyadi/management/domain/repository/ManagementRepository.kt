@@ -6,5 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface ManagementRepository {
 
     fun getAllUsers(): Flow<Result<List<UserProfile>>>
+    fun updateUserRole(userId: Int, newRole: String): Flow<Result<Unit>>
 
+    fun deleteUser(userId: Int): Flow<Result<Unit>>
 }

@@ -28,4 +28,34 @@ class ManagementRepositoryImpl @Inject constructor(
             emit(result)
         }
     }
+
+    override fun updateUserRole(userId: Int, newRole: String): Flow<Result<Unit>> {
+        return flow {
+            val result = runCatching {
+                postgrest.from("users")
+                    .update(mapOf("role" to newRole)) {
+                        filter {
+                            eq("user_id", userId)
+                        }
+                    }
+                Unit
+            }
+            emit(result)
+        }
+    }
+
+    override fun deleteUser(userId: Int): Flow<Result<Unit>> {
+        return flow {
+            val result = runCatching {
+                postgrest.from("users")
+                    .delete {
+                        filter {
+                            eq("user_id", userId)
+                        }
+                    }
+                Unit
+            }
+            emit(result)
+        }
+    }
 }

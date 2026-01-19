@@ -35,6 +35,7 @@ import com.fyyadi.jampy.ui.components.PlantCard
 import com.fyyadi.jampy.ui.components.PlantItemSearchCard
 import com.fyyadi.jampy.ui.components.ShimmerPlantCard
 import com.fyyadi.theme.Green400
+import com.fyyadi.theme.Green600
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.fyyadi.theme.whiteBackground
@@ -278,6 +279,7 @@ fun PopularPlantsSection(
             fontSize = 18.sp,
             fontFamily = RethinkSans,
             fontWeight = FontWeight.Bold,
+            color = Green600,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),

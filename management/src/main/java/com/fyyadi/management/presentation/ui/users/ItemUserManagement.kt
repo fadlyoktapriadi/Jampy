@@ -36,7 +36,8 @@ import com.fyyadi.theme.PrimaryGreen
 fun ItemUserManagement(
     user: UserProfile,
     onUsersClick: (Int) -> Unit = {},
-    onChangeRole: () -> Unit = {}
+    onChangeRole: () -> Unit = {},
+    onDeleteUser: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier
@@ -100,7 +101,9 @@ fun ItemUserManagement(
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 IconButton(
-                    onClick = { /* TODO: handle delete */ },
+                    onClick = {
+                        onDeleteUser()
+                    },
                     modifier = Modifier.size(32.dp)
                 ) {
                     Icon(
