@@ -78,7 +78,7 @@ fun BottomNavigationBar(
                             painter = painterResource(
                                 id = if (isSelected) item.selectedIcon else item.unselectedIcon
                             ),
-                            modifier = Modifier.size(28.dp),
+                            modifier = Modifier.size(22.dp),
                             contentDescription = item.title,
                         )
                     },

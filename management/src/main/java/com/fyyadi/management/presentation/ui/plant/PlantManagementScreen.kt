@@ -27,6 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,32 +40,60 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fyyadi.common.ResultState
+import com.fyyadi.components.DialogPopUp
 import com.fyyadi.core_presentation.R
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.theme.BackgroundGreen
+import com.fyyadi.theme.Green100
 import com.fyyadi.theme.Green500
+import com.fyyadi.theme.Green600
 import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
+import com.fyyadi.theme.whiteBackground
 
 @Composable
 fun PlantManagementScreen(
     modifier: Modifier = Modifier,
     onPlantClick: (Int) -> Unit = {},
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onAddNewPlantClick: () -> Unit = {},
+    onEditPlantClick: (Int) -> Unit = {}
 ) {
     val viewModel: PlantManagementViewModel = hiltViewModel()
     val plantsState by viewModel.plantsState.collectAsState()
+    val deletePlantState by viewModel.deletePlantState.collectAsState()
+    var showSuccessDialog by remember { mutableStateOf(false) }
+
 
     LaunchedEffect(Unit) {
         viewModel.getAllPlants()
+    }
+
+    LaunchedEffect(deletePlantState) {
+        if (deletePlantState is ResultState.Success) {
+            showSuccessDialog = true
+        }
+    }
+
+    if (showSuccessDialog) {
+        DialogPopUp(
+            title = "Berhasil",
+            imageRes = R.drawable.illustration_success,
+            description = "Data tanaman berhasil dihapus.",
+            onDismissRequest = { showSuccessDialog = false },
+            onCloseClick = {
+                showSuccessDialog = false
+                viewModel.getAllPlants()
+            }
+        )
     }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* TODO: handle add plant */ },
+                onClick = { onAddNewPlantClick() },
                 containerColor = OrangePrimary,
                 contentColor = Color.White
             ) {
@@ -79,7 +110,7 @@ fun PlantManagementScreen(
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(BackgroundGreen)
+                .background(whiteBackground)
         ) {
 
             Row(
@@ -92,14 +123,14 @@ fun PlantManagementScreen(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
-                        .background(Green500.copy(alpha = 0.8f))
+                        .background(Green100)
                         .clickable(onClick = onBackClick),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_left_arrow),
                         contentDescription = "Back",
-                        tint = Color.White,
+                        tint = Green600,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -156,7 +187,14 @@ fun PlantManagementScreen(
                             contentPadding = PaddingValues(bottom = 45.dp)
                         ) {
                             items(plants) { plant ->
-                                ItemPlantManagement(plant = plant, onPlantClick)
+                                ItemPlantManagement(
+                                    plant = plant,
+                                    onEditPlantClick = {
+                                        onEditPlantClick(plant.idPlant)
+                                    }, onDeletePlantClick = {
+                                        viewModel.deletePlant(plant.idPlant)
+                                    }
+                                )
                             }
                         }
                     }

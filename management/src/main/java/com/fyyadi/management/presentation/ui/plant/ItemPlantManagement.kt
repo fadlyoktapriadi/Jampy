@@ -32,13 +32,14 @@ import com.fyyadi.theme.PrimaryGreen
 @Composable
 fun ItemPlantManagement(
     plant: Plant,
-    onPlantClick: (Int) -> Unit = {}
+    onEditPlantClick: () -> Unit = {},
+    onDeletePlantClick: () -> Unit = {},
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
-                onClick = { onPlantClick(plant.idPlant) }
+                onClick = {  }
             ),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -55,11 +56,11 @@ fun ItemPlantManagement(
                 contentDescription = plant.plantName,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(70.dp)
                     .clip(RoundedCornerShape(12.dp))
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
             Column {
                 Text(
@@ -79,26 +80,26 @@ fun ItemPlantManagement(
                 horizontalArrangement = Arrangement.End
             ) {
                 IconButton(
-                    onClick = { /* TODO: handle edit */ },
+                    onClick = { onEditPlantClick() },
                     modifier = Modifier.size(32.dp)
                 ) {
                     Icon(
                         painter = painterResource(com.fyyadi.management.R.drawable.ic_edit),
                         contentDescription = "Edit plant",
                         tint = PrimaryGreen,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 IconButton(
-                    onClick = { /* TODO: handle delete */ },
+                    onClick = { onDeletePlantClick() },
                     modifier = Modifier.size(32.dp)
                 ) {
                     Icon(
                         painter = painterResource(com.fyyadi.management.R.drawable.ic_delete),
                         contentDescription = "Delete plant",
                         tint = Color.Red,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
