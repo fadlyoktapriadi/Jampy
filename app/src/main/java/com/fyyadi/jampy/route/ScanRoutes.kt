@@ -13,7 +13,8 @@ sealed class ScanRoutes : BaseRoute() {
 
     @Serializable
     data class ResultScanScreen(
-        val plantLabels: String, val imageResultUri: String,
+        val plantLabels: String,
+        val imageResultUri: String,
         val userEmail: String
     ) : ScanRoutes()
 

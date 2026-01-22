@@ -1,25 +1,21 @@
 package com.fyyadi.jampy.ui.screen.home
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -70,7 +66,7 @@ fun HomeScreen(
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(whiteBackground)
     ) {
@@ -89,11 +85,16 @@ fun HomeScreen(
                 value = searchQuery,
                 onValueChange = { viewModel.onSearchQueryChange(it) },
                 textStyle = LocalTextStyle.current.copy(color = Color.Black),
-                placeholder = { Text("Cari tanaman...", color = Color.Gray) },
+                placeholder = {
+                    Text(
+                        stringResource(R.string.search_placeholder),
+                        color = Color.Gray
+                    )
+                },
                 leadingIcon = {
                     Image(
                         painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.search_grey),
-                        contentDescription = "Search Icon",
+                        contentDescription = stringResource(R.string.search),
                         modifier = Modifier.size(16.dp)
                     )
                 },
@@ -118,7 +119,10 @@ fun HomeScreen(
                 is ResultState.Success -> {
                     val userProfile = (profileUserState as ResultState.Success<UserProfile?>).data
                     Text(
-                        text = "Hai, ${userProfile?.userFullName}",
+                        text = stringResource(
+                            R.string.welcome_home_page_name,
+                            userProfile?.userFullName ?: ""
+                        ),
                         fontSize = 24.sp,
                         fontFamily = RethinkSans,
                         fontWeight = FontWeight.Bold,
@@ -158,7 +162,10 @@ fun HomeScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Tidak ada hasil untuk \"$searchQuery\"",
+                                text = stringResource(
+                                    R.string.result_search_not_found,
+                                    searchQuery
+                                ),
                                 color = PrimaryGreen,
                                 fontSize = 16.sp
                             )
@@ -189,7 +196,7 @@ fun HomeScreen(
                             Text(text = "Error: $msg", color = Color.Red)
                             Spacer(Modifier.height(12.dp))
                             Button(onClick = { viewModel.getPlants() }) {
-                                Text("Retry")
+                                Text(stringResource(R.string.retry))
                             }
                         }
                     }
@@ -207,9 +214,7 @@ fun HomeScreen(
                 }
             }
         }
-
     }
-
 }
 
 @Composable
@@ -235,7 +240,7 @@ fun CardInformationHome() {
                 modifier = Modifier.padding(start = 16.dp, top = 12.dp)
             ) {
                 Text(
-                    text = "Jampy",
+                    text = stringResource(R.string.app_name),
                     color = PrimaryGreen,
                     fontWeight = FontWeight.Medium,
                     fontSize = 12.sp,
@@ -250,7 +255,7 @@ fun CardInformationHome() {
             ) {
                 Column(modifier = Modifier.weight(3f)) {
                     Text(
-                        text = "Cukup satu foto, untuk kenali tanaman herbal dan resepnya",
+                        text = stringResource(R.string.home_card_description),
                         color = Color.Black,
                         fontWeight = FontWeight.Medium,
                         fontSize = 14.sp,
@@ -294,18 +299,20 @@ fun PopularPlantsSection(
 
         when (plantHomeState) {
             is ResultState.Loading -> {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        16.dp
-                    )
-                ) {
+                Column {
                     repeat(4) {
-                        ShimmerPlantCard()
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            ShimmerPlantCard()
+                            ShimmerPlantCard()
+                        }
                     }
                 }
+
             }
 
             is ResultState.Success -> {

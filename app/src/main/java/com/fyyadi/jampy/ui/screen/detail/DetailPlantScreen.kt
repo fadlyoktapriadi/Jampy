@@ -1,7 +1,6 @@
 package com.fyyadi.jampy.ui.screen.detail
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -39,9 +38,7 @@ import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Black600
 import com.fyyadi.theme.Green100
-import com.fyyadi.theme.Green400
 import com.fyyadi.theme.Green600
-import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.fyyadi.theme.SecondaryGreen
@@ -354,7 +351,7 @@ fun StaticTopBar(
         ) {
             Icon(
                 painter = painterResource(com.fyyadi.core_presentation.R.drawable.bookmark_filled),
-                contentDescription = "Bookmark",
+                contentDescription = stringResource(R.string.bookmark),
                 tint = if (isBookmarked) Green600 else SlateSecondary,
                 modifier = Modifier.size(24.dp)
             )

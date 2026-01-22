@@ -1,7 +1,6 @@
 package com.fyyadi.jampy.ui
 
 import android.app.Activity
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -23,7 +22,6 @@ import com.fyyadi.jampy.route.BaseRoute
 import com.fyyadi.jampy.route.HomeRoutes
 import com.fyyadi.jampy.ui.components.BottomNavigationBar
 import com.fyyadi.jampy.utils.getItemNavScreens
-import com.fyyadi.theme.Green600
 import com.fyyadi.theme.whiteBackground
 
 @Composable

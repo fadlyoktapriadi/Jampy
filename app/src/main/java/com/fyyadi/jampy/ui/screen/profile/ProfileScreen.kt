@@ -94,11 +94,11 @@ fun ProfileScreen(
         ) {
             Image(
                 painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
-                contentDescription = "Jampy Logo",
+                contentDescription = stringResource(R.string.app_name),
                 modifier = Modifier.size(48.dp)
             )
             Text(
-                text = "Profile",
+                text = stringResource(R.string.profile),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryGreen,
@@ -264,11 +264,8 @@ fun ProfileScreen(
                                     textAlign = TextAlign.Center
                                 )
                             }
-
                         }
-
                         ResultState.Idle -> {
-
                         }
                     }
                 }

@@ -70,11 +70,11 @@ fun ActivityHistoryScreen(
         ) {
             Image(
                 painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
-                contentDescription = "Jampy Logo",
+                contentDescription = stringResource(R.string.app_name),
                 modifier = Modifier.size(48.dp)
             )
             Text(
-                text = "Aktivitas",
+                text = stringResource(R.string.activity),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryGreen,
@@ -151,7 +151,7 @@ fun ActivityHistoryScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Button(onClick = { viewModel.getAllHistoryScanPlants() }) {
-                        Text(text = "Load Bookmarks")
+                        Text(text = stringResource(R.string.load_bookmark))
                     }
                 }
             }

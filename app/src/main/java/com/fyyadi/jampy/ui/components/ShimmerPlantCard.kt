@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-
 @Composable
 private fun rememberShimmerBrush(): Brush {
     val transition = rememberInfiniteTransition(label = "shimmer")
@@ -57,6 +56,7 @@ fun ShimmerPlantCard(modifier: Modifier = Modifier, search: Boolean = false, ) {
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = if (search) modifier.fillMaxWidth()
         else modifier.width(180.dp)
+
     ) {
         Column(
             modifier = Modifier

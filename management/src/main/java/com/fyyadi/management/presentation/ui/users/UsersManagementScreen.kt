@@ -118,7 +118,7 @@ fun UsersManagementScreen(
     if (showConfirmDeleteDialog) {
         DialogPopUp(
             title = "Konfirmasi!",
-            imageRes = R.drawable.illustration_error,
+            imageRes = R.drawable.illustration_alert,
             description = "Apakah anda yakin data ini akan dihapus?",
             onDismissRequest = { showSuccessDialog = false },
             onCloseClick = {

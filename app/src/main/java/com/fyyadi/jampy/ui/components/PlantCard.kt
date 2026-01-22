@@ -45,13 +45,13 @@ fun PlantCard(
             AsyncImage(
                 model = plant.imagePlant,
                 contentDescription = plant.plantName,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .height(110.dp)
                     .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = modifier.height(12.dp))
             Text(
                 text = plant.plantName,
                 fontFamily = RethinkSans,

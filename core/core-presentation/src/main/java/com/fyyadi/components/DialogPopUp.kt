@@ -63,7 +63,7 @@ fun DialogPopUp(
                 painter = painterResource(imageRes),
                 contentDescription = title,
                 modifier = Modifier.fillMaxWidth()
-                    .height(200.dp)
+                    .height(230.dp)
             )
             Spacer(Modifier.height(16.dp))
             Text(

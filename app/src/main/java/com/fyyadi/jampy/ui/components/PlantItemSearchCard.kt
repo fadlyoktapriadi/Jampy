@@ -32,7 +32,6 @@ import coil3.compose.AsyncImage
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.theme.OrangePrimary
 
-
 @Composable
 fun PlantItemSearchCard(
     plant: Plant,
@@ -40,7 +39,7 @@ fun PlantItemSearchCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = 4.dp)
             .clickable(
                 onClick = { onPlantClick(plant.idPlant) }
             ),

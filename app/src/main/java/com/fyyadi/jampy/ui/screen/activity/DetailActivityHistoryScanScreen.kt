@@ -1,7 +1,6 @@
 package com.fyyadi.jampy.ui.screen.activity
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -37,17 +36,13 @@ import com.fyyadi.domain.model.Plant
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.screen.detail.DetailPlantViewModel
-import com.fyyadi.scan.presentation.ui.TitleContent
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Black600
 import com.fyyadi.theme.Green100
-import com.fyyadi.theme.Green400
 import com.fyyadi.theme.Green600
-import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.fyyadi.theme.SecondaryGreen
-import com.fyyadi.theme.SlateSecondary
 import com.fyyadi.theme.whiteBackground
 
 @Composable
@@ -181,9 +176,8 @@ fun TitleContentHistoryScan(plant: Plant?, accuracy: String, modifier: Modifier 
                 fontWeight = FontWeight.ExtraBold,
                 color = PrimaryGreen
             )
-//            val accuracyPercent = (accuracy * 100).toInt()
             Text(
-                text = "Akurasi: ${accuracy}%",
+                text = stringResource(R.string.accuracy_result, accuracy),
                 fontSize = 16.sp,
                 fontFamily = RethinkSans,
                 fontWeight = FontWeight.ExtraBold,

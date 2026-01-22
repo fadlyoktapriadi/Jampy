@@ -89,7 +89,7 @@ fun ResultScanScreen(
     if (lowConfidence) {
         DialogPopUp(
             title = "Hasil Klasifikasi",
-            imageRes = com.fyyadi.scan.R.drawable.ic_illustration_low_confidence,
+            imageRes = R.drawable.illustration_alert,
             description = "Akurasi dibawah 50% kemungkinan sistem sulit mendeteksi foto tanaman herbal",
             onDismissRequest = {
                 lowConfidence = false

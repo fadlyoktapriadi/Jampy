@@ -3,7 +3,6 @@ package com.fyyadi.jampy.ui.screen.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fyyadi.auth.domain.usecase.AuthUseCase
-import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.domain.usecase.CoreUseCase
 import com.fyyadi.jampy.common.ResultState

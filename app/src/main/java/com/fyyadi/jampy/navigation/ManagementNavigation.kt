@@ -5,9 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.fyyadi.jampy.route.HomeRoutes
 import com.fyyadi.jampy.route.ManagementRoutes
-import com.fyyadi.jampy.ui.screen.activity.DetailActivityHistoryScanScreen
 import com.fyyadi.management.presentation.ui.plant.AddPlantScreen
 import com.fyyadi.management.presentation.ui.plant.EditPlantScreen
 import com.fyyadi.management.presentation.ui.plant.PlantManagementScreen
