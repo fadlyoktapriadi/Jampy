@@ -49,6 +49,7 @@ import com.fyyadi.theme.Green500
 import com.fyyadi.theme.Green600
 import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
+import com.fyyadi.theme.RedPrimary
 import com.fyyadi.theme.RethinkSans
 import com.fyyadi.theme.whiteBackground
 
@@ -64,7 +65,8 @@ fun PlantManagementScreen(
     val plantsState by viewModel.plantsState.collectAsState()
     val deletePlantState by viewModel.deletePlantState.collectAsState()
     var showSuccessDialog by remember { mutableStateOf(false) }
-
+    var showConfirmDeleteDialog by remember { mutableStateOf(false) }
+    var idDelete by remember { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
         viewModel.getAllPlants()
@@ -86,6 +88,24 @@ fun PlantManagementScreen(
                 showSuccessDialog = false
                 viewModel.getAllPlants()
             }
+        )
+    }
+
+    if (showConfirmDeleteDialog) {
+        DialogPopUp(
+            title = "Konfirmasi!",
+            imageRes = R.drawable.illustration_error,
+            description = "Apakah anda yakin data ini akan dihapus?",
+            onDismissRequest = { showSuccessDialog = false },
+            onCloseClick = {
+                showConfirmDeleteDialog = false
+            },
+            textConfirm = "Hapus",
+            onConfirmClick = {
+                viewModel.deletePlant(idDelete)
+                showConfirmDeleteDialog = false
+            },
+            colorConfirmButton = RedPrimary
         )
     }
 
@@ -192,7 +212,8 @@ fun PlantManagementScreen(
                                     onEditPlantClick = {
                                         onEditPlantClick(plant.idPlant)
                                     }, onDeletePlantClick = {
-                                        viewModel.deletePlant(plant.idPlant)
+                                        idDelete = plant.idPlant
+                                        showConfirmDeleteDialog = true
                                     }
                                 )
                             }

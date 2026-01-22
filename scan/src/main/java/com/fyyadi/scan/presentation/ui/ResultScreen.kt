@@ -32,6 +32,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,27 +52,23 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.fyyadi.common.ResultState
+import com.fyyadi.components.DialogPopUp
 import com.fyyadi.components.MarkdownText
 import com.fyyadi.core_presentation.R
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.PlantLabel
-import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Black600
 import com.fyyadi.theme.Green100
-import com.fyyadi.theme.Green400
-import com.fyyadi.theme.Green500
 import com.fyyadi.theme.Green600
-import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.fyyadi.theme.SecondaryGreen
-import com.fyyadi.theme.SlateSecondary
 import com.fyyadi.theme.whiteBackground
 
 @Composable
 fun ResultScanScreen(
     modifier: Modifier = Modifier,
-    plantResult: List<PlantLabel>,
+    plantResult: PlantLabel,
     imageResultUri: String,
     userEmail: String,
     onBackClick: () -> Unit
@@ -77,13 +76,31 @@ fun ResultScanScreen(
 
     val viewModel: ScanViewModel = hiltViewModel()
     val detailResultClassify by viewModel.detailResultClassify.collectAsState()
+    var lowConfidence by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        viewModel.getDetailResultClassify(plantResult.first().displayName)
+        viewModel.getDetailResultClassify(plantResult.displayName)
     }
 
-    LaunchedEffect(plantResult.firstOrNull()?.displayName) {
-        plantResult.firstOrNull()?.displayName?.let { viewModel.getDetailResultClassify(it) }
+    LaunchedEffect(plantResult.displayName) {
+        plantResult.displayName.let { viewModel.getDetailResultClassify(it) }
+    }
+
+    if (lowConfidence) {
+        DialogPopUp(
+            title = "Hasil Klasifikasi",
+            imageRes = com.fyyadi.scan.R.drawable.ic_illustration_low_confidence,
+            description = "Akurasi dibawah 50% kemungkinan sistem sulit mendeteksi foto tanaman herbal",
+            onDismissRequest = {
+                lowConfidence = false
+                onBackClick()
+            },
+            onCloseClick = {
+                lowConfidence = false
+                onBackClick()
+            },
+            modifier = modifier
+        )
     }
 
     when (detailResultClassify) {
@@ -97,12 +114,15 @@ fun ResultScanScreen(
                 CircularProgressIndicator(color = PrimaryGreen)
             }
         }
+
         is ResultState.Success -> {
             val plant = (detailResultClassify as ResultState.Success<Plant?>).data
 
+            if(plantResult.confidence < 0.5f) lowConfidence = true
+
             LaunchedEffect(plant?.idPlant) {
                 plant?.let {
-                    val acc = (plantResult.firstOrNull()?.confidence?.times(100))?.toInt() ?: 0
+                    val acc = (plantResult.confidence.times(100)).toInt()
                     viewModel.saveHistoryScan(
                         userEmail = userEmail,
                         plantId = it.idPlant,
@@ -122,14 +142,27 @@ fun ResultScanScreen(
             DetailPlantResult(
                 plant = plant,
                 imageResultUri = imageResultUri,
-                accuracy = plantResult.firstOrNull()?.confidence ?: 0f,
+                accuracy = plantResult.confidence,
                 onBackClick = onBackClick,
                 modifier = modifier
             )
         }
+
         is ResultState.Error -> {
             val errorMsg = (detailResultClassify as ResultState.Error).message
-            Log.e("CEK ERROR", "ResultScanScreen: $errorMsg")
+
+            DialogPopUp(
+                title = "Terjadi Kesalahan",
+                imageRes = R.drawable.illustration_error,
+                description = errorMsg.toString(),
+                onDismissRequest = {
+                    onBackClick()
+                },
+                onCloseClick = {
+                    onBackClick()
+                },
+                modifier = modifier
+            )
         }
 
         ResultState.Idle -> {
@@ -201,7 +234,7 @@ fun TitleContent(plant: Plant?, accuracy: Float, modifier: Modifier = Modifier) 
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Text(
                 text = plant?.plantName ?: "",
                 fontSize = 20.sp,
@@ -319,8 +352,10 @@ fun BodyContent(plant: Plant?, modifier: Modifier = Modifier, headerHeight: Dp) 
                                     .padding(horizontal = 12.dp, vertical = 6.dp)
                             ) {
                                 Text(
-                                    text = benefit.trim().replaceFirstChar { if (it.isLowerCase()) it.titlecase()
-                                    else it.toString() },
+                                    text = benefit.trim().replaceFirstChar {
+                                        if (it.isLowerCase()) it.titlecase()
+                                        else it.toString()
+                                    },
                                     color = Color.White,
                                     fontSize = 12.sp,
                                     fontFamily = RethinkSans

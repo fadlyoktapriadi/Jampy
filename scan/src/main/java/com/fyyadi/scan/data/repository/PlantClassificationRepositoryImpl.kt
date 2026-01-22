@@ -2,7 +2,6 @@ package com.fyyadi.scan.data.repository
 
 import android.graphics.Bitmap
 import android.util.Log
-import com.fyyadi.data.mapper.toDomain
 import com.fyyadi.data.mapper.toPlant
 import com.fyyadi.data.source.local.room.dao.ScanHistoryDao
 import com.fyyadi.data.source.network.dto.PlantDto
@@ -91,7 +90,7 @@ class PlantClassificationRepositoryImpl @Inject constructor(
                 val processedImage = imageProcessor.process(tensorImage)
 
                 val inputBuffer = processedImage.buffer
-                val outputArray = Array(1) { FloatArray(10) }
+                val outputArray = Array(1) { FloatArray(PlantLabels.LABELS.size) }
 
                 currentInterpreter.run(inputBuffer, outputArray)
 
@@ -101,8 +100,8 @@ class PlantClassificationRepositoryImpl @Inject constructor(
                 predictions.forEachIndexed { index, confidence ->
                     if (confidence > CONFIDENCE_THRESHOLD && index < PlantLabels.LABELS.size) {
                         val label = PlantLabels.LABELS[index]
-                        val displayName = PlantLabels.DISPLAY_NAMES[label] ?: label
-                        results.add(PlantLabel(label, displayName, confidence))
+//                        val displayName = PlantLabels.DISPLAY_NAMES[label] ?: label
+                        results.add(PlantLabel(label, label, confidence))
                     }
                 }
 

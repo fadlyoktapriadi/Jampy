@@ -1,5 +1,6 @@
 package com.fyyadi.jampy.ui.screen.bookmark
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +35,6 @@ import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.components.PlantItemSearchCard
 import com.fyyadi.jampy.ui.components.ShimmerPlantCard
-import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.fyyadi.theme.whiteBackground
@@ -42,10 +42,15 @@ import com.fyyadi.theme.whiteBackground
 @Composable
 fun BookmarkScreen(
     modifier: Modifier = Modifier,
+    onBackPressed: () -> Unit = {},
     onPlantClick: (Int) -> Unit = {}
 ) {
     val viewModel: BookmarkViewModel = hiltViewModel()
     val bookmarkPlantState by viewModel.bookmarkPlantState.collectAsState()
+
+    BackHandler {
+        onBackPressed()
+    }
 
     LaunchedEffect(Unit) {
         viewModel.getAllBookmarkPlants()

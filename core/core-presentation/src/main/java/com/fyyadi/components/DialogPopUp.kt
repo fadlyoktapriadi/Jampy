@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,6 +35,9 @@ fun DialogPopUp(
     description: String,
     onDismissRequest: () -> Unit,
     onCloseClick: () -> Unit,
+    textConfirm: String? = null,
+    onConfirmClick: () -> Unit = {},
+    colorConfirmButton: Color = Green600,
     modifier: Modifier = Modifier
 ) {
     Dialog(
@@ -47,7 +49,7 @@ fun DialogPopUp(
                 .padding(horizontal = 12.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(Color.White)
-                .padding(8.dp),
+                .padding(horizontal = 24.dp, vertical = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -56,49 +58,31 @@ fun DialogPopUp(
                 fontSize = 24.sp,
                 color = Color.Black,
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(16.dp))
             Image(
                 painter = painterResource(imageRes),
                 contentDescription = title,
                 modifier = Modifier.fillMaxWidth()
+                    .height(200.dp)
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(16.dp))
             Text(
                 text = description,
                 fontFamily = RethinkSans,
                 fontSize = 14.sp,
-                lineHeight = 18.sp,
                 color = Color.Black,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 12.dp)
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-//                Button(
-//                    onClick = onCloseClick,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(horizontal = 8.dp, vertical = 4.dp),
-//                    colors = ButtonDefaults.buttonColors(
-//                        containerColor = Green600
-//                    )
-//                ) {
-//                    Text(
-//                        text = "Tutup",
-//                        color = Color.White,
-//                        fontSize = 14.sp,
-//                        fontFamily = RethinkSans,
-//                        modifier = Modifier.padding(vertical = 4.dp)
-//                    )
-//                }
-                Spacer(Modifier.width(8.dp))
                 Button(
                     onClick = onCloseClick,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                        .weight(1f),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Green600
                     )
@@ -110,6 +94,25 @@ fun DialogPopUp(
                         fontFamily = RethinkSans,
                         modifier = Modifier.padding(vertical = 4.dp)
                     )
+                }
+                if (textConfirm != null) {
+                    Spacer(Modifier.width(8.dp))
+                    Button(
+                        onClick = onConfirmClick,
+                        modifier = Modifier
+                            .weight(1f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorConfirmButton
+                        )
+                    ) {
+                        Text(
+                            text = textConfirm,
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            fontFamily = RethinkSans,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
                 }
             }
         }

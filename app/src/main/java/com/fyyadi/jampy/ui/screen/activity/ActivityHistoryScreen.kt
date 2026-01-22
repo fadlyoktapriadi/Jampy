@@ -1,5 +1,6 @@
 package com.fyyadi.jampy.ui.screen.activity
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,13 +31,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.fyyadi.domain.model.Plant
 import com.fyyadi.jampy.R
 import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.components.PlantHistoryScanCard
-import com.fyyadi.jampy.ui.components.PlantItemSearchCard
 import com.fyyadi.jampy.ui.components.ShimmerPlantCard
-import com.fyyadi.jampy.ui.screen.bookmark.BookmarkViewModel
 import com.fyyadi.scan.domain.model.HistoryScan
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
@@ -45,10 +43,15 @@ import com.fyyadi.theme.whiteBackground
 @Composable
 fun ActivityHistoryScreen(
     modifier: Modifier = Modifier,
-    onPlantClick: (Int, String, String) -> Unit
+    onPlantClick: (Int, String, String) -> Unit,
+    onBackPressed: () -> Unit
 ) {
     val viewModel: ActivityHistoryViewModel = hiltViewModel()
     val activityHistoryState by viewModel.activityHistoryState.collectAsState()
+
+    BackHandler {
+        onBackPressed()
+    }
 
     LaunchedEffect(Unit) {
         viewModel.getAllHistoryScanPlants()
@@ -80,7 +83,7 @@ fun ActivityHistoryScreen(
                     .weight(1f)
                     .fillMaxWidth()
                     .padding(start = 8.dp),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                textAlign = TextAlign.Center,
                 maxLines = 1
             )
         }
@@ -120,7 +123,6 @@ fun ActivityHistoryScreen(
                         Modifier
                             .padding(bottom = 6.dp, start = 24.dp, end = 24.dp)
                             .fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         items(plants) { plant ->
                             PlantHistoryScanCard(history = plant, onPlantClick)

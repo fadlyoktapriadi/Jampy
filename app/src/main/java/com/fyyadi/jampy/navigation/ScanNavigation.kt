@@ -64,7 +64,7 @@ object ScanNavigation {
 
             ResultScanScreen(
                 modifier = modifier,
-                plantResult = plantResult,
+                plantResult = plantResult[0],
                 imageResultUri = args.imageResultUri,
                 userEmail = args.userEmail,
                 onBackClick = { navController.popBackStack() }

@@ -1,6 +1,7 @@
 package com.fyyadi.jampy.ui.screen.home
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,6 +44,7 @@ import com.fyyadi.theme.whiteBackground
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    onBackPressed: () -> Unit = {},
     onPlantClick: (Int) -> Unit = {}
 ) {
     val viewModel: HomeViewModel = hiltViewModel()
@@ -52,6 +54,9 @@ fun HomeScreen(
     val searchPlantState by viewModel.searchPlantState.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
 
+    BackHandler {
+        onBackPressed()
+    }
 
     LaunchedEffect(Unit) {
         viewModel.getUserProfile()

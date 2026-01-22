@@ -59,10 +59,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.core.net.toUri
 import com.fyyadi.common.ResultState
+import com.fyyadi.components.DialogPopUp
 import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.theme.Slate200
-import com.fyyadi.theme.SlatePrimary
-import com.fyyadi.theme.SlateSecondary
 import com.fyyadi.theme.whiteBackground
 
 @Composable
@@ -287,7 +286,7 @@ fun ScanScreen(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
+                .padding(top = 12.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
                 .clickable {
                     selectedImage?.let { uri ->
                         coroutineScope.launch {
@@ -304,11 +303,12 @@ fun ScanScreen(
                             }
                             if (bitmap != null) {
                                 viewModel.classifyImage(bitmap)
+                                Log.e("CEK IMAGE", "ScanScreen: $bitmap")
                             }
                         }
                     }
                 },
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(containerColor = OrangePrimary),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
@@ -371,22 +371,12 @@ fun ScanScreen(
                 }
 
                 is ResultState.Error -> {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 24.dp, vertical = 8.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.Red.copy(alpha = 0.1f)),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-                    ) {
-                        Log.e("ScanScreen", "Error: ${result.message}")
-                        Text(
-                            text = "Error: ${result.message ?: "Unknown error"}",
-                            fontSize = 14.sp,
-                            color = Color.Red,
-                            modifier = Modifier.padding(16.dp)
-                        )
-                    }
+                    Text(
+                        text = "Error: ${result.message ?: "Unknown error"}",
+                        fontSize = 14.sp,
+                        color = Color.Red,
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
             }
         }

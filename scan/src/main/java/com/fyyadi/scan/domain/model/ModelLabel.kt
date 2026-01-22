@@ -8,16 +8,18 @@ data class PlantLabel(
 
 object PlantLabels {
     val LABELS = listOf(
-        "belimbing_wuluh",
-        "jahe",
-        "jambu_biji",
-        "jeruk_nipis",
-        "kemangi",
-        "kunyit",
-        "lidah_buaya",
-        "mint",
-        "pepaya",
-        "sirih"
+        "Daun Basil",
+        "Daun Belimbing Wuluh",
+        "Daun Jambu Biji",
+        "Daun Jeruk Nipis",
+        "Daun Kelor",
+        "Daun Kunyit",
+        "Daun Mint",
+        "Daun Pepaya",
+        "Daun Sirih",
+        "Jahe",
+        "Kunyit",
+        "Lidah Buaya"
     )
     
     val DISPLAY_NAMES = mapOf(

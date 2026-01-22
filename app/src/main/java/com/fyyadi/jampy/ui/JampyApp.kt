@@ -75,6 +75,7 @@ fun JampyApp(
             )
             homeNavigation(
                 navController = navController,
+                activity = activity,
                 modifier = Modifier.fillMaxWidth()
             )
             scanNavigation(

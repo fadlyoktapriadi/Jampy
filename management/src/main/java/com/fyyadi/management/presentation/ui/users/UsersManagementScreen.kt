@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fyyadi.common.ResultState
+import com.fyyadi.components.DialogPopUp
 import com.fyyadi.core_presentation.R
 import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.theme.BackgroundGreen
@@ -50,6 +51,7 @@ import com.fyyadi.theme.Green500
 import com.fyyadi.theme.Green600
 import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
+import com.fyyadi.theme.RedPrimary
 import com.fyyadi.theme.RethinkSans
 import com.fyyadi.theme.SlatePrimary
 import com.fyyadi.theme.whiteBackground
@@ -69,6 +71,11 @@ fun UsersManagementScreen(
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
     var selectedUser by remember { mutableStateOf<UserProfile?>(null) }
+    var showSuccessDialog by remember { mutableStateOf(false) }
+    var showSuccessDeleteDialog by remember { mutableStateOf(false) }
+    var showConfirmDeleteDialog by remember { mutableStateOf(false) }
+    var idDelete by remember { mutableStateOf(0) }
+
 
     LaunchedEffect(Unit) {
         viewModel.getAllUsers()
@@ -76,14 +83,54 @@ fun UsersManagementScreen(
 
     LaunchedEffect(updateRoleState) {
         if (updateRoleState is ResultState.Success) {
+            showSuccessDialog = true
             viewModel.getAllUsers()
         }
     }
 
     LaunchedEffect(deleteUserState){
         if (deleteUserState is ResultState.Success){
+            showSuccessDeleteDialog = true
             viewModel.getAllUsers()
         }
+    }
+
+    if (showSuccessDialog) {
+        DialogPopUp(
+            title = "Berhasil",
+            imageRes = R.drawable.illustration_success,
+            description = "Data user berhasil disimpan.",
+            onDismissRequest = { showSuccessDialog = false },
+            onCloseClick = { showSuccessDialog = false }
+        )
+    }
+
+    if (showSuccessDeleteDialog) {
+        DialogPopUp(
+            title = "Berhasil",
+            imageRes = R.drawable.illustration_success,
+            description = "Data user berhasil dihapus.",
+            onDismissRequest = { showSuccessDeleteDialog = false },
+            onCloseClick = { showSuccessDeleteDialog = false }
+        )
+    }
+
+    if (showConfirmDeleteDialog) {
+        DialogPopUp(
+            title = "Konfirmasi!",
+            imageRes = R.drawable.illustration_error,
+            description = "Apakah anda yakin data ini akan dihapus?",
+            onDismissRequest = { showSuccessDialog = false },
+            onCloseClick = {
+                showConfirmDeleteDialog = false
+            },
+            textConfirm = "Hapus",
+            onConfirmClick = {
+                viewModel.deleteUser(idDelete)
+                showConfirmDeleteDialog = false
+            },
+            colorConfirmButton = RedPrimary
+        )
     }
 
     Scaffold(
@@ -134,36 +181,6 @@ fun UsersManagementScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(horizontal = 24.dp),
-//                horizontalArrangement = Arrangement.spacedBy(12.dp)
-//            ) {
-//                Button(
-//                    onClick = { /* TODO: filter users */ },
-//                    colors = ButtonDefaults.buttonColors(
-//                        containerColor = OrangePrimary,
-//                        contentColor = Color.White
-//                    ),
-//                    modifier = Modifier.weight(1f)
-//                ) {
-//                    Text(text = "Users")
-//                }
-//                Button(
-//                    onClick = { /* TODO: filter petugas */ },
-//                    colors = ButtonDefaults.buttonColors(
-//                        containerColor = SlatePrimary,
-//                        contentColor = Color.White
-//                    ),
-//                    modifier = Modifier.weight(1f)
-//                ) {
-//                    Text(text = "Petugas")
-//                }
-//            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
             when (usersState) {
                 is ResultState.Loading -> {
                     Column(
@@ -204,7 +221,8 @@ fun UsersManagementScreen(
                                     showBottomSheet = true
                                     selectedUser = user
                                 }, onDeleteUser = {
-                                    viewModel.deleteUser(user.userId ?: 0)
+                                    idDelete = user.userId ?: 0
+                                    showConfirmDeleteDialog = true
                                 })
                             }
                         }

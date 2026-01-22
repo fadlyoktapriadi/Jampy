@@ -1,10 +1,6 @@
 package com.fyyadi.jampy.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -38,8 +34,6 @@ fun BottomNavigationBar(
 ) {
     AnimatedVisibility(
         visible = isBottomBarVisible,
-        enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
-        exit = fadeOut() + slideOutVertically(targetOffsetY = { it })
     ) {
         NavigationBar(
             containerColor = Green600,

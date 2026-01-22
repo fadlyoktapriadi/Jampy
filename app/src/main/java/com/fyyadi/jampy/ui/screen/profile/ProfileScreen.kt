@@ -1,6 +1,7 @@
 package com.fyyadi.jampy.ui.screen.profile
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -53,6 +54,7 @@ import com.fyyadi.theme.whiteBackground
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
+    onBackPressed: () -> Unit = {},
     onLoggedOut: () -> Unit,
     onPlantManagementNavigate: () -> Unit,
     onUsersManagementNavigate: () -> Unit
@@ -60,6 +62,10 @@ fun ProfileScreen(
     val viewModel: ProfileViewModel = hiltViewModel()
     val profileState by viewModel.profileUserState.collectAsState()
     val logoutState by viewModel.logoutState.collectAsState()
+
+    BackHandler {
+        onBackPressed()
+    }
 
     LaunchedEffect(Unit) {
         viewModel.getUserProfile()
@@ -211,26 +217,6 @@ fun ProfileScreen(
                                 ) {
                                     Text(
                                         text = stringResource(R.string.plants_management),
-                                        fontSize = 14.sp,
-                                        fontWeight = FontWeight.Normal,
-                                        fontFamily = RethinkSans
-                                    )
-                                }
-                                Button(
-                                    onClick = {
-                                    },
-                                    modifier = Modifier
-                                        .align(Alignment.CenterHorizontally)
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 24.dp),
-                                    shape = RoundedCornerShape(12.dp),
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = Green600,
-                                        contentColor = Color.White
-                                    )
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.report),
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.Normal,
                                         fontFamily = RethinkSans

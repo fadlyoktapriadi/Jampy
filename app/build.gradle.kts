@@ -62,7 +62,6 @@ dependencies {
     implementation(project(":scan"))
     implementation(project(":auth"))
     implementation(project(":management"))
-    implementation(project(":report"))
 
     // Core
     implementation(libs.androidx.core.ktx)
