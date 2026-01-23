@@ -32,9 +32,6 @@ object ManagementNavigation {
         composable<ManagementRoutes.PlantManagementScreen> {
             PlantManagementScreen(
                 modifier = modifier,
-                onPlantClick = {
-
-                },
                 onBackClick = {
                     navController.popBackStack()
                 },

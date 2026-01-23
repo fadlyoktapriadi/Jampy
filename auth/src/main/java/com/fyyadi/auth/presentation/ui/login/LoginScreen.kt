@@ -1,6 +1,7 @@
 package com.fyyadi.auth.presentation.ui.login
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -185,6 +186,7 @@ private fun onCheckUserLoginState(
             }
         }
         is ResultState.Error -> {
+            Log.e("Test ERROR", state.message.toString())
             Toast.makeText(
                 context,
                 state.message ?: "Failed to check user login",
@@ -225,6 +227,7 @@ private fun onAddUserState(
             onLoginSuccess()
         }
         is ResultState.Error -> {
+            Log.e("Test ERROR", state.message.toString())
             Toast.makeText(
                 context,
                 state.message ?: "Failed to save user",
@@ -253,7 +256,7 @@ private suspend fun performGoogleSignIn(
             userEmail = googleIdCredential.id,
             userFullName = googleIdCredential.displayName,
             photoProfile = googleIdCredential.profilePictureUri.toString(),
-            role = "User"
+            role = "Pengguna"
         )
         viewModel.loginWithGoogle(googleIdToken)
         viewModel.updateUserProfile(userProfile)

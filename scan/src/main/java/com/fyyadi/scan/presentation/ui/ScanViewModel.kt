@@ -112,29 +112,6 @@ class ScanViewModel @Inject constructor(
         }
     }
 
-    fun saveHistoryScan(
-        userEmail: String,
-        plantId: Int,
-        accuracy: Int
-    ) {
-        viewModelScope.launch {
-            scanUseCase.saveHistoryScanUseCase(
-                userEmail = userEmail,
-                plantId = plantId,
-                accuracy = accuracy
-            ).collect {
-                result ->
-                result
-                    .onSuccess {
-                        Log.e("ScanViewModel", "saveHistoryScan: Success" )
-                    }
-                    .onFailure { exception ->
-                        Log.e("ScanViewModel", "saveHistoryScan: Failure ${exception.message}" )
-                    }
-            }
-        }
-    }
-
     fun saveHistoryScanLocal(
         userEmail: String,
         plantId: Int,

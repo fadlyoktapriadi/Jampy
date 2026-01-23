@@ -80,8 +80,7 @@ fun BookmarkScreen(
                 fontFamily = RethinkSans,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
-                    .padding(start = 8.dp),
+                    .fillMaxWidth(),
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                 maxLines = 1
             )

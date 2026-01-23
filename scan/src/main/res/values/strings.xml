@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_result_scan_pop_up">Hasil Klasifikasi</string>
+    <string name="desc_confidence_low_pop_up">Akurasi dibawah 50% kemungkinan sistem sulit mendeteksi foto tanaman herbal</string>
+</resources>

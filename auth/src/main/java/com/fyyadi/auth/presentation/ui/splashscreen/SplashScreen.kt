@@ -18,7 +18,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.fyyadi.common.ResultState
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Green600
-import com.fyyadi.theme.SecondaryGreen
 import kotlinx.coroutines.delay
 
 @Composable

@@ -17,12 +17,11 @@
     <string name="detail_history_scan">Detail Riwayat Aktivitas Scan</string>
     <string name="activity">Aktivitas</string>
     <string name="load_bookmark">Load Bookmark</string>
-    <string name="accuracy_result">Akurasi: $1%s</string>
     <string name="bookmark">Bookmark</string>
-    <string name="search_placeholder">Cari tanaman herbal...</string>
-    <string name="welcome_home_page_name">Hai, $1%s</string>
+    <string name="search_placeholder">Cari tanaman herbal…</string>
+    <string name="welcome_home_page_name">Hai, %1$s</string>
     <string name="result_search_not_found">Tidak ada hasil untuk $1%s</string>
     <string name="retry">Coba lagi</string>
     <string name="home_card_description">Cukup satu foto, untuk kenali tanaman herbal dan resepnya</string>
-    <string name="profile">Profile</string>
+    <string name="accuracy_result">Akurasi: $1%s</string>
 </resources>

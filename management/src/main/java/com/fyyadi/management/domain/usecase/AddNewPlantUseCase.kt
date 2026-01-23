@@ -1,6 +1,5 @@
 package com.fyyadi.management.domain.usecase
 
-import com.fyyadi.domain.model.Plant
 import com.fyyadi.management.domain.model.AddPlant
 import com.fyyadi.management.domain.repository.ManagementRepository
 import kotlinx.coroutines.flow.Flow

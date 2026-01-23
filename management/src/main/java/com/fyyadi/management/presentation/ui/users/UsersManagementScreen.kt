@@ -17,10 +17,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -37,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,15 +44,11 @@ import com.fyyadi.common.ResultState
 import com.fyyadi.components.DialogPopUp
 import com.fyyadi.core_presentation.R
 import com.fyyadi.domain.model.UserProfile
-import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Green100
-import com.fyyadi.theme.Green500
 import com.fyyadi.theme.Green600
-import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RedPrimary
 import com.fyyadi.theme.RethinkSans
-import com.fyyadi.theme.SlatePrimary
 import com.fyyadi.theme.whiteBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,9 +92,9 @@ fun UsersManagementScreen(
 
     if (showSuccessDialog) {
         DialogPopUp(
-            title = "Berhasil",
+            title = stringResource(com.fyyadi.management.R.string.success_title_pop_up),
             imageRes = R.drawable.illustration_success,
-            description = "Data user berhasil disimpan.",
+            description = stringResource(com.fyyadi.management.R.string.success_description_delete_pop_up),
             onDismissRequest = { showSuccessDialog = false },
             onCloseClick = { showSuccessDialog = false }
         )
@@ -107,9 +102,9 @@ fun UsersManagementScreen(
 
     if (showSuccessDeleteDialog) {
         DialogPopUp(
-            title = "Berhasil",
+            title = stringResource(com.fyyadi.management.R.string.success_title_pop_up),
             imageRes = R.drawable.illustration_success,
-            description = "Data user berhasil dihapus.",
+            description = stringResource(com.fyyadi.management.R.string.success_description_delete_pop_up),
             onDismissRequest = { showSuccessDeleteDialog = false },
             onCloseClick = { showSuccessDeleteDialog = false }
         )
@@ -165,15 +160,14 @@ fun UsersManagementScreen(
                     )
                 }
                 Text(
-                    text = "Kelola Data Users",
+                    text = stringResource(com.fyyadi.management.R.string.users_management),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = PrimaryGreen,
                     fontFamily = RethinkSans,
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxWidth()
-                        .padding(start = 8.dp),
+                        .fillMaxWidth(),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     maxLines = 1
                 )
@@ -203,7 +197,7 @@ fun UsersManagementScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Tidak ada data pengguna",
+                                text = stringResource(com.fyyadi.management.R.string.no_data_user),
                                 color = PrimaryGreen,
                                 fontSize = 16.sp
                             )

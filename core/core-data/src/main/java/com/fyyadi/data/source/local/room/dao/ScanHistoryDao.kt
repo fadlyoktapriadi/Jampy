@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ScanHistoryDao {
-    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveScanHistory(entity: ScanHistoryEntity)
 
     @Query("SELECT * FROM scan_history ORDER BY scanDate DESC")

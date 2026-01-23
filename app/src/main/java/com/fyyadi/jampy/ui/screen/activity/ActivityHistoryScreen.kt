@@ -81,8 +81,7 @@ fun ActivityHistoryScreen(
                 fontFamily = RethinkSans,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
-                    .padding(start = 8.dp),
+                    .fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 maxLines = 1
             )

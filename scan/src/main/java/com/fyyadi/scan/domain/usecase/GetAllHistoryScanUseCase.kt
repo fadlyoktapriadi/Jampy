@@ -1,6 +1,5 @@
 package com.fyyadi.scan.domain.usecase
 
-import com.fyyadi.domain.model.Plant
 import com.fyyadi.scan.domain.model.HistoryScan
 import com.fyyadi.scan.domain.repository.PlantClassificationRepository
 import kotlinx.coroutines.flow.Flow

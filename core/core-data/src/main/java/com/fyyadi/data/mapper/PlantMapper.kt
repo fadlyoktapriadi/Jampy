@@ -5,8 +5,6 @@ import com.fyyadi.data.source.network.dto.PlantDto
 import com.fyyadi.data.source.network.dto.UserProfileDto
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.UserProfile
-
-
 fun UserProfileDto.toProfileUser() = UserProfile(
     userId = this.userId ?: 0,
     userFullName = this.userFullName.orEmpty(),

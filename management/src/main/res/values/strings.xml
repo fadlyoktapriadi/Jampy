@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="success_title_pop_up">Berhasil</string>
+    <string name="success_description_pop_up">Data tanaman berhasil disimpan.</string>
+    <string name="add_plant_herb">Tambah Tanaman Herbal</string>
+    <string name="edit_plant_herb">Ubah Data Tanaman Herbal</string>
+    <string name="name_herb_label">Nama Tanaman Herbal</string>
+    <string name="scientific_name_label">Nama Ilmiah</string>
+    <string name="description_herb_label">Deskripsi Tanaman</string>
+    <string name="benefits_herb_label">Manfaat</string>
+    <string name="processing_method_label">Cara Pengolahan</string>
+    <string name="image_url_label">URL Gambar</string>
+    <string name="save_button">Simpan</string>
+    <string name="small_desc_fill_benefits">*Pisahkan manfaat dengan semikolon ";"</string>
+    <string name="success_description_delete_pop_up">Data tanaman berhasil dihapus.</string>
+    <string name="confirm_pop_up">Konfirmasi!</string>
+    <string name="description_confirm_pop_up">Apakah anda yakin data ini akan dihapus?</string>
+    <string name="delete_button">Hapus</string>
+    <string name="manage_data_plant">Kelola Data Tanaman Herbal</string>
+    <string name="no_data_plant">Tidak ada data tanaman herbal</string>
+    <string name="change_role_user">Ubah Role Pengguna</string>
+    <string name="select_role">Pilih Role</string>
+    <string name="users_management">Kelola Data Pengguna</string>
+    <string name="no_data_user">Tidak ada data pengguna</string>">
+</resources>

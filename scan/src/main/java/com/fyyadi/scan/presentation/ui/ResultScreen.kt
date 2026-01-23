@@ -1,7 +1,6 @@
 package com.fyyadi.scan.presentation.ui
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -88,9 +87,9 @@ fun ResultScanScreen(
 
     if (lowConfidence) {
         DialogPopUp(
-            title = "Hasil Klasifikasi",
+            title = stringResource(com.fyyadi.scan.R.string.title_result_scan_pop_up),
             imageRes = R.drawable.illustration_alert,
-            description = "Akurasi dibawah 50% kemungkinan sistem sulit mendeteksi foto tanaman herbal",
+            description = stringResource(com.fyyadi.scan.R.string.desc_confidence_low_pop_up),
             onDismissRequest = {
                 lowConfidence = false
                 onBackClick()
@@ -123,11 +122,6 @@ fun ResultScanScreen(
             LaunchedEffect(plant?.idPlant) {
                 plant?.let {
                     val acc = (plantResult.confidence.times(100)).toInt()
-                    viewModel.saveHistoryScan(
-                        userEmail = userEmail,
-                        plantId = it.idPlant,
-                        accuracy = acc,
-                    )
 
                     viewModel.saveHistoryScanLocal(
                         userEmail = userEmail,
@@ -152,7 +146,7 @@ fun ResultScanScreen(
             val errorMsg = (detailResultClassify as ResultState.Error).message
 
             DialogPopUp(
-                title = "Terjadi Kesalahan",
+                title = stringResource(R.string.somethink_wrong),
                 imageRes = R.drawable.illustration_error,
                 description = errorMsg.toString(),
                 onDismissRequest = {
@@ -244,7 +238,7 @@ fun TitleContent(plant: Plant?, accuracy: Float, modifier: Modifier = Modifier) 
             )
             val accuracyPercent = (accuracy * 100).toInt()
             Text(
-                text = "Akurasi: ${accuracyPercent}%",
+                text = stringResource(R.string.accuracy_result, accuracyPercent),
                 fontSize = 16.sp,
                 fontFamily = RethinkSans,
                 fontWeight = FontWeight.ExtraBold,

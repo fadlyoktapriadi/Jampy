@@ -1,6 +1,5 @@
 package com.fyyadi.management.presentation.ui.plant
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,9 +43,7 @@ import com.fyyadi.common.ResultState
 import com.fyyadi.components.DialogPopUp
 import com.fyyadi.core_presentation.R
 import com.fyyadi.domain.model.Plant
-import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Green100
-import com.fyyadi.theme.Green500
 import com.fyyadi.theme.Green600
 import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
@@ -56,7 +54,6 @@ import com.fyyadi.theme.whiteBackground
 @Composable
 fun PlantManagementScreen(
     modifier: Modifier = Modifier,
-    onPlantClick: (Int) -> Unit = {},
     onBackClick: () -> Unit = {},
     onAddNewPlantClick: () -> Unit = {},
     onEditPlantClick: (Int) -> Unit = {}
@@ -80,9 +77,9 @@ fun PlantManagementScreen(
 
     if (showSuccessDialog) {
         DialogPopUp(
-            title = "Berhasil",
+            title = stringResource(com.fyyadi.management.R.string.success_title_pop_up),
             imageRes = R.drawable.illustration_success,
-            description = "Data tanaman berhasil dihapus.",
+            description = stringResource(com.fyyadi.management.R.string.success_description_delete_pop_up),
             onDismissRequest = { showSuccessDialog = false },
             onCloseClick = {
                 showSuccessDialog = false
@@ -93,14 +90,14 @@ fun PlantManagementScreen(
 
     if (showConfirmDeleteDialog) {
         DialogPopUp(
-            title = "Konfirmasi!",
+            title = stringResource(com.fyyadi.management.R.string.confirm_pop_up),
             imageRes = R.drawable.illustration_alert,
-            description = "Apakah anda yakin data ini akan dihapus?",
+            description = stringResource(com.fyyadi.management.R.string.description_confirm_pop_up),
             onDismissRequest = { showSuccessDialog = false },
             onCloseClick = {
                 showConfirmDeleteDialog = false
             },
-            textConfirm = "Hapus",
+            textConfirm = stringResource(com.fyyadi.management.R.string.delete_button),
             onConfirmClick = {
                 viewModel.deletePlant(idDelete)
                 showConfirmDeleteDialog = false
@@ -155,15 +152,14 @@ fun PlantManagementScreen(
                     )
                 }
                 Text(
-                    text = "Kelola Data Tanaman Herbal",
+                    text = stringResource(com.fyyadi.management.R.string.manage_data_plant),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = PrimaryGreen,
                     fontFamily = RethinkSans,
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxWidth()
-                        .padding(start = 8.dp),
+                        .fillMaxWidth(),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     maxLines = 1
                 )
@@ -193,8 +189,9 @@ fun PlantManagementScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Tidak ada data tanaman herbal",
+                                text = stringResource(com.fyyadi.management.R.string.no_data_plant),
                                 color = PrimaryGreen,
+                                fontFamily = RethinkSans,
                                 fontSize = 16.sp
                             )
                         }

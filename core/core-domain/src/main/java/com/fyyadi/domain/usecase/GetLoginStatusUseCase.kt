@@ -1,6 +1,5 @@
 package com.fyyadi.domain.usecase
 
-import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.domain.repository.CoreRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

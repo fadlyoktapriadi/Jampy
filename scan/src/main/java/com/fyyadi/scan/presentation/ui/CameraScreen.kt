@@ -39,12 +39,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.fyyadi.scan.R
 import com.fyyadi.scan.presentation.utils.MediaStoreUtils
 import com.fyyadi.theme.OrangePrimary
@@ -105,6 +103,7 @@ fun CameraScreen(
     }
 
     Box(modifier = modifier.fillMaxSize().background(Color.Black)) {
+        @Suppress("COMPOSE_APPLIER_CALL_MISMATCH")
         AndroidView(
             factory = { previewView },
             modifier = Modifier.fillMaxSize()
@@ -126,14 +125,12 @@ fun CameraScreen(
             }
         }
 
-        // Bottom-center small capture button with subtle circular background
         Box(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp),
             contentAlignment = Alignment.Center
         ) {
-            // Soft circular backdrop
             Box(
                 modifier = Modifier
                     .size(72.dp)
@@ -171,7 +168,7 @@ fun CameraScreen(
                 containerColor = OrangePrimary,
                 contentColor = Color.White,
                 elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 6.dp),
-                modifier = Modifier.size(48.dp) // small button
+                modifier = Modifier.size(48.dp)
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_camera),

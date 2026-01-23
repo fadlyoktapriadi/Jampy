@@ -1,6 +1,6 @@
 package com.fyyadi.auth.data.repository
 
-import android.util.Log
+import com.fyyadi.auth.data.mapper.toAddNewUserRequestDto
 import com.fyyadi.auth.domain.repository.AuthRepository
 import com.fyyadi.data.mapper.toProfileUser
 import com.fyyadi.data.source.local.sharedpreference.PreferenceManager
@@ -32,13 +32,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override fun addUser(user: UserProfile): Flow<Result<Unit>> = flow {
         val result = runCatching {
-            val userDto = mapOf(
-                "user_full_name" to user.userFullName,
-                "user_email" to user.userEmail,
-                "photo_profile" to user.photoProfile,
-                "role" to user.role
-            )
-            postgrest.from("users").upsert(userDto)
+            postgrest.from("users").upsert(user.toAddNewUserRequestDto())
             Unit
         }
         emit(result)
@@ -85,8 +79,6 @@ class AuthRepositoryImpl @Inject constructor(
             val result = runCatching {
                 preferenceManager.clearUserData()
                 auth.signOut()
-                Log.e("AuthRepositoryImpl", "User logged out successfully" )
-                Unit
             }
             emit(result)
         }

@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -49,7 +50,6 @@ import coil3.compose.AsyncImage
 import com.fyyadi.scan.R
 import com.fyyadi.scan.domain.model.PlantLabel
 import com.fyyadi.scan.presentation.utils.MediaStoreUtils
-import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
@@ -59,7 +59,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.core.net.toUri
 import com.fyyadi.common.ResultState
-import com.fyyadi.components.DialogPopUp
 import com.fyyadi.domain.model.UserProfile
 import com.fyyadi.theme.Slate200
 import com.fyyadi.theme.whiteBackground
@@ -175,19 +174,18 @@ fun ScanScreen(
         ) {
             Image(
                 painter = painterResource(id = com.fyyadi.core_presentation.R.drawable.jampy),
-                contentDescription = "Jampy Logo",
+                contentDescription = stringResource(com.fyyadi.core_presentation.R.string.app_name),
                 modifier = Modifier.size(48.dp)
             )
             Text(
-                text = "Scan Tanaman Herbal",
+                text = stringResource(com.fyyadi.core_presentation.R.string.scan_plant),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryGreen,
                 fontFamily = RethinkSans,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
-                    .padding(start = 12.dp),
+                    .fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 maxLines = 1
             )

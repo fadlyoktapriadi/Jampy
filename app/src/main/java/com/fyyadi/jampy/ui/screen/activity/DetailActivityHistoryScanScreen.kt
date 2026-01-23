@@ -177,7 +177,7 @@ fun TitleContentHistoryScan(plant: Plant?, accuracy: String, modifier: Modifier 
                 color = PrimaryGreen
             )
             Text(
-                text = stringResource(R.string.accuracy_result, accuracy),
+                text = stringResource(com.fyyadi.jampy.R.string.accuracy_result, accuracy),
                 fontSize = 16.sp,
                 fontFamily = RethinkSans,
                 fontWeight = FontWeight.ExtraBold,

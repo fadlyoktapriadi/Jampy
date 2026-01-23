@@ -12,7 +12,6 @@ import com.fyyadi.scan.domain.model.HistoryScan
 import com.fyyadi.scan.domain.model.HistoryScanLocal
 import com.fyyadi.scan.domain.model.PlantLabel
 import com.fyyadi.scan.domain.model.PlantLabels
-import com.fyyadi.scan.domain.model.SaveHistoryScanRequest
 import com.fyyadi.scan.domain.repository.PlantClassificationRepository
 import com.google.firebase.ml.modeldownloader.CustomModel
 import com.google.firebase.ml.modeldownloader.CustomModelDownloadConditions
@@ -21,9 +20,7 @@ import com.google.firebase.ml.modeldownloader.FirebaseModelDownloader
 import io.github.jan.supabase.postgrest.Postgrest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.tensorflow.lite.Interpreter
@@ -34,8 +31,6 @@ import org.tensorflow.lite.support.image.ops.ResizeOp
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
 import kotlin.collections.map
 
 @Singleton
@@ -100,11 +95,9 @@ class PlantClassificationRepositoryImpl @Inject constructor(
                 predictions.forEachIndexed { index, confidence ->
                     if (confidence > CONFIDENCE_THRESHOLD && index < PlantLabels.LABELS.size) {
                         val label = PlantLabels.LABELS[index]
-//                        val displayName = PlantLabels.DISPLAY_NAMES[label] ?: label
-                        results.add(PlantLabel(label, label, confidence))
+                        results.add(PlantLabel(label, confidence))
                     }
                 }
-
                 results.sortByDescending { it.confidence }
 
                 Log.e("PlantClassification", "Classification results: $results")
@@ -114,7 +107,6 @@ class PlantClassificationRepositoryImpl @Inject constructor(
                 Result.failure(e)
             }
         }
-
 
     override fun isModelReady(): Boolean = interpreter != null
 
@@ -135,22 +127,6 @@ class PlantClassificationRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun saveHistoryScan(
-        saveHistoryScanRequest: SaveHistoryScanRequest
-    ): Flow<Result<Unit>> = flow {
-        val result = runCatching {
-            postgrest.from("history_scan").insert(
-                value = buildJsonObject {
-                    put("user_email", saveHistoryScanRequest.userEmail)
-                    put("plant_id", saveHistoryScanRequest.plantId)
-                    put("accuracy", saveHistoryScanRequest.accuracy)
-                }
-            )
-            Unit
-        }
-        emit(result)
-    }
-
     override fun saveHistoryScanLocal(
         history: HistoryScanLocal
     ): Flow<Result<Unit>> = flow {
@@ -159,10 +135,15 @@ class PlantClassificationRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getAllHistoryScan(): Flow<Result<List<HistoryScan>>> =
-        dao.getAllHistory()
-            .map { list -> Result.success(list.map { it.toDomain() }) }
-            .catch { emit(Result.failure(it)) }
+    override fun getAllHistoryScan(): Flow<Result<List<HistoryScan>>> = flow {
+        try {
+            dao.getAllHistory().collect { list ->
+                emit(Result.success(list.map { it.toDomain() }))
+            }
+        } catch (e: Throwable) {
+            emit(Result.failure(e))
+        }
+    }
 
 
     companion object {

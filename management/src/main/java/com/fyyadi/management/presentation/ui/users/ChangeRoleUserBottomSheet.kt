@@ -1,5 +1,6 @@
 package com.fyyadi.management.presentation.ui.users
 
+import androidx.browser.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,7 +57,7 @@ fun ChangeRoleUserBottomSheet(
                 .padding(vertical = 4.dp, horizontal = 24.dp)
         ) {
             Text(
-                text = "Ubah Role Pengguna",
+                text = stringResource(com.fyyadi.management.R.string.change_role_user),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryGreen,
@@ -82,7 +84,7 @@ fun ChangeRoleUserBottomSheet(
                     readOnly = true,
                     label = {
                         Text(
-                            text = "Pilih Role",
+                            text = stringResource(com.fyyadi.management.R.string.select_role),
                             color = PrimaryGreen,
                             fontFamily = RethinkSans
                         )
@@ -133,7 +135,7 @@ fun ChangeRoleUserBottomSheet(
                 )
             ) {
                 Text(
-                    text = "Simpan",
+                    text = stringResource(com.fyyadi.management.R.string.save_button),
                     color = Color.White,
                     fontSize = 14.sp,
                     fontFamily = RethinkSans,

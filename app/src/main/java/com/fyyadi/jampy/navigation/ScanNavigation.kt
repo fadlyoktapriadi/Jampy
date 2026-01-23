@@ -27,7 +27,7 @@ object ScanNavigation {
                 },
                 onResultClassification = { plantLabels, imageResultUri, userEmail ->
                     val labelsJson = plantLabels.joinToString(separator = "|") {
-                        "${it.name},${it.displayName},${it.confidence}"
+                        "${it.name},${it.confidence}"
                     }
                     navController.navigate(
                         ScanRoutes.ResultScanScreen(plantLabels = labelsJson, imageResultUri, userEmail)

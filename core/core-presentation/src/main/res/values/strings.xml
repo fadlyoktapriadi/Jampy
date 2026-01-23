@@ -5,9 +5,12 @@
     <string name="welcome_text_explore">Jelajahi Dunia Herbal</string>
     <string name="welcome_text_discover">Identifikasi tanaman dengan mudah dan temukan khasiatnya hanya dalam sekali klik.</string>
     <string name="button_login">Sign in with Google</string>
+    <string name="scan_plant">Scan Tanaman Herbal</string>
     <string name="description">Deskripsi:</string>
     <string name="benefits">Manfaat:</string>
     <string name="how_to_usage">Cara Pengolahan:</string>
     <string name="detail_plant">Detail Tanaman</string>
     <string name="result_scan">Hasil Identifikasi</string>
+    <string name="somethink_wrong">Terjadi Kesalahan</string>
+    <string name="accuracy_result">Akurasi: $1%s</string>
 </resources>

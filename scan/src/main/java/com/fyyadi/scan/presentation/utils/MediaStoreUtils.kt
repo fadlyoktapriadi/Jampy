@@ -8,19 +8,19 @@ import android.provider.MediaStore
 import java.io.File
 
 object MediaStoreUtils {
-    fun createImageUri(context: Context, fileName: String): Uri? {
-        val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "$fileName.jpg")
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Jampy")
-            }
-        }
-        return context.contentResolver.insert(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            contentValues
-        )
-    }
+//    fun createImageUri(context: Context, fileName: String): Uri? {
+//        val contentValues = ContentValues().apply {
+//            put(MediaStore.Images.Media.DISPLAY_NAME, "$fileName.jpg")
+//            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Jampy")
+//            }
+//        }
+//        return context.contentResolver.insert(
+//            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//            contentValues
+//        )
+//    }
     fun createInternalImageUri(context: Context, filename: String): Uri {
         val internalDir = File(context.filesDir, "cropped_images")
         if (!internalDir.exists()) {

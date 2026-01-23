@@ -3,6 +3,8 @@ package com.fyyadi.management.data.repository
 import com.fyyadi.data.source.network.dto.UserProfileDto
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.domain.model.UserProfile
+import com.fyyadi.management.data.mapper.toAddPlantDto
+import com.fyyadi.management.data.mapper.toUpdatePlantDto
 import com.fyyadi.management.data.mapper.toUserProfileList
 import com.fyyadi.management.domain.model.AddPlant
 import com.fyyadi.management.domain.repository.ManagementRepository
@@ -63,15 +65,7 @@ class ManagementRepositoryImpl @Inject constructor(
 
     override fun addNewPlant(plant: AddPlant): Flow<Result<Unit>> = flow {
         val result = runCatching {
-            val addPlantDto = mapOf(
-                "plant_name" to plant.plantName,
-                "plant_species" to plant.plantSpecies,
-                "plant_description" to plant.plantDescription,
-                "health_benefits" to plant.healthBenefits,
-                "processing_method" to plant.processingMethod,
-                "image_plant" to plant.imagePlant
-            )
-            postgrest.from("herb_plants").insert(addPlantDto)
+            postgrest.from("herb_plants").insert(plant.toAddPlantDto())
             Unit
         }
         emit(result)
@@ -80,16 +74,8 @@ class ManagementRepositoryImpl @Inject constructor(
     override fun updatePlant(plant: Plant): Flow<Result<Unit>> {
         return flow {
             val result = runCatching {
-                val updatePlantDto = mapOf(
-                    "plant_name" to plant.plantName,
-                    "plant_species" to plant.plantSpecies,
-                    "plant_description" to plant.plantDescription,
-                    "health_benefits" to plant.healthBenefits,
-                    "processing_method" to plant.processingMethod,
-                    "image_plant" to plant.imagePlant
-                )
                 postgrest.from("herb_plants")
-                    .update(updatePlantDto) {
+                    .update(plant.toUpdatePlantDto()) {
                         filter {
                             eq("plant_id", plant.idPlant)
                         }

@@ -1,12 +1,9 @@
 package com.fyyadi.management.presentation.ui.plant
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,7 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -59,9 +53,7 @@ import com.fyyadi.core_presentation.R
 import com.fyyadi.domain.model.Plant
 import com.fyyadi.theme.BackgroundGreen
 import com.fyyadi.theme.Green100
-import com.fyyadi.theme.Green500
 import com.fyyadi.theme.Green600
-import com.fyyadi.theme.OrangePrimary
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
 import com.fyyadi.theme.whiteBackground
@@ -98,11 +90,17 @@ fun EditPlantScreen(
 
     if (showSuccessDialog) {
         DialogPopUp(
-            title = "Berhasil",
+            title = stringResource(com.fyyadi.management.R.string.success_title_pop_up),
             imageRes = R.drawable.illustration_success,
-            description = "Data tanaman berhasil disimpan.",
-            onDismissRequest = { showSuccessDialog = false },
-            onCloseClick = { showSuccessDialog = false }
+            description =  stringResource(com.fyyadi.management.R.string.success_title_pop_up),
+            onDismissRequest = {
+                showSuccessDialog = false
+                onBackClick()
+            },
+            onCloseClick = {
+                showSuccessDialog = false
+                onBackClick()
+            }
         )
     }
 
@@ -117,6 +115,7 @@ fun EditPlantScreen(
                 CircularProgressIndicator(color = PrimaryGreen)
             }
         }
+
         is ResultState.Error -> {
             Box(
                 modifier = modifier
@@ -137,6 +136,7 @@ fun EditPlantScreen(
                 }
             }
         }
+
         is ResultState.Success -> {
             val plant = state.data
             plantName = plant?.plantName ?: ""
@@ -180,15 +180,14 @@ fun EditPlantScreen(
                             )
                         }
                         Text(
-                            text = "Ubah Data Tanaman Herbal",
+                            text = stringResource(com.fyyadi.management.R.string.edit_plant_herb),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = PrimaryGreen,
                             fontFamily = RethinkSans,
                             modifier = Modifier
                                 .weight(1f)
-                                .fillMaxWidth()
-                                .padding(start = 8.dp),
+                                .fillMaxWidth(),
                             textAlign = TextAlign.Center,
                             maxLines = 1
                         )
@@ -199,7 +198,12 @@ fun EditPlantScreen(
                     OutlinedTextField(
                         value = plantName,
                         onValueChange = { plantName = it },
-                        label = { Text("Nama Tanaman Herbal") },
+                        label = {
+                            Text(
+                                text = stringResource(com.fyyadi.management.R.string.name_herb_label),
+                                fontFamily = RethinkSans
+                            )
+                        },
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = PrimaryGreen,
                             unfocusedBorderColor = PrimaryGreen,
@@ -227,7 +231,12 @@ fun EditPlantScreen(
                     OutlinedTextField(
                         value = scientificName,
                         onValueChange = { scientificName = it },
-                        label = { Text("Nama Ilmiah") },
+                        label = {
+                            Text(
+                                text = stringResource(com.fyyadi.management.R.string.scientific_name_label),
+                                fontFamily = RethinkSans
+                            )
+                        },
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = PrimaryGreen,
                             unfocusedBorderColor = PrimaryGreen,
@@ -255,7 +264,12 @@ fun EditPlantScreen(
                     OutlinedTextField(
                         value = descriptionPlant,
                         onValueChange = { descriptionPlant = it },
-                        label = { Text("Deskripsi Tanaman") },
+                        label = {
+                            Text(
+                                text = stringResource(com.fyyadi.management.R.string.description_herb_label),
+                                fontFamily = RethinkSans
+                            )
+                        },
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = PrimaryGreen,
                             unfocusedBorderColor = PrimaryGreen,
@@ -284,7 +298,12 @@ fun EditPlantScreen(
                     OutlinedTextField(
                         value = benefits,
                         onValueChange = { benefits = it },
-                        label = { Text("Manfaat") },
+                        label = {
+                            Text(
+                                text = stringResource(com.fyyadi.management.R.string.benefits_herb_label),
+                                fontFamily = RethinkSans
+                            )
+                        },
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = PrimaryGreen,
                             unfocusedBorderColor = PrimaryGreen,
@@ -308,7 +327,7 @@ fun EditPlantScreen(
                             .padding(horizontal = 24.dp)
                     )
                     Text(
-                        text = "*Pisahkan manfaat dengan semikolon \";\"",
+                        text = stringResource(com.fyyadi.management.R.string.small_desc_fill_benefits),
                         fontSize = 10.sp,
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = RethinkSans,
@@ -321,7 +340,12 @@ fun EditPlantScreen(
                     OutlinedTextField(
                         value = processingMethod,
                         onValueChange = { processingMethod = it },
-                        label = { Text("Cara Pengolahan") },
+                        label = {
+                            Text(
+                                text = stringResource(com.fyyadi.management.R.string.processing_method_label),
+                                fontFamily = RethinkSans
+                            )
+                        },
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = PrimaryGreen,
                             unfocusedBorderColor = PrimaryGreen,
@@ -350,7 +374,12 @@ fun EditPlantScreen(
                     OutlinedTextField(
                         value = imageUrl,
                         onValueChange = { imageUrl = it },
-                        label = { Text("URL Gambar") },
+                        label = {
+                            Text(
+                                text = stringResource(com.fyyadi.management.R.string.image_url_label),
+                                fontFamily = RethinkSans
+                            )
+                        },
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = PrimaryGreen,
                             unfocusedBorderColor = PrimaryGreen,
@@ -393,7 +422,7 @@ fun EditPlantScreen(
                         )
                     ) {
                         Text(
-                            text = "Simpan",
+                            text = stringResource(com.fyyadi.management.R.string.save_button),
                             color = Color.White,
                             fontSize = 14.sp,
                             fontFamily = RethinkSans,
@@ -404,6 +433,7 @@ fun EditPlantScreen(
             }
         }
 
-        ResultState.Idle -> { /* Do nothing */ }
+        ResultState.Idle -> { /* Do nothing */
+        }
     }
 }

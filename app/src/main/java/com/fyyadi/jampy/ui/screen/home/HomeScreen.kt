@@ -31,7 +31,7 @@ import com.fyyadi.jampy.common.ResultState
 import com.fyyadi.jampy.ui.components.PlantCard
 import com.fyyadi.jampy.ui.components.PlantItemSearchCard
 import com.fyyadi.jampy.ui.components.ShimmerPlantCard
-import com.fyyadi.theme.Green400
+import com.fyyadi.theme.Green300
 import com.fyyadi.theme.Green600
 import com.fyyadi.theme.PrimaryGreen
 import com.fyyadi.theme.RethinkSans
@@ -225,7 +225,7 @@ fun CardInformationHome() {
             .padding(16.dp),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Green400
+            containerColor = Green300
         ),
         border = BorderStroke(2.dp, PrimaryGreen)
     ) {
